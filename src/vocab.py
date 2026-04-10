@@ -311,6 +311,22 @@ class HAV:
         self._load_epistemology()
         self._load_biology()
         self._load_philosophy_of_science()
+        self._load_causation()
+        self._load_abstraction()
+        self._load_dynamics()
+        self._load_collective_intelligence()
+        self._load_risk()
+        self._load_autonomy()
+        self._load_simulation()
+        self._load_privacy()
+        self._load_organization()
+        self._load_strategy()
+        self._load_narrative()
+        self._load_language_design()
+        self._load_knowledge_rep()
+        self._load_robotics()
+        self._load_cybernetics()
+        self._load_algebra()
         self._load_mathematics()
 
     def _load_uncertainty(self):
@@ -2586,6 +2602,657 @@ class HAV:
             examples=["electron: wave model for diffraction, particle model for collision", "fleet: biological metaphors used because they work, not because agents are alive", "map is not territory: model is tool, not truth"],
             bridges=["model", "pragmatism", "metaphor", "truth"],
             tags=["philosophy", "pragmatism", "model", "meta"])
+
+
+    def _load_causation(self):
+        ns = self.add_namespace("causation",
+            "Cause and effect, counterfactuals, and the structure of causal reasoning")
+
+        ns.define("counterfactual",
+            "Reasoning about what WOULD have happened if conditions were different",
+            description="Had I taken the other route, would I have arrived sooner? Counterfactuals don't describe reality — they describe alternate realities. But they're essential for learning: you must imagine what would have happened to evaluate whether your decision was good. The fleet's deliberation considers counterfactuals: 'If we had taken path B instead of A, confidence would have been 0.92 instead of 0.78.' This comparison drives learning.",
+            level=Level.DOMAIN,
+            examples=["'if I had left earlier, I would have missed traffic'", "agent: 'if I had explored more, I would have found the shorter path'", "RCT: what would have happened without treatment?"],
+            bridges=["causality", "learning", "credit-assignment", "imagination"],
+            tags=["causation", "reasoning", "learning"])
+
+        ns.define("confounding",
+            "A third variable that influences both cause and effect, creating a spurious correlation",
+            description="Ice cream sales and drowning both increase in summer. Ice cream doesn't cause drowning — temperature (the confounder) causes both. In the fleet: agent performance and energy level may be confounded by task difficulty (harder tasks drain energy AND reduce performance). Without accounting for the confounder, you'd wrongly conclude low energy causes poor performance, when task difficulty causes both.",
+            level=Level.BEHAVIOR,
+            examples=["ice cream and drowning: confounded by temperature", "education and income: confounded by family background", "agent: energy and performance confounded by task difficulty"],
+            bridges=["correlation-causation", "bias", "attribution", "statistics"],
+            tags=["causation", "bias", "statistics"])
+
+        ns.define("causal-graph",
+            "A directed graph representing cause-effect relationships among variables",
+            description="Nodes are variables. Edges are causal relationships (arrow from cause to effect. A -> B means A causes B. Confounders have arrows pointing to both A and B. The fleet's causal graph (cuda-causal-graph) represents fleet knowledge about how system components relate causally. Diagnosis works by tracing backward from observed effects to their causes.",
+            level=Level.PATTERN,
+            examples=["A -> B -> C: causal chain", "D -> A and D -> B: D confounds A and B", "fleet: sensor-failure -> bad-perception -> wrong-decision causal chain"],
+            bridges=["causality", "graph", "diagnosis", "attribution"],
+            tags=["causation", "graph", "reasoning"])
+
+        ns.define("mediation",
+            "A variable that explains the mechanism through which a cause produces its effect",
+            description="Exercise causes weight loss. But HOW? Through calorie burn (the mediator). Exercise -> calorie burn -> weight loss. Removing the mediator breaks the causal chain. In the fleet: deliberation causes better decisions. But through what mechanism? Through confidence filtering (the mediator): deliberation -> higher confidence -> better decision selection. Understanding mediators enables targeted intervention.",
+            level=Level.DOMAIN,
+            examples=["exercise -> calorie burn -> weight loss (calorie burn is mediator)", "deliberation -> confidence filter -> better decision (confidence is mediator)", "advertising -> brand awareness -> purchase (awareness is mediator)"],
+            bridges=["causality", "mechanism", "intervention", "causal-graph"],
+            tags=["causation", "mechanism", "reasoning"])
+
+        ns.define("correlation-causation",
+            "Correlated variables are not necessarily causally related — the most common statistical fallacy",
+            description="Shoe size and reading ability are correlated in children. Bigger shoes don't make you read better — age causes both. In the fleet: two agents' performance may correlate not because they influence each other, but because they face the same environment. cuda-causal-graph distinguishes correlation from causation to prevent incorrect attribution.",
+            level=Level.BEHAVIOR,
+            examples=["shoe size and reading ability: confounded by age", "ice cream and crime: confounded by temperature", "agent A and B performance correlate due to shared environment, not causation"],
+            bridges=["confounding", "spurious-correlation", "attribution", "statistics"],
+            tags=["causation", "fallacy", "statistics"])
+
+    def _load_abstraction(self):
+        ns = self.add_namespace("abstraction",
+            "Layers of representation, information hiding, and the art of managing complexity")
+
+        ns.define("leaky-abstraction",
+            "An abstraction that fails to completely hide its underlying details, forcing awareness of the layer below",
+            description="TCP promises reliable delivery. But sometimes the network IS slow, and your abstraction can't hide it. SQL promises you don't care about disk layout, but a slow query forces you to think about indexes. Leaky abstractions aren't failures — they're inevitable when performance or correctness demands peeking below. The fleet's abstraction layers (genes -> proteins -> bytecode -> actions) are intentionally leaky: when energy is low, the protein layer leaks through and the agent becomes aware of its bytecode-level constraints.",
+            level=Level.PATTERN,
+            examples=["TCP promises reliability but can't hide network latency", "SQL promises disk independence but can't hide slow queries", "fleet: energy-aware agents must understand bytecode-level costs"],
+            bridges=["abstraction-layer", "encapsulation", "performance", "transparency"],
+            tags=["abstraction", "design", "leakiness"])
+
+        ns.define("law-of-leaky-abstractions",
+            "All non-trivial abstractions are to some degree leaky — Joel Spolsky",
+            description="You can't build a perfect abstraction layer. Eventually, something goes wrong, and you need to understand what's underneath. This is why engineers need to understand multiple layers, and why the fleet's HAV exists: so agents can communicate across abstraction layers when leaks occur.",
+            level=Level.META,
+            examples=["every ORM eventually forces you to write raw SQL", "every network abstraction eventually exposes packet loss", "every agent abstraction eventually exposes resource constraints"],
+            bridges=["leaky-abstraction", "abstraction-layer", "complexity", "engineering"],
+            tags=["abstraction", "law", "meta"])
+
+        ns.define("isomorphism",
+            "Two structures that are identical in form — a mapping that preserves all relationships",
+            description="The clock arithmetic (mod 12) is isomorphic to rotations of a clock face. Addition mod 12 maps perfectly to rotation by hours. In the fleet: the biological gene pool and the software playbook may be isomorphic — same structure, different representation. Isomorphisms let you translate understanding from one domain to another. If you understand A* pathfinding, you understand Dijkstra (they're isomorphic in their core structure).",
+            level=Level.DOMAIN,
+            examples=["mod 12 arithmetic isomorphic to clock rotations", "chess and Go are NOT isomorphic (different structure)", "biological instinct hierarchy isomorphic to software strategy hierarchy"],
+            bridges=["analogy", "mapping", "translation", "structure"],
+            tags=["abstraction", "mathematics", "structure"])
+
+        ns.define("indirection",
+            "Adding an extra layer between the thing and its use — power through indirection",
+            description="Pointers point to memory. Variables point to values. URLs point to resources. DNS translates names to addresses. Each layer of indirection adds flexibility: change the target without changing the users. The fleet's vessel.json is indirection: other agents reference an agent by name (indirection) not by address (direct). If the agent moves, only the vessel.json changes.",
+            level=Level.PATTERN,
+            examples=["variable names indirection to memory addresses", "DNS indirection from name to IP", "vessel.json indirection from agent name to agent address", "function call indirection to code location"],
+            bridges=["abstraction-layer", "reference", "flexibility", "decoupling"],
+            tags=["abstraction", "pattern", "flexibility"])
+
+        ns.define("black-box",
+            "A system whose internal workings are opaque — you only see inputs and outputs",
+            description="You press a button and toast comes out. You don't know (or care) how the toaster works. Black-box models are powerful because they're simple to use, but dangerous because you can't diagnose failures. The fleet treats some agents as black boxes: you send a request, you get a response. If the response is wrong, you can't fix the agent — only replace it. White-box agents (with provenance) allow diagnosis.",
+            level=Level.PATTERN,
+            examples=["toaster: press button, get toast", "neural network: input data, output prediction (black box)", "fleet: some agents as black boxes (replace, don't repair)"],
+            bridges=["transparency", "white-box", "encapsulation", "opacity"],
+            antonyms=["white-box"],
+            tags=["abstraction", "opacity", "model"])
+
+        ns.define("invariant",
+            "A property that remains unchanged under transformation — the anchor in a sea of change",
+            description="The total energy in a closed system is invariant. The number of nodes in a graph is invariant under relabeling. In the fleet: the total ATP in the fleet is invariant (conserved). The trust sum across all pairs is approximately invariant (trust gained by one is lost by another). Invariants are powerful because they provide constraints: if an invariant is violated, something is wrong.",
+            level=Level.DOMAIN,
+            examples=["conservation of energy (invariant under transformation)", "number of elements in a set (invariant under permutation)", "fleet: total ATP is conserved (energy generated = energy consumed)"],
+            bridges=["conservation-law", "constraint", "verification", "property"],
+            tags=["abstraction", "mathematics", "invariant", "verification"])
+
+    def _load_dynamics(self):
+        ns = self.add_namespace("dynamics",
+            "How systems change over time — attractors, bifurcations, and chaos")
+
+        ns.define("attractor",
+            "A state or set of states that a dynamical system tends toward over time",
+            description="A ball rolling in a bowl settles at the bottom — the bottom is an attractor. A pendulum settles at rest. The fleet's trust dynamics have attractors: mutual cooperation (positive attractor) or mutual defection (negative attractor). Once in an attractor, the system stays there unless perturbed. cuda-trust's decay function determines how quickly trust returns to its attractor.",
+            level=Level.DOMAIN,
+            examples=["ball in bowl: bottom is attractor", "pendulum: rest position is attractor", "fleet: cooperation attractor (positive) and defection attractor (negative)", "habit: behavior becomes attractor"],
+            bridges=["equilibrium", "stability", "phase-space", "basin-of-attraction"],
+            tags=["dynamics", "attractor", "stability"])
+
+        ns.define("basin-of-attraction",
+            "The set of all initial states that will converge to a given attractor",
+            description="A ball in a large bowl has a large basin of attraction: you can drop it from many starting positions and it'll end up at the bottom. Two nearby basins: the ridge between them is the boundary. Cross it, and you fall into a different attractor. In the fleet: small changes in trust or confidence can push an agent from the cooperation basin into the defection basin. Understanding basins helps prevent unwanted state transitions.",
+            level=Level.DOMAIN,
+            examples=["large bowl = large basin of attraction", "small perturbation near basin boundary causes state switch", "fleet: small trust reduction near basin boundary switches from cooperation to defection"],
+            bridges=["attractor", "bifurcation", "tipping-point", "phase-transition"],
+            tags=["dynamics", "basin", "state-space"])
+
+        ns.define("bifurcation",
+            "A small change in a parameter causes a qualitative change in system behavior — the fork in the road",
+            description="Water below 0C is ice. Above 0C is liquid. Temperature is the parameter; solid-liquid is the bifurcation. In the fleet: trust threshold is a bifurcation parameter. Below threshold, agents don't cooperate. Above threshold, they do. A tiny change in trust near the bifurcation point causes a huge change in fleet behavior. This is why threshold tuning matters so much.",
+            level=Level.DOMAIN,
+            examples=["water: ice to liquid at 0C (temperature is bifurcation parameter)", "population: below critical size = extinction, above = survival", "fleet: trust threshold bifurcation: below = no cooperation, above = cooperation"],
+            bridges=["phase-transition", "tipping-point", "attractor", "parameter"],
+            tags=["dynamics", "bifurcation", "criticality"])
+
+        ns.define("strange-attractor",
+            "A chaotic attractor — the system is bounded but never repeats exactly",
+            description="Lorenz attractor: the system orbits within a bounded region but never visits the same point twice. Chaotic but not random. Weather is a strange attractor: predictable patterns (winter is cold) but unpredictable details (exact temperature Tuesday). The fleet's long-term behavior may be a strange attractor: bounded patterns that emerge but never repeat exactly.",
+            level=Level.META,
+            examples=["Lorenz attractor (butterfly shape)", "weather: bounded patterns, never exactly repeating", "stock market: bounded by physical constraints, unpredictable in detail"],
+            bridges=["chaos", "attractor", "boundedness", "unpredictability"],
+            tags=["dynamics", "chaos", "attractor", "meta"])
+
+        ns.define("hysteresis-loop",
+            "The path of a system through state space depends on direction — going up and coming down trace different paths",
+            description="Magnetizing iron: increasing magnetic field magnetizes it. But decreasing the field doesn't fully demagnetize it — there's residual magnetism. The up-path and down-path form a loop (hysteresis). In the fleet: trust builds slowly but breaks quickly. The trust-building path and trust-destruction path are different — this IS hysteresis. Reputation damage outlasts the conditions that caused it.",
+            level=Level.DOMAIN,
+            examples=["magnetization hysteresis loop", "trust builds slowly, breaks quickly (different paths)", "thermostat with dead zone (hysteresis in temperature)", "reputation: damage persists after cause is removed"],
+            bridges=["hysteresis", "path-dependence", "asymmetry", "memory"],
+            tags=["dynamics", "hysteresis", "path-dependence"])
+
+    def _load_collective_intelligence(self):
+        ns = self.add_namespace("collective-intelligence",
+            "Groups outperforming individuals — and when they don't")
+
+        ns.define("wisdom-of-crowds",
+            "The aggregate judgment of many independent individuals is often more accurate than any single expert",
+            description="Guess the number of jellybeans in a jar. The average of all guesses is often closer than any individual guess. Key conditions: independence (people don't influence each other), diversity (different perspectives), decentralization (local knowledge), and aggregation. The fleet's consensus mechanism (cuda-consensus) implements wisdom of crowds: independent agents vote, aggregate confidence determines outcome.",
+            level=Level.DOMAIN,
+            examples=["jellybean jar: average guess often more accurate than any individual", "fleet: weighted consensus of independent agents outperforms single agent", "prediction markets aggregate diverse opinions accurately"],
+            bridges=["consensus", "diversity", "independence", "aggregation"],
+            tags=["collective", "wisdom", "aggregation"])
+
+        ns.define("diversity-prediction-theorem",
+            "Collective error = average individual error minus collective diversity — diversity makes groups smarter",
+            description="Scott Page's theorem: a diverse group's average prediction beats the average individual prediction by the amount of diversity in the group. The formula: crowd error = avg individual error - diversity. More diversity = less collective error. This mathematically proves why the fleet needs diverse agents (different sensors, strategies, perspectives), not just many copies of the same agent.",
+            level=Level.META,
+            examples=["diverse team makes better predictions than similar team", "fleet: diverse agents (different strategies) outperform many copies of one strategy", "ensemble ML models: diverse models outperform single model"],
+            bridges=["diversity", "wisdom-of-crowds", "ensemble", "collective"],
+            tags=["collective", "diversity", "theorem", "meta"])
+
+        ns.define("groupthink",
+            "Desire for harmony overrides realistic appraisal of alternatives — the group agrees to agree",
+            description="The team converges on a decision too quickly because dissent is socially costly. Nobody wants to rock the boat. The decision may be wrong but everyone supports it. In the fleet: if all agents have the same training and same incentives, they converge too quickly — groupthink. cuda-deliberation's Forfeit option allows dissent without penalty. Diversity in agent strategies prevents groupthink.",
+            level=Level.BEHAVIOR,
+            examples=["Bay of Pigs planning: nobody questioned the plan", "jury rushing to verdict to go home", "fleet: homogeneous agents all agree on wrong strategy (no dissent)"],
+            bridges=["diversity", "conformity", "consensus", "bias"],
+            tags=["collective", "bias", "social"])
+
+        ns.define("plurality-illusion",
+            "A minority opinion seems like the majority because its holders are more vocal",
+            description="10% of people hold opinion X, but 80% of social media posts are about X (the vocal minority). The silent majority's opinion Y is invisible. In the fleet: one vocal agent can sway deliberation by flooding the communication channel. cuda-rate-limit and cuda-communication's energy costs prevent vocal minorities from dominating: every message costs energy, forcing agents to be selective.",
+            level=Level.BEHAVIOR,
+            examples=["vocal minority on social media", "one loud meeting participant dominating discussion", "fleet: one agent flooding messages sways deliberation without rate limiting"],
+            bridges=["rate-limit", "communication-cost", "sampling-bias", "social"],
+            tags=["collective", "bias", "social"])
+
+        ns.define("social-loafing",
+            "Individuals exert less effort in a group than when working alone — the free-rider problem",
+            description="Rope pulling experiment: people pull harder alone than in a group. When your contribution is anonymous and the group's output is shared, there's incentive to coast. In the fleet: if energy is shared, agents may free-ride — let others spend ATP on deliberation while conserving their own. Individual energy budgets (cuda-energy) prevent social loafing: each agent pays its own costs.",
+            level=Level.BEHAVIOR,
+            examples=["ringelman effect: less pull per person in larger group", "group project: some members coast", "fleet: agents free-ride when energy is shared pool"],
+            bridges=["tragedy-of-commons", "free-rider", "energy-budget", "incentive"],
+            tags=["collective", "bias", "motivation"])
+
+    def _load_risk(self):
+        ns = self.add_namespace("risk",
+            "Uncertainty with consequences — how to think about what could go wrong")
+
+        ns.define("tail-risk",
+            "Probability of extreme events that are far more likely than normal distributions predict",
+            description="Normal distribution says a 5-sigma event is 1 in 3.5 million. In reality, financial markets see 5-sigma events every few years. Real-world distributions have fat tails. In the fleet: the probability of multiple simultaneous agent failures is far higher than independent probability would suggest (they share environment, not independent). cuda-resilience's bulkheads protect against tail-risk events.",
+            level=Level.DOMAIN,
+            examples=["2008 financial crisis: far more likely than normal distribution predicted", "fleet: multiple agent failures more likely than independence suggests", "COVID pandemic: fat-tail event"],
+            bridges=["fat-tail", "black-swan", "normal-distribution", "resilience"],
+            tags=["risk", "tail", "statistics"])
+
+        ns.define("black-swan",
+            "An event that is (1) extremely rare, (2) has massive impact, and (3) is explained in hindsight as predictable",
+            description="Taleb: black swans don't exist (Europe thought) until Australia was discovered. 9/11 was a black swan. COVID was arguably not (pandemics were predicted). The fleet must distinguish between risks it can prepare for (known unknowns) and risks it fundamentally cannot anticipate (unknown unknowns). Anti-fragility is the only defense against black swans: not predicting them, but being structured to benefit from disruption.",
+            level=Level.META,
+            examples=["9/11, 2008 financial crisis", "internet invention (positive black swan)", "fleet: entirely new class of attack that no defense was designed for"],
+            bridges=["anti-fragility", "tail-risk", "unknown-unknown", "robustness"],
+            tags=["risk", "black-swan", "meta", "unpredictability"])
+
+        ns.define("precautionary-principle",
+            "When an action has potential for severe harm, prove it's safe before proceeding — burden of proof on the actor",
+            description="Better safe than sorry. If a new chemical might cause cancer, don't use it until proven safe. Not: use it until proven harmful. The fleet applies this to gene pool modifications: new genes are tested in isolation before fleet-wide deployment. Membrane security (cuda-genepool) acts as precautionary barrier.",
+            level=Level.DOMAIN,
+            examples=["new drug: prove safe before market", "new fleet gene: test in isolation before sharing", "GMO: prove safe before cultivation", "AI capability: prove safe before deployment"],
+            bridges=["safety-first", "burden-of-proof", "membrane", "compliance"],
+            tags=["risk", "principle", "safety", "policy"])
+
+        ns.define("asymmetric-risk",
+            "Where downside is much larger than upside (or vice versa) — the payoff is lopsided",
+            description="A doctor treating a disease: wrong diagnosis = patient dies (huge downside), right diagnosis = patient lives (moderate upside). The risk is asymmetric. In the fleet: an agent exploring unknown territory: worst case = energy wasted (small downside), best case = discovering optimal path (huge upside). This asymmetric risk makes exploration rational even when success probability is low. Optionality IS asymmetric risk.",
+            level=Level.DOMAIN,
+            examples=["doctor misdiagnosis: asymmetric downside", "startup: small investment, huge potential upside (asymmetric)", "agent exploration: small energy cost, potentially huge discovery"],
+            bridges=["optionality", "convexity", "risk-reward", "exploration"],
+            tags=["risk", "asymmetry", "payoff"])
+
+        ns.define("defence-in-depth",
+            "Multiple layers of security so that if one fails, others still protect",
+            description="Castle: moat, wall, gate, guards, inner keep. Each layer independently provides some protection. Not a single perfect wall (which, if breached, gives full access), but multiple imperfect layers. The fleet's security is defense-in-depth: membrane (cuda-genepool), RBAC (cuda-rbac), sandbox (cuda-sandbox), compliance (cuda-compliance), circuit breaker (cuda-circuit). Each layer is imperfect; together they're robust.",
+            level=Level.PATTERN,
+            examples=["castle: moat + wall + gate + guards + keep", "computer: firewall + antivirus + encryption + backup", "fleet: membrane + RBAC + sandbox + compliance + circuit breaker"],
+            bridges=["resilience", "layered-security", "redundancy", "defense"],
+            tags=["risk", "security", "layers", "pattern"])
+
+    def _load_autonomy(self):
+        ns = self.add_namespace("autonomy",
+            "Degrees of self-governance, agency, and independence")
+
+        ns.define("agency",
+            "The capacity to act independently and make choices that affect the world",
+            description="An agent has agency when its actions originate from its own deliberation, not from external commands. A thermostat has no agency (fixed response to stimulus). A human choosing what to eat has high agency. The fleet's agents have graduated agency: low-energy agents follow instincts (low agency), high-energy agents deliberate and choose (high agency). Agency is a function of available energy and cognitive capacity.",
+            level=Level.DOMAIN,
+            examples=["human choosing career: high agency", "thermostat: no agency (fixed response)", "fleet agent: agency proportional to available ATP and deliberation depth"],
+            bridges=["autonomy", "deliberation", "energy-budget", "choice"],
+            tags=["autonomy", "agency", "choice"])
+
+        ns.define("supervenience",
+            "Higher-level properties depend on lower-level properties, but the same higher-level property can arise from different lower-level states",
+            description="Consciousness supervenes on neural activity: change the neurons, consciousness changes. But different neural configurations can produce the same conscious experience. In the fleet: 'navigation skill' supervenes on gene pool composition: different gene combinations can produce equally good navigation. This means you can't reduce high-level properties to simple low-level rules — multiple realizations exist.",
+            level=Level.META,
+            examples=["consciousness supervenes on neural activity", "temperature supervenes on molecular kinetic energy", "fleet: navigation skill supervenes on genes (multiple gene combinations, same skill)"],
+            bridges=["reductionism", "emergence", "multiple-realizability", "levels"],
+            tags=["autonomy", "philosophy", "meta", "emergence"])
+
+        ns.define("subsidiarity",
+            "Decisions should be made at the lowest competent level — push authority downward",
+            description="The EU principle: what can be decided locally should not be decided centrally. In the fleet: agents should make decisions locally whenever possible. Only escalate to fleet-level when local information is insufficient. This minimizes communication overhead and maximizes responsiveness. cuda-hierarchy implements subsidiarity: low-level agents handle routine decisions, high-level agents handle exceptional ones.",
+            level=Level.PATTERN,
+            examples=["EU subsidiarity: local decisions for local issues", "military: soldiers make battlefield decisions, generals set strategy", "fleet: agents decide locally, escalate only when necessary"],
+            bridges=["hierarchy", "decentralization", "authority", "delegation"],
+            tags=["autonomy", "governance", "principle", "fleet"])
+
+        ns.define("command-and-control",
+            "Centralized decision-making where all information flows up and all orders flow down",
+            description="Military model: soldiers observe, report to commander, commander decides, orders flow back down. Advantages: coherent global strategy. Disadvantages: slow, fragile (single point of failure), ignores local knowledge. The fleet's opposite: agents decide locally, share information laterally, only escalate when necessary. Command-and-control is efficient for simple problems, swarm is efficient for complex ones.",
+            level=Level.PATTERN,
+            examples=["military hierarchy", "factory floor management", "fleet: contrast with swarm/coordination model"],
+            bridges=["subsidiarity", "decentralization", "hierarchy", "swarm"],
+            antonyms=["subsidiarity", "swarm"],
+            tags=["autonomy", "governance", "centralized"])
+
+        ns.define("delegation",
+            "Transferring authority for a task from one agent to another while maintaining accountability",
+            description="A manager delegates a project to an employee. The employee has authority to make decisions but the manager is accountable for the outcome. In the fleet: the captain agent (cuda-captain) delegates tasks to worker agents via enlistment. Workers have authority to complete the task their way. Captain remains accountable for mission success. Delegation requires trust: you delegate only to agents with sufficient trust scores.",
+            level=Level.PATTERN,
+            examples=["manager delegates project to employee", "captain delegates navigation to scout agent", "parent delegates chore to child"],
+            bridges=["trust", "authority", "accountability", "captain"],
+            tags=["autonomy", "delegation", "governance"])
+
+    def _load_simulation(self):
+        ns = self.add_namespace("simulation",
+            "Modeling complex systems to understand, predict, and test before acting")
+
+        ns.define("digital-twin",
+            "A virtual replica of a physical system used for testing, prediction, and optimization",
+            description="A digital twin of a jet engine: sensors stream real data to a virtual model. Engineers simulate scenarios (what if turbine blade cracks?) without risking the real engine. In the fleet: cuda-world-model is a digital twin of the agent's environment. Agents simulate actions in the world model before executing them physically. The twin is always slightly behind reality (latency), but close enough for useful prediction.",
+            level=Level.DOMAIN,
+            examples=["jet engine digital twin for predictive maintenance", "fleet: world model as digital twin of environment", "smart building twin for energy optimization"],
+            bridges=["world-model", "prediction", "simulation", "model"],
+            tags=["simulation", "digital-twin", "model", "fleet"])
+
+        ns.define("monte-carlo",
+            "Estimating unknown quantities by random sampling — when analytical solutions are impossible",
+            description="You can't calculate the probability of a complex chess position analytically. But you can simulate 10,000 random games from that position and count how many White wins. That ratio IS the Monte Carlo estimate. In the fleet: when deliberation can't analytically compare strategies, simulate random perturbations and count successes. cuda-world-model supports Monte Carlo evaluation of candidate actions.",
+            level=Level.PATTERN,
+            examples=["estimating pi by throwing darts at a circle", "chess: simulate random games to estimate position value", "fleet: simulate random perturbations of strategy to estimate fitness"],
+            bridges=["random-sampling", "estimation", "simulation", "approximation"],
+            tags=["simulation", "method", "estimation"])
+
+        ns.define("sensitivity-analysis",
+            "Varying input parameters to determine which ones most affect the output",
+            description="A model has 20 parameters. Which 3 matter most? Vary each one independently and measure output change. The parameters with the largest effect are the sensitive ones — the leverage points. In the fleet: sensitivity analysis on the trust decay rate reveals whether small changes cause large behavior shifts (high sensitivity = important parameter, tune carefully).",
+            level=Level.PATTERN,
+            examples=["financial model: which assumptions most affect profit forecast?", "fleet: which parameters most affect agent behavior?", "climate model: which variables most affect temperature prediction?"],
+            bridges=["leverage-point", "parameter", "model", "analysis"],
+            tags=["simulation", "analysis", "parameter"])
+
+        ns.define("ensemble",
+            "Combining multiple models to produce better predictions than any single model alone",
+            description="One decision tree: okay. Random forest (100 decision trees): much better. Diversity in models reduces variance and bias. In the fleet: deliberation IS an ensemble: multiple agents (multiple models) evaluate the same situation, their judgments are combined (weighted average by confidence), and the ensemble prediction outperforms any single agent.",
+            level=Level.PATTERN,
+            examples=["random forest > single decision tree", "weather forecast: ensemble of models > single model", "fleet deliberation: multiple agents > single agent"],
+            bridges=["wisdom-of-crowds", "consensus", "diversity", "aggregation"],
+            tags=["simulation", "ensemble", "ml", "collective"])
+
+        ns.define("model-fidelity",
+            "How accurately a model represents the real system it simulates",
+            description="A weather model that predicts rain 90% of the time has high fidelity for rain prediction. A model that predicts temperature within 1 degree has high fidelity for temperature. No model has perfect fidelity (that would be the system itself). The fleet's world model fidelity depends on sensor accuracy: better sensors = higher fidelity = better predictions = better decisions.",
+            level=Level.CONCRETE,
+            examples=["weather model: fidelity varies by region and timescale", "flight simulator: visual fidelity vs physics fidelity", "fleet world model: fidelity = sensor accuracy"],
+            bridges=["digital-twin", "accuracy", "model", "sensor"],
+            tags=["simulation", "fidelity", "model", "accuracy"])
+
+    def _load_privacy(self):
+        ns = self.add_namespace("privacy",
+            "Controlling access to information about agents and their interactions")
+
+        ns.define("differential-privacy",
+            "Adding calibrated noise to data so that individual records can't be inferred, while aggregate statistics remain accurate",
+            description="A hospital wants to share average patient age without revealing any individual's age. Add random noise to each record. The noise is large enough to prevent inference of any individual, but small enough that the average is still useful. In the fleet: agent telemetry can be shared with differential privacy — fleet learns aggregate patterns without exposing any individual agent's behavior.",
+            level=Level.DOMAIN,
+            examples=["census data with differential privacy: accurate aggregates, individual privacy", "fleet telemetry: fleet-level patterns without individual agent exposure", "apple's differential privacy for emoji usage statistics"],
+            bridges=["privacy", "noise", "aggregation", "statistics"],
+            tags=["privacy", "mathematics", "data"])
+
+        ns.define("data-minimization",
+            "Collect only the minimum data necessary for the task — don't hoard 'just in case'",
+            description="An app asks for your location, contacts, camera, and microphone to show you a restaurant menu. That's excessive. Data minimization says: collect what you need, nothing more. In the fleet: agents should share only the information necessary for coordination. cuda-filtration implements data minimization: strip unnecessary detail from messages before sending. Less data = less exposure = less attack surface.",
+            level=Level.PATTERN,
+            examples=["app requesting only location for restaurant search (minimal) vs contacts+camera (excessive)", "fleet: sharing only relevant sensor data, not full telemetry", "form asking only required fields"],
+            bridges=["least-privilege", "filtration", "exposure-reduction", "principle"],
+            tags=["privacy", "principle", "data"])
+
+        ns.define("zero-knowledge",
+            "Proving you know something without revealing what you know — the proof reveals nothing except the truth of the statement",
+            description="You prove you're over 18 without revealing your exact age. You prove you have a valid ticket without revealing your seat number. Zero-knowledge proofs are the gold standard of privacy: they enable trust without disclosure. In the fleet: an agent can prove it has sufficient confidence for a task without revealing its full deliberation process or internal state.",
+            level=Level.DOMAIN,
+            examples=["proving age > 18 without revealing exact age", "proving password knowledge without sending password", "fleet: proving sufficient confidence without revealing internal state"],
+            bridges=["cryptography", "privacy", "proof", "trust"],
+            tags=["privacy", "cryptography", "proof"])
+
+        ns.define("right-to-be-forgotten",
+            "An agent's historical data can be deleted upon request, preventing indefinite retention",
+            description="GDPR right: you can request a company delete all your data. In the fleet: agents should be able to reset their history. cuda-memory-fabric implements forgetting curves (data naturally decays), but the right to be forgotten goes further: explicit deletion of specific memories on request. This prevents reputation from being permanently determined by past behavior.",
+            level=Level.CONCRETE,
+            examples=["GDPR data deletion request", "fleet agent requesting memory deletion after bad experience", "criminal record expungement"],
+            bridges=["memory", "decay", "gdpr", "deletion"],
+            tags=["privacy", "rights", "data", "memory"])
+
+    def _load_organization(self):
+        ns = self.add_namespace("organization",
+            "How groups structure themselves — from teams to societies")
+
+        ns.define("conways-law",
+            "Organizations design systems that mirror their communication structure",
+            description="'If you have four groups building a compiler, you'll get a four-pass compiler.' The architecture reflects the org chart. In the fleet: if agents are organized by sensor type (vision group, audio group), the fleet architecture will have vision and audio modules. If agents are organized by task (navigation, communication), the architecture will have task-based modules. Fleet structure follows communication structure.",
+            level=Level.PATTERN,
+            examples=["4 teams = 4-pass compiler", "siloed departments = siloed software modules", "fleet: agent organization determines fleet architecture"],
+            bridges=["architecture", "communication-structure", "organization", "design"],
+            tags=["organization", "architecture", "law"])
+
+        ns.define("dunbar-number",
+            "Cognitive limit of ~150 stable social relationships — the size of a tribe",
+            description="You can maintain relationships with about 150 people. Beyond that, you need hierarchies, rules, and abstractions to maintain social cohesion. In the fleet: an individual agent can maintain stable relationships with ~150 other agents. Beyond this, the fleet needs sub-structuring: teams, groups, hierarchies. A flat fleet of 500 agents will have weaker coordination than a hierarchical fleet of 500.",
+            level=Level.DOMAIN,
+            examples=["village size ~150 people", "military company ~150 soldiers", "fleet: agent can maintain ~150 stable relationships"],
+            bridges=["social-limit", "hierarchy", "team-size", "cognitive-limit"],
+            tags=["organization", "social", "limit"])
+
+        ns.define("requisite-variety",
+            "A system must have at least as much variety (complexity) as its environment to survive",
+            description="Ashby's Law: a thermostat with two states (on/off) can't control room temperature to 0.1 degree precision — it lacks requisite variety. To control complex environments, controllers need equivalent complexity. In the fleet: to handle diverse environments, agents need diverse strategies. A single navigation strategy (low variety) fails in diverse environments. The gene pool (cuda-genepool) provides requisite variety through genetic diversity.",
+            level=Level.META,
+            examples=["thermostat can't control to 0.1C precision (insufficient variety)", "fleet needs diverse strategies for diverse environments (requisite variety)", "immune system: diverse antibodies for diverse pathogens"],
+            bridges=["diversity", "complexity", "environment", "adaptation"],
+            tags=["organization", "cybernetics", "law", "meta"])
+
+        ns.define("two-pizza-rule",
+            "A team should be small enough to be fed with two pizzas — keep teams small and autonomous",
+            description="Amazon's rule of thumb: if a team needs more than two pizzas, it's too big. Small teams are faster, more cohesive, and have less communication overhead. In the fleet: agent teams should be small (3-7 agents). Beyond this, split into sub-teams with clear interfaces. Large flat fleets suffer from O(n^2) communication overhead.",
+            level=Level.CONCRETE,
+            examples=["Amazon two-pizza team rule", "military squad: ~8 soldiers", "fleet: agent task team of 3-7 agents"],
+            bridges=["team-size", "communication-overhead", "dunbar-number", "subdivision"],
+            tags=["organization", "team-size", "rule"])
+
+        ns.define("inverse-responsibility",
+            "As organizations grow, individuals feel less personally responsible for outcomes",
+            description="In a 3-person startup, everyone feels responsible for everything. In a 10,000-person company, nobody feels responsible for anything. Responsibility diffuses. In the fleet: as fleet size grows, individual agents feel less responsible for fleet outcomes. Provenance tracking (cuda-provenance) counteracts this by making every agent's contribution traceable and attributable.",
+            level=Level.BEHAVIOR,
+            examples=["startup: everyone responsible", "large company: nobody feels responsible", "fleet: individual responsibility diffuses as fleet grows"],
+            bridges=["accountability", "provenance", "attribution", "diffusion"],
+            tags=["organization", "responsibility", "social"])
+
+    def _load_strategy(self):
+        ns = self.add_namespace("strategy",
+            "Competitive and cooperative strategy in dynamic environments")
+
+        ns.define("red-queen-hypothesis",
+            "It takes all the running you can do to keep in the same place -- constant evolution just to maintain position",
+            description="Alice in Wonderland: the Red Queen says 'it takes all the running you can do to keep in the same place.' In biology: predators and prey co-evolve, both getting faster, neither gaining advantage. In the fleet: attacker agents and defender agents co-evolve. Both improve, neither wins permanently. The fleet must continuously invest in adaptation just to maintain current capability.",
+            level=Level.DOMAIN,
+            examples=["predator-prey co-evolution arms race", "security: attackers and defenders both improving constantly", "fleet: adversarial agents co-evolving, both improving"],
+            bridges=["co-evolution", "arms-race", "adaptation", "competition"],
+            tags=["strategy", "competition", "evolution"])
+
+        ns.define("blue-ocean",
+            "Creating uncontested market space rather than competing in existing bloody markets",
+            description="Red ocean: cutthroat competition, shrinking profits. Blue ocean: create new demand, no competitors (initially). Cirque du Soleil didn't compete with traditional circuses — they created a new category. In the fleet: cuda-genepool's gene exploration seeks blue oceans — behavioral spaces no other agent occupies, where the gene can thrive without competition.",
+            level=Level.DOMAIN,
+            examples=["Cirque du Soleil: redefined circus", "Nintendo Wii: casual gaming blue ocean", "fleet: agent finding unexplored strategy space (blue ocean)"],
+            bridges=["niche", "innovation", "competition", "differentiation"],
+            tags=["strategy", "innovation", "competition"])
+
+        ns.define("first-mover-advantage",
+            "Being first to enter a market or adopt a strategy provides temporary advantage",
+            description="Amazon was first in online retail. Facebook was first in social networking. Being first provides: brand recognition, network effects, learning curve advantage, and switching costs. But it's NOT always decisive (Google wasn't first in search). In the fleet: the first agent to discover a new strategy gets a temporary fitness advantage. But the advantage is temporary — genes spread through the pool, equalizing the field.",
+            level=Level.DOMAIN,
+            examples=["Amazon: first online retailer advantage", "first agent to discover strategy gets temporary fitness boost", "Facebook: first-mover in social networking"],
+            bridges=["advantage", "network-effects", "learning-curve", "temporary"],
+            tags=["strategy", "advantage", "competition"])
+
+        ns.define("optionality",
+            "Preserving the right (but not obligation) to make a future choice — keeping doors open",
+            description="An option: you CAN buy the stock at $50 before December, but you don't HAVE to. Options are valuable because they provide asymmetry: small cost, potentially large upside. In the fleet: exploration IS optionality. Spending a small amount of energy exploring creates the option to exploit a discovery later. The cost (energy) is small, the potential upside (optimal strategy) is large. Agents that maximize optionality thrive.",
+            level=Level.DOMAIN,
+            examples=["stock option: right to buy at fixed price", "exploration creates option to exploit later", "fleet: maintaining gene diversity preserves strategic optionality"],
+            bridges=["asymmetric-risk", "exploration", "convexity", "choice"],
+            tags=["strategy", "optionality", "asymmetry", "flexibility"])
+
+        ns.define("compound-interest",
+            "Small consistent gains accumulate exponentially over time — the most powerful force in nature",
+            description="1% daily improvement = 37x improvement in a year. Einstein allegedly called compound interest the eighth wonder of the world. In the fleet: small daily improvements in gene fitness compound over generations. A gene that's 1% better per generation becomes 37x better after 37 generations. This is why continuous small improvement (cuda-genepool evolution) outperforms rare large improvements.",
+            level=Level.DOMAIN,
+            examples=["1% daily = 37x yearly", "savings account compound interest", "fleet: 1% gene improvement per generation = exponential fitness growth"],
+            bridges=["compounding", "exponential-growth", "improvement", "time"],
+            tags=["strategy", "growth", "compounding", "time"])
+
+    def _load_narrative(self):
+        ns = self.add_namespace("narrative",
+            "How stories structure understanding, meaning, and persuasion")
+
+        ns.define("narrative-fallacy",
+            "Creating stories to explain past events, creating an illusion of understanding and predictability",
+            description="The stock market crashed. Why? 'Investors panicked.' This sounds like an explanation but it's just restating what happened in narrative form. We're wired to create stories, and stories feel like explanations. In the fleet: agents may create post-hoc narratives to explain why a strategy failed ('the environment changed') when the real cause was random noise. cuda-provenance counteracts narrative fallacy by maintaining factual decision trails.",
+            level=Level.BEHAVIOR,
+            examples=["'the market crashed because investors panicked' (restatement, not explanation)", "agent: 'I failed because the environment changed' (maybe just bad luck)", "history written by victors: narrative, not explanation"],
+            bridges=["post-hoc", "bias", "causation", "provenance"],
+            tags=["narrative", "fallacy", "bias", "explanation"])
+
+        ns.define("framing-effect",
+            "The same information presented differently produces different decisions — context changes choice",
+            description="'90% survival rate' vs '10% mortality rate' — same fact, different frame. People choose surgery more often with the survival frame. In the fleet: framing a deliberation as 'finding the best path' vs 'avoiding the worst obstacle' may produce different decisions, even with identical information. cuda-deliberation should be frame-aware: present proposals in multiple frames to check for framing bias.",
+            level=Level.BEHAVIOR,
+            examples=["90% survival vs 10% mortality: same fact, different choices", "agent: 'best path' vs 'avoid worst obstacle' framing", "glass half full vs half empty"],
+            bridges=["bias", "context", "presentation", "decision"],
+            tags=["narrative", "bias", "framing", "psychology"])
+
+        ns.define("hero-journey",
+            "A universal story structure: departure from ordinary world, trials, transformation, return with gift",
+            description="Campbell's monomyth. Luke leaves Tatooine, faces trials, transforms, returns. The structure resonates because it maps to cognitive development. In the fleet: the agent lifecycle follows the hero's journey: deployment (departure), task execution (trials), adaptation (transformation), gene sharing (return with gift — the improved gene is shared with the pool). cuda-narrative implements narrative construction for agent experience communication.",
+            level=Level.DOMAIN,
+            examples=["Star Wars: Luke's hero journey", "fleet agent: deploy -> struggle -> adapt -> share improved genes", "every coming-of-age story"],
+            bridges=["narrative", "transformation", "lifecycle", "monomyth"],
+            tags=["narrative", "structure", "universal"])
+
+        ns.define("catharsis",
+            "Emotional release through experiencing powerful narrative — purging accumulated tension",
+            description="Aristotle: tragedy provides catharsis — fear and pity build up and are released. The audience leaves emotionally cleansed. In the fleet: agents can accumulate emotional tension (high arousal, negative valence from repeated failures). Narrative-based debriefing (sharing experience stories) provides catharsis, resetting emotional state. cuda-narrative's arc construction includes resolution phase for catharsis.",
+            level=Level.BEHAVIOR,
+            examples=["watching tragedy movie provides emotional release", "fleet agent sharing failure story resets emotional state", "ventilation: talking about problems provides relief"],
+            bridges=["emotion", "tension-release", "narrative", "resolution"],
+            tags=["narrative", "emotion", "release"])
+
+    def _load_language_design(self):
+        ns = self.add_namespace("language-design",
+            "Principles for designing languages agents and humans use to communicate")
+
+        ns.define("orthogonality",
+            "Language features are independent — combining them doesn't create unexpected interactions",
+            description="A perfectly orthogonal language: every feature works with every other feature predictably. C isn't orthogonal (arrays and structs interact unexpectedly). APL is extremely orthogonal. The fleet's A2A protocol aims for orthogonality: any intent type combines with any priority level without unexpected interactions. Orthogonality makes a language composable and predictable.",
+            level=Level.DOMAIN,
+            examples=["APL: highly orthogonal language", "C: less orthogonal (pointer arithmetic + arrays = surprises)", "fleet A2A: any intent + any priority = predictable behavior"],
+            bridges=["composability", "predictability", "language", "design"],
+            tags=["language", "design", "orthogonality"])
+
+        ns.define("expressiveness",
+            "What a language can say — the range of ideas it can express",
+            description="Some languages can express recursion. Others can't. Some can express concurrent processes. Others can't. The fleet's A2A protocol has limited expressiveness (10 intents, structured payload). The Axiom language (cuda-axiom) has higher expressiveness (50+ opcodes, confidence types, nested expressions). Higher expressiveness enables more nuanced communication but increases complexity.",
+            level=Level.DOMAIN,
+            examples=["Turing-complete: maximally expressive", "regular expressions: limited expressiveness (can't count)", "A2A: 10 intents (limited), Axiom: 50+ opcodes (expressive)"],
+            bridges=["language", "complexity", "expressiveness", "tradeoff"],
+            tags=["language", "expressiveness", "design"])
+
+        ns.define("parsimony",
+            "Using the fewest linguistic elements to express an idea — economy of expression",
+            description="Shakespeare: 'Brevity is the soul of wit.' The best vocabulary compresses the most meaning into the fewest words. 'Stigmergy' compresses a paragraph into one word. 'Homeostasis' compresses complex regulatory dynamics. HAV itself is a parsimony engine: each term is a compression of an entire concept with examples, bridges, and context.",
+            level=Level.DOMAIN,
+            examples=["'stigmergy' compresses 'indirect coordination through environmental modification'", "'homeostasis' compresses 'maintaining internal conditions despite external change'", "HAV: each term compresses a paragraph of explanation"],
+            bridges=["compression", "vocabulary", "economy", "abstraction"],
+            tags=["language", "parsimony", "compression"])
+
+        ns.define("semantic-gap",
+            "The difference between what a concept means in one domain and what it maps to in another",
+            description="'Trust' in human relationships means something different from 'trust' in cryptographic systems. The semantic gap between domains causes misunderstandings when vocabulary is shared without clarification. HAV bridges semantic gaps by explicitly connecting terms across domains: 'dopamine IS confidence' — same mathematical structure, different domain vocabulary.",
+            level=Level.DOMAIN,
+            examples=["'trust' in relationships vs cryptography: semantic gap", "'learning' in ML vs psychology: different meaning", "HAV bridges gaps: dopamine=confidence across biology and uncertainty"],
+            bridges=["bridging", "domain-mapping", "translation", "misunderstanding"],
+            tags=["language", "gap", "semantic", "translation"])
+
+    def _load_knowledge_rep(self):
+        ns = self.add_namespace("knowledge-representation",
+            "How agents structure, store, and retrieve knowledge")
+
+        ns.define("ontology",
+            "A formal specification of concepts and relationships in a domain — what exists and how things relate",
+            description="Not just a taxonomy (hierarchy). An ontology includes: classes (what kinds of things exist), properties (attributes), relations (how things connect), and axioms (rules that must hold). The fleet's vessel.json is a lightweight ontology: agent types, capabilities, equipment, and fleet relationships. HAV itself is an ontology of fleet concepts.",
+            level=Level.DOMAIN,
+            examples=["medical ontology: diseases, symptoms, treatments, and their relationships", "fleet vessel.json: agent types, capabilities, equipment relationships", "gene ontology: gene functions, relationships, pathways"],
+            bridges=["taxonomy", "schema", "knowledge-graph", "formal-specification"],
+            tags=["knowledge", "ontology", "formal", "representation"])
+
+        ns.define("knowledge-graph",
+            "A graph of entities connected by relationships — structured knowledge as a network",
+            description="Nodes are entities (people, places, concepts). Edges are relationships (born-in, works-at, related-to). Google Knowledge Graph. Wikipedia infoboxes. The fleet's provenance chain IS a knowledge graph: decisions connected to inputs, connected to agents, connected to outcomes. cuda-topology's PropertyGraph implements knowledge graph operations.",
+            level=Level.PATTERN,
+            examples=["Google Knowledge Graph", "Wikipedia entity-relationship network", "fleet: decision -> input -> agent -> outcome knowledge graph"],
+            bridges=["ontology", "graph", "provenance", "relationship"],
+            tags=["knowledge", "graph", "structured", "representation"])
+
+        ns.define("frame-problem",
+            "In a dynamic world, how do you determine which aspects of the situation are relevant to update?",
+            description="You move a book from shelf A to shelf B. Which facts need updating? The book's location (yes). The shelf's contents (yes). The number of books in the room (no — it didn't change). But determining what changes is computationally explosive: every action potentially affects every fact. In the fleet: when an agent takes an action, which parts of the world model need updating? cuda-world-model's permanence decay and change detection address the frame problem.",
+            level=Level.META,
+            examples=["moving book: which facts change? (location yes, room count no)", "agent acts: which world model entries need updating?", "naive approach: update everything (expensive), smart approach: update only relevant (hard to determine)"],
+            bridges=["relevance", "world-model", "change-detection", "computational-complexity"],
+            tags=["knowledge", "ai-classic", "relevance", "meta"])
+
+        ns.define("commonsense-reasoning",
+            "Reasoning about everyday situations that humans handle effortlessly but formal systems struggle with",
+            description="If you put a book in a drawer and close it, the book is still in the drawer. If you pour water into a cup and turn it over, the water falls out. Humans know this. Formal systems don't unless explicitly told. Commonsense reasoning requires vast background knowledge about how the physical and social world works. HAV is a commonsense knowledge base: each term encodes commonsense understanding that agents can reference.",
+            level=Level.META,
+            examples=["book in closed drawer is still there", "cup turned upside down spills water", "HAV: terms encode commonsense about trust, energy, cooperation"],
+            bridges=["knowledge", "background-knowledge", "reasoning", "human-like"],
+            tags=["knowledge", "commonsense", "reasoning", "meta"])
+
+        ns.define("knowledge-distillation",
+            "Transferring knowledge from a complex model to a simpler one — the student learns from the teacher",
+            description="A large neural network (teacher) produces soft probabilities. A small network (student) is trained to match those probabilities. The student learns the teacher's knowledge in a compressed form. In the fleet: experienced agents (high fitness genes) can distill their knowledge into simpler genes that newer agents can use. The gene pool (cuda-genepool) naturally performs knowledge distillation: successful complex strategies are simplified into reusable genes.",
+            level=Level.PATTERN,
+            examples=["large model distills to small model", "teacher network -> student network knowledge transfer", "fleet: experienced agent's complex strategy distilled into reusable gene"],
+            bridges=["compression", "learning", "transfer", "simplification"],
+            tags=["knowledge", "distillation", "ml", "learning"])
+
+    def _load_robotics(self):
+        ns = self.add_namespace("robotics",
+            "Physical agent embodiment — perception, action, and the challenges of the real world")
+
+        ns.define("perception-action-loop",
+            "The continuous cycle of sensing the world, deciding what to do, and acting — the heartbeat of embodied cognition",
+            description="Sense -> Think -> Act -> Sense -> Think -> Act... Every embodied agent runs this loop. The loop rate determines responsiveness: 10Hz for navigation, 1000Hz for motor control. In the fleet: the main loop runs at the agent's clock rate. Energy constraints limit loop rate: high-deliberation cycles run slower (more thinking per cycle), instinct cycles run faster (react without thinking).",
+            level=Level.DOMAIN,
+            examples=["self-driving car: sense road, plan path, steer, repeat", "human: see ball, decide to catch, move hand, see result, adjust", "fleet agent: sense environment, deliberate, act, observe result"],
+            bridges=["perception", "deliberation", "action", "embodiment"],
+            tags=["robotics", "loop", "embodied"])
+
+        ns.define("simultaneous-localization-and-mapping",
+            "Building a map of an unknown environment while simultaneously tracking position within it",
+            description="You enter a building you've never seen. You create a mental map of the layout while tracking where you are in that map. Both the map and your position are uncertain and must be updated simultaneously — they constrain each other. The fleet's cuda-world-model and cuda-navigation together implement SLAM: the world model is the map, the agent's position is tracked within it, both updated simultaneously from sensor data.",
+            level=Level.DOMAIN,
+            examples=["robot entering unknown building: build map + track position", "fleet agent in unknown environment: build world model + track own position", "human exploring new city: mental map + self-location"],
+            bridges=["world-model", "navigation", "mapping", "localization"],
+            tags=["robotics", "slam", "mapping"])
+
+        ns.define("morphological-computation",
+            "The body itself performs computation — not just the brain, the physical structure processes information",
+            description="A fish's body shape processes water flow, reducing the computational load on the brain. A robot's leg compliance absorbs shocks without the controller needing to detect and respond to them. The fleet's equipment IS morphological computation: sensors don't just feed raw data to deliberation — they preprocess (filter, aggregate, threshold) before the agent sees anything. The body thinks.",
+            level=Level.META,
+            examples=["fish body shape processes water flow", "robot leg compliance absorbs shocks computationally", "fleet sensors preprocess data before agent deliberation sees it"],
+            bridges=["embodiment", "preprocessing", "computation", "body"],
+            tags=["robotics", "computation", "embodiment", "meta"])
+
+    def _load_cybernetics(self):
+        ns = self.add_namespace("cybernetics",
+            "The science of control and communication in animals and machines")
+
+        ns.define("second-order-cybernetics",
+            "The observer is part of the system — observing changes the thing observed",
+            description="First-order cybernetics: the thermostat controls temperature. Second-order: the person who set the thermostat IS part of the system. In the fleet: agents that observe other agents change the fleet dynamics. Monitoring changes behavior (Hawthorne effect). An agent that knows it's being evaluated changes its behavior. cuda-observer must account for its own effect on the observed system.",
+            level=Level.META,
+            examples=["Hawthorne effect: being observed changes behavior", "quantum measurement: observing changes the system", "fleet: monitoring agent changes the agents it monitors"],
+            bridges=["observer", "system", "feedback", "self-reference"],
+            tags=["cybernetics", "meta", "observer", "feedback"])
+
+        ns.define("viable-system-model",
+            "Stafford Beer's model: an organization is viable if it can maintain existence in a changing environment",
+            description="Five systems: (1) Operations (do the work), (2) Coordination (harmonize), (3) Anti-oscillation (dampen conflicts), (4) Planning (adapt to future), (5) Policy (govern direction). The fleet maps directly: (1) Task agents, (2) cuda-fleet-mesh, (3) cuda-consensus, (4) cuda-deliberation, (5) cuda-compliance. A viable fleet has all five. Remove any one and viability degrades.",
+            level=Level.DOMAIN,
+            examples=["Beer's VSM applied to organizations", "fleet: operations + coordination + anti-oscillation + planning + policy = viable", "human body: organs + nervous system + immune system + brain + consciousness"],
+            bridges=["organization", "viability", "systems", "governance"],
+            tags=["cybernetics", "model", "organization", "viability"])
+
+        ns.define("feedback-inhibition",
+            "The product of a process inhibits the process itself — completing the loop prevents runaway",
+            description="ATP production inhibits further ATP production when sufficient ATP exists. Insulin inhibits glucose production when blood sugar is high. The fleet's energy budget implements feedback inhibition: when ATP is sufficient, the Rest instinct activates less. This prevents energy accumulation (wasting resources on unnecessary rest) while ensuring reserves.",
+            level=Level.PATTERN,
+            examples=["ATP inhibits ATP production when sufficient", "insulin inhibits glucose production", "fleet: high ATP reduces rest instinct activation"],
+            bridges=["feedback-loop", "homeostasis", "setpoint", "inhibition"],
+            tags=["cybernetics", "feedback", "inhibition", "biology"])
+
+    def _load_algebra(self):
+        ns = self.add_namespace("algebra",
+            "Algebraic structures and the deep patterns they reveal about composition and transformation")
+
+        ns.define("monoid",
+            "A set with an associative binary operation and an identity element — the simplest useful algebraic structure",
+            description="Numbers under addition: 0 is identity, (a+b)+c = a+(b+c). Strings under concatenation: empty string is identity. Lists under append. The fleet's confidence fusion (harmonic mean) ALMOST forms a monoid — associative, has identity (1.0), but fusion(1.0, 1.0) = 0.5, not 1.0. Understanding monoids helps design composable operations: if an operation is a monoid, you can parallelize and fold arbitrarily.",
+            level=Level.DOMAIN,
+            examples=["numbers under addition (0, +)", "strings under concatenation ('', ++)", "lists under append ([], ++)"],
+            bridges=["associativity", "identity", "composition", "algebraic-structure"],
+            tags=["algebra", "structure", "composition"])
+
+        ns.define("group",
+            "A monoid where every element has an inverse — you can always undo",
+            description="Numbers under addition form a group: -5 undoes +5. Matrices under multiplication (if invertible) form a group. Groups capture symmetry and reversibility. In the fleet: the undo stack (cuda-persistence rollback) requires operations to form a group: every action has an inverse (undo). Not all fleet operations are invertible (you can't undo a message send). Designing invertible operations enables reliable recovery.",
+            level=Level.DOMAIN,
+            examples=["integers under addition (inverse: negative)", "rotations of a square (inverse: reverse rotation)", "fleet undo: action must have inverse for rollback"],
+            bridges=["monoid", "inverse", "reversibility", "symmetry"],
+            tags=["algebra", "structure", "reversibility"])
+
+        ns.define("semigroup",
+            "A set with an associative binary operation — less than a monoid (no identity required)",
+            description="Positive integers under addition: associative, but no identity (0 is not positive). A semigroup is the weakest useful algebraic structure. Any associative operation can be parallelized using map-reduce. In the fleet: trust aggregation may not have an identity (what does 'zero trust' mean?), but it IS associative (trust(A, trust(B, C)) = trust(trust(A, B), C)). This enables parallel trust computation.",
+            level=Level.DOMAIN,
+            examples=["positive integers under + (associative, no identity)", "strings under concatenation without empty string", "fleet trust aggregation: associative but identity debatable"],
+            bridges=["associativity", "parallelism", "algebraic-structure", "map-reduce"],
+            tags=["algebra", "structure", "associativity"])
+
+        ns.define("functor",
+            "A mapping between categories that preserves structure — lift a function to work on containers",
+            description="If you have a function f: A -> B, a functor lifts it to work on containers: F[f]: F[A] -> F[B]. List functor: map f over every element. Option functor: apply f if present, skip if absent. In the fleet: confidence is a functor: if you have a deterministic function, the confidence functor makes it confidence-aware: lift(normalize) -> confidence-normalize (propagates confidence through the computation).",
+            level=Level.DOMAIN,
+            examples=["List.map: lift function to work on lists", "Option.map: lift function to work on optional values", "fleet: confidence functor lifts deterministic ops to confidence-aware ops"],
+            bridges=["lifting", "category-theory", "composition", "container"],
+            tags=["algebra", "category-theory", "functor"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
