@@ -385,6 +385,9 @@ class HAV:
         self._load_propagation()
         self._load_lifecycle()
         self._load_incentives()
+        self._load_action_verbs()
+        self._load_action_verbs_2()
+        self._load_final_verbs()
         self._load_mathematics()
 
     def _load_uncertainty(self):
@@ -5250,6 +5253,540 @@ class HAV:
             examples=["money supply: useful measure, useless target", "fleet: fitness score as sole target → agents game the score", "test scores: useful measure, useless when teachers target them"],
             bridges=["metric", "gaming", "target", "measure"],
             tags=["incentive", "goodhart", "measure", "meta"])
+
+
+    def _load_action_verbs(self):
+        ns = self.add_namespace("action-verbs",
+            "High-compression verbs that each encode a complete multi-step operational pattern")
+
+        ns.define("vet",
+            "Rapidly assess whether a candidate is viable before investing in full evaluation",
+            description="Not evaluate — VET. A 30-second scan that eliminates 90% of options. Check three things: does it compile? Does it have tests? Does the README make sense? 30 seconds, not 30 minutes. Vet before evaluate. In the fleet: cuda-deliberation should vet proposals before full deliberation — quick confidence check on the proposer's track record eliminates obviously weak proposals from expensive deliberation rounds.",
+            level=Level.CONCRETE,
+            examples=["resume scan: 30 seconds, eliminate 90% before full interview (vet)", "fleet: quick confidence check on proposal before full deliberation (vet)", "startup idea: quick market check before building MVP (vet)"],
+            bridges=["pre-filter", "rapid-assessment", "triage", "efficiency"],
+            tags=["verb", "vet", "assess", "concrete"])
+
+        ns.define("triage",
+            "Rapidly categorize incoming items by urgency and severity to allocate attention where it's most needed",
+            description="Emergency room: patient with chest pain → immediate. Patient with cut finger → wait. 30-second assessment per patient, then prioritize. Triage doesn't solve — it RANKS. The ranking determines where limited attention goes first. In the fleet: cuda-filtration's ResourceBudget IS a triage system — incoming tasks are ranked by priority, and energy is allocated to the highest-ranked first.",
+            level=Level.CONCRETE,
+            examples=["ER: chest pain → immediate, cut finger → wait (triage)", "fleet: incoming tasks ranked by priority, energy allocated to highest (triage)", "inbox: flag urgent, archive spam, respond to important (triage)"],
+            bridges=["prioritize", "rank", "urgent", "allocate"],
+            tags=["verb", "triage", "prioritize", "concrete"])
+
+        ns.define("shard",
+            "Split a large entity into smaller, independently manageable pieces that can be processed in parallel",
+            description="A 100GB database split into 10 × 10GB shards. Each shard is independent, can be processed on a different machine. Sharding enables parallel processing of data too large for one machine. In the fleet: a large task (analyze 1000 sensor readings) is sharded into 10 sub-tasks of 100 readings each, assigned to 10 agents in parallel. Sharding turns a sequential bottleneck into parallel throughput.",
+            level=Level.CONCRETE,
+            examples=["database: 100GB → 10 × 10GB shards (parallel processing)", "fleet: 1000 readings → 10 × 100 reading sub-tasks (parallel agents)", "map: reduce input into chunks for parallel map workers"],
+            bridges=["split", "parallel", "partition", "scale"],
+            tags=["verb", "shard", "split", "concrete"])
+
+        ns.define("stitch",
+            "Combine multiple partial results into a coherent whole — the inverse of shard",
+            description="After sharding and parallel processing, stitch the results back together. 10 partial analyses → 1 comprehensive analysis. Stitching requires handling overlaps, resolving conflicts, and ensuring consistency. In the fleet: cuda-fusion's weighted/Bayesian fusion IS stitching — combining multiple sensor readings or agent assessments into one coherent picture. Stitch well and the seams are invisible.",
+            level=Level.CONCRETE,
+            examples=["sharded results → combined analysis (stitch)", "fleet: multiple sensor readings → fused coherent picture (stitch)", "quilt: separate patches → one blanket (stitch)"],
+            bridges=["fusion", "combine", "merge", "consistency"],
+            antonyms=["shard"],
+            tags=["verb", "stitch", "combine", "concrete"])
+
+        ns.define("bench",
+            "Establish a performance baseline by measuring a known workload under controlled conditions",
+            description="Before optimizing, bench: run the workload, measure the time, record the number. That's your baseline. After optimization, run the same bench. Compare. If you didn't bench first, you don't know if the optimization helped. In the fleet: each agent should bench its typical task performance before and after gene changes. cuda-metrics provides the timing. Without benching, you're optimizing blind.",
+            level=Level.CONCRETE,
+            examples=["benchmark: run workload, measure time (bench)", "fleet: measure task performance before/after gene change (bench)", "athlete: timed run before/after training program (bench)"],
+            bridges=["baseline", "measure", "performance", "comparison"],
+            tags=["verb", "bench", "measure", "concrete"])
+
+        ns.define("mock",
+            "Replace a real component with a fake one that has the same interface but controlled behavior",
+            description="Test a payment system without charging real cards → mock the payment gateway. Test fleet coordination without real network → mock the A2A protocol. Mocks enable testing in isolation: fast, deterministic, no external dependencies. In the fleet: cuda-equipment's traits enable mocking — implement the Sensor trait with fixed values for testing, swap in real sensors for production.",
+            level=Level.CONCRETE,
+            examples=["test payment without real charges (mock gateway)", "test fleet without real network (mock A2A)", "fleet: mock sensor trait with fixed values for testing"],
+            bridges=["testing", "isolation", "fake", "interface"],
+            tags=["verb", "mock", "fake", "concrete"])
+
+        ns.define("hardwire",
+            "Permanently connect two components with a direct, dedicated channel — no routing, no discovery, no overhead",
+            description="Instead of sending a message through the fleet mesh (routing overhead, discovery, serialization), hardwire two agents with a direct channel. Dedicated, no intermediaries, minimal latency. In the fleet: agents that communicate constantly (perception → deliberation) should be hardwired — direct function calls instead of A2A messages. Reserve the fleet mesh for inter-team communication, not intra-pipeline communication.",
+            level=Level.CONCRETE,
+            examples=["dedicated line between two offices instead of phone network (hardwire)", "fleet: direct function call between perception and deliberation (hardwire)", "memory bus: direct CPU-RAM connection instead of network storage (hardwire)"],
+            bridges=["direct-connection", "low-latency", "dedicated", "bypass"],
+            antonyms=["route"],
+            tags=["verb", "hardwire", "direct", "concrete"])
+
+        ns.define("throttle",
+            "Deliberately slow down a process to prevent overload, resource exhaustion, or rate limit violations",
+            description="API rate limit: 100 requests/second. Your code can do 500/second. Throttle to 100. Throttle isn't failure — it's protection. In the fleet: cuda-rate-limit's TokenBucket throttles outbound communication to prevent rate limit violations. Throttling is better than being blocked: self-imposed throttle keeps you under the limit, reactive throttle means you've already exceeded it.",
+            level=Level.CONCRETE,
+            examples=["API: self-throttle to 100/s to avoid 429 errors", "fleet: throttle outbound messages to stay under rate limits", "highway: speed limit as throttle (prevents accidents from over-speed)"],
+            bridges=["rate-limit", "protect", "slow-down", "self-imposed"],
+            tags=["verb", "throttle", "slow", "concrete"])
+
+        ns.define("bridge",
+            "Create a translation layer between two incompatible systems, enabling them to communicate without modifying either",
+            description="A database adapter that translates SQL queries to NoSQL operations. A protocol converter that translates HTTP to gRPC. The bridge doesn't modify either side — it sits between them and translates. In the fleet: cuda-vessel-bridge IS a bridge — it translates between physical sensors/actuators and the agent's abstract decision-making layer. Neither side needs to know about the other's implementation.",
+            level=Level.CONCRETE,
+            examples=["database adapter: SQL → NoSQL translation (bridge)", "fleet: physical sensors ↔ agent decisions (bridge)", "interpreter: translates between two languages (bridge)"],
+            bridges=["translation", "adapter", "intermediary", "compatibility"],
+            tags=["verb", "bridge", "translate", "concrete"])
+
+        ns.define("harden",
+            "Add defensive measures to a system to make it resistant to attacks, failures, and unexpected inputs",
+            description="Input validation, rate limiting, error handling, memory bounds, authentication — hardening is adding ALL the defensive layers that prevent the system from being compromised or crashing under adversarial conditions. In the fleet: cuda-sandbox hardens agent isolation, cuda-compliance hardens policy enforcement, cuda-rbac hardens access control. Hardening is the difference between 'works in development' and 'survives in production'.",
+            level=Level.PATTERN,
+            examples=["web app: add input validation, rate limit, auth, CSP (harden)", "fleet: add sandbox, compliance, RBAC to agent system (harden)", "house: add locks, alarm, reinforced doors (harden)"],
+            bridges=["defense", "production-readiness", "resilience", "robustness"],
+            tags=["verb", "harden", "defend", "pattern"])
+
+        ns.define("stress-test",
+            "Push a system beyond its normal operating range to find its breaking point and verify graceful degradation",
+            description="Load test: 1000 concurrent users. Chaos test: kill random services. Spike test: 10x normal traffic in 10 seconds. Stress-testing reveals weaknesses that normal testing misses. In the fleet: cuda-resilience's chaos monkey stress-tests the fleet by randomly failing agents and verifying that the fleet degrades gracefully rather than collapsing catastrophically.",
+            level=Level.CONCRETE,
+            examples=["load test: 1000 concurrent users (stress-test)", "chaos test: kill random services (stress-test)", "fleet: chaos monkey randomly fails agents (stress-test)"],
+            bridges=["testing", "extreme", "failure", "verification"],
+            tags=["verb", "stress-test", "push", "concrete"])
+
+        ns.define("garden",
+            "Tend to a system regularly — prune dead parts, water growing parts, remove weeds — continuous maintenance",
+            description="A garden isn't built once — it's tended continuously. Prune dead branches. Remove weeds (bad genes). Water growing plants (promising strategies). Rotate crops (gene diversity). In the fleet: the gene pool (cuda-genepool) needs gardening — quarantine bad genes, promote fit genes, maintain diversity, remove duplicates. Gardening is ongoing, not one-time. The best systems are gardens, not buildings.",
+            level=Level.BEHAVIOR,
+            examples=["garden: prune, water, weed, rotate (continuous maintenance)", "fleet: quarantine bad genes, promote fit ones (gene pool gardening)", "codebase: remove dead code, refactor, update deps (codebase gardening)"],
+            bridges=["maintenance", "continuous", "prune", "tend"],
+            tags=["verb", "garden", "maintain", "behavior"])
+
+        ns.define("orchestrate",
+            "Coordinate multiple independent components to perform a unified workflow without centralizing control",
+            description="An orchestra: 50 musicians, each playing their own part, no one telling each note when to play. The conductor sets tempo and dynamics, but each musician plays independently within that framework. In the fleet: cuda-captain orchestrates agents — sets mission parameters and task assignments, but each agent executes independently. Orchestration is coordination WITHOUT micromanagement.",
+            level=Level.PATTERN,
+            examples=["orchestra: conductor coordinates, musicians play independently", "fleet: captain coordinates, agents execute independently (orchestrate)", "devops: pipeline tool coordinates build, test, deploy stages (orchestrate)"],
+            bridges=["coordinate", "conduct", "workflow", "independent"],
+            tags=["verb", "orchestrate", "coordinate", "pattern"])
+
+        ns.define("ferment",
+            "Allow a system to develop complexity through autonomous internal processes over time, with minimal intervention",
+            description="Wine: grapes + yeast + time = complex flavors you can't design directly. Fermentation requires patience and a controlled environment, not active manipulation. In the fleet: cuda-genepool's evolution IS fermentation — genes combine, mutate, and compete over time. The fleet doesn't design optimal strategies directly. It creates the conditions (fitness function, energy budget) and lets strategies ferment into quality.",
+            level=Level.META,
+            examples=["wine: grapes + yeast + time = complex flavors (ferment)", "fleet: genes evolve over time into strategies (ferment)", "starter: flour + water + time = sourdough culture (ferment)"],
+            bridges=["evolution", "autonomous", "patience", "emergence"],
+            tags=["verb", "ferment", "evolve", "meta"])
+
+        ns.define("calibrate",
+            "Adjust a measurement instrument to match a known reference standard, ensuring accuracy",
+            description="A scale reads 101g for a 100g weight — it needs calibration. Adjust it to read 100g. Now it's calibrated against the reference standard. In the fleet: cuda-self-model's capability calibration adjusts self-assessed performance toward actual performance using EMA. Without calibration, agents overestimate or underestimate their capabilities. With calibration, self-assessment matches reality.",
+            level=Level.CONCRETE,
+            examples=["scale: reads 101g for 100g weight → adjust to 100g (calibrate)", "fleet: self-model adjusts self-assessment to match actual performance (calibrate)", "thermometer: adjust to match known reference temperature (calibrate)"],
+            bridges=["accuracy", "reference", "adjustment", "measurement"],
+            tags=["verb", "calibrate", "adjust", "concrete"])
+
+        ns.define("route",
+            "Determine the optimal path for information or resources to travel from source to destination",
+            description="GPS: route from A to B via fastest roads. Internet: route packets via shortest AS path. Fleet mesh: route messages via lowest-latency agent-to-agent path. Routing considers current conditions (congestion, latency, cost) and selects the best path NOW, not just the shortest path on paper. In the fleet: cuda-fleet-mesh's routing selects message paths dynamically based on current network conditions.",
+            level=Level.CONCRETE,
+            examples=["GPS: fastest route considering current traffic (route)", "internet: shortest AS path (route)", "fleet: lowest-latency message path (route)"],
+            bridges=["pathfinding", "optimal", "dynamic", "network"],
+            tags=["verb", "route", "path", "concrete"])
+
+        ns.define("thaw",
+            "Gradually restore a frozen or quarantined component to active service, testing at each step",
+            description="Frozen food: thaw in fridge overnight, not microwave (gradual). Quarantined employee: return to reduced duties first, then full duties. Thaw is the reverse of quarantine: incremental restoration with verification at each step. In the fleet: a quarantined gene (cuda-genepool) can be thawed — tested in sandbox first, then in limited production, then fully restored. Thaw prevents re-introduction of the problem that caused quarantine.",
+            level=Level.PATTERN,
+            examples=["quarantined employee: reduced duties → full duties (thaw)", "fleet: sandbox → limited production → full (thaw quarantined gene)", "frozen code: unit tests → staging → production (thaw)"],
+            bridges=["quarantine", "restore", "incremental", "verification"],
+            antonyms=["quarantine"],
+            tags=["verb", "thaw", "restore", "pattern"])
+
+        ns.define("snapshot",
+            "Capture the complete state of a system at a moment in time, enabling exact restoration later",
+            description="Virtual machine snapshot: save all memory, disk, CPU state → restore to EXACTLY this point. Database snapshot: consistent view of all data at one instant. Snapshots enable rollback, debugging, and recovery. In the fleet: cuda-persistence's snapshot captures agent state (energy, memory, genes, trust scores) at a moment in time. On failure, restore from snapshot instead of starting from scratch.",
+            level=Level.CONCRETE,
+            examples=["VM snapshot: exact state preservation for rollback", "fleet: agent state captured for failure recovery (snapshot)", "photo: visual snapshot of a moment in time"],
+            bridges=["backup", "state", "restore", "point-in-time"],
+            tags=["verb", "snapshot", "capture", "concrete"])
+
+        ns.define("broadcast",
+            "Send a message to all receivers simultaneously without targeting specific recipients",
+            description="Radio broadcast: one transmitter, all receivers in range hear it. TV broadcast: one signal, all TVs receive. Broadcast doesn't target — it INUNDATES. Receivers decide whether the message is relevant. In the fleet: cuda-a2a's broadcast sends a message to all fleet agents. Each agent decides whether to act on it based on relevance. Broadcast is efficient for fleet-wide announcements but wasteful if most agents ignore it.",
+            level=Level.CONCRETE,
+            examples=["radio: one transmitter, all receivers hear (broadcast)", "fleet: one message, all agents receive (broadcast)", "emergency alert: one signal, all phones receive (broadcast)"],
+            bridges=["multicast", "inundate", "announce", "all-receivers"],
+            tags=["verb", "broadcast", "send-all", "concrete"])
+
+        ns.define("tunnel",
+            "Create a direct path through an intermediate layer that would otherwise block or transform the communication",
+            description="VPN tunnel: encrypted path through the internet that bypasses firewalls and surveillance. SSH tunnel: direct connection through a bastion host. Tunnels bypass intermediaries. In the fleet: agents that need direct communication despite fleet mesh routing can establish tunnels — direct agent-to-agent connections that bypass the mesh routing layer for lower latency.",
+            level=Level.CONCRETE,
+            examples=["VPN: encrypted path through internet (tunnel)", "SSH tunnel: direct connection through bastion host (tunnel)", "fleet: direct agent-to-agent connection bypassing mesh routing (tunnel)"],
+            bridges=["bypass", "direct", "encrypted", "intermediary"],
+            antonyms=["route"],
+            tags=["verb", "tunnel", "bypass", "concrete"])
+
+        ns.define("pollinate",
+            "Transfer useful patterns or data from one part of the system to another, enabling cross-pollination of ideas",
+            description="Bees transfer pollen between flowers → cross-fertilization → genetic diversity. Without pollination, plants self-fertilize and lose diversity. In the fleet: cuda-genepool's gene sharing IS pollination — successful genes from one agent's pool transfer to another agent's pool. Cross-pollination prevents local optima by introducing diversity. Pollinate actively, not just wait for it to happen naturally.",
+            level=Level.PATTERN,
+            examples=["bees: transfer pollen between plants (pollinate)", "fleet: gene sharing between agent pools (pollinate)", "team rotation: ideas transfer between teams (pollinate)"],
+            bridges=["cross-pollination", "diversity", "transfer", "sharing"],
+            tags=["verb", "pollinate", "transfer", "pattern"])
+
+        ns.define("graft",
+            "Attach a foreign component to an existing system, creating a hybrid that combines both capabilities",
+            description="Graft apple branch onto pear tree → one tree produces both apples and pears. The graft takes time to heal but the result is a hybrid with capabilities neither had alone. In the fleet: grafting a new capability (e.g., cuda-attention) onto an existing agent (e.g., cuda-swarm-agent) creates a hybrid agent that can both coordinate AND focus attention. Grafting requires careful interface matching.",
+            level=Level.PATTERN,
+            examples=["apple branch grafted onto pear tree (hybrid fruit tree)", "fleet: attention capability grafted onto swarm agent (hybrid agent)", "organization: acquired team integrated into existing structure (graft)"],
+            bridges=["hybrid", "attach", "integrate", "combine"],
+            tags=["verb", "graft", "attach", "pattern"])
+
+        ns.define("reconcile",
+            "Resolve differences between two or more sources of truth into a single consistent state",
+            description="Bank statement vs checkbook: amounts differ. Reconcile: find the discrepancy, determine which is correct, update to consistent state. Two agents have different trust scores for the same third agent. Reconcile: exchange evidence, converge to agreed trust score. In the fleet: cuda-trust's gossip sharing and cuda-crdt's merge both implement reconciliation — combining multiple perspectives into one truth.",
+            level=Level.CONCRETE,
+            examples=["bank statement vs checkbook: find discrepancy, resolve (reconcile)", "fleet: agents exchange evidence, converge on agreed trust score (reconcile)", "git merge: resolve conflicts between branches (reconcile)"],
+            bridges=["consistency", "merge", "conflict-resolution", "truth"],
+            tags=["verb", "reconcile", "resolve", "concrete"])
+
+        ns.define("fortify",
+            "Add defensive layers specifically targeting known or anticipated attack vectors",
+            description="A castle is built → then fortified with thicker walls, deeper moats, more guards. Fortification is HARDENING against specific threats, not general hardening. In the fleet: cuda-compliance's policy rules ARE fortifications — specific rules against specific threat vectors (no unauthorized resource access, no energy overspending, no communication with untrusted agents). Each rule is a fortification against a specific attack.",
+            level=Level.PATTERN,
+            examples=["castle: add walls, moats, guards against specific threats (fortify)", "fleet: add compliance rules against specific attack vectors (fortify)", "network: add specific firewall rules for known attack patterns (fortify)"],
+            bridges=["harden", "defense", "specific", "threat"],
+            tags=["verb", "fortify", "defend", "pattern"])
+
+
+    def _load_action_verbs_2(self):
+        ns = self.add_namespace("action-verbs-2",
+            "More high-compression operational verbs for the fleet vocabulary")
+
+        ns.define("drain",
+            "Gradually consume or remove a finite resource until it reaches zero or a critical low",
+            description="A battery drains over hours. A budget drains as expenses accumulate. Drain is the passive consumption of a finite resource — it's not being actively attacked, just slowly depleted. In the fleet: an agent's energy budget drains during sustained deliberation. cuda-energy's EnergyBudget tracks drain rate. If drain exceeds generation (rest instinct), the agent eventually reaches apoptosis threshold.",
+            level=Level.CONCRETE,
+            examples=["phone battery: drains from 100% to 0% over day (drain)", "fleet: energy budget drains during sustained deliberation", "bank account: drains as expenses accumulate (drain)"],
+            bridges=["depletion", "consumption", "budget", "resource"],
+            tags=["verb", "drain", "deplete", "concrete"])
+
+        ns.define("prime",
+            "Pre-load a system with initial data or state so it's immediately useful, not cold-starting from zero",
+            description="Prime a water pump: fill it with water before starting so it can pump. Prime a cache: pre-populate with hot data before serving requests. Priming eliminates cold-start latency. In the fleet: cuda-cache's warm() primes the cache with predicted accesses. cuda-world-model primes with known object positions. A primed agent starts productive immediately; an unprimed agent needs time to learn.",
+            level=Level.CONCRETE,
+            examples=["water pump: fill with water before starting (prime)", "cache: pre-populate with hot data (prime)", "fleet: preload agent with known object positions (prime)"],
+            bridges=["warm-start", "pre-load", "initial-state", "latency"],
+            tags=["verb", "prime", "pre-load", "concrete"])
+
+        ns.define("relay",
+            "Pass a message or task through a chain of intermediaries, each forwarding to the next hop",
+            description="Olympic torch relay: runner to runner. Email relay: server to server. Each hop receives, processes minimally, and forwards. The relay doesn't CREATE the message — it TRANSPORTS it. In the fleet: cuda-fleet-mesh's message routing can use relay — if agent A can't reach agent C directly, it relays through agent B. Relay enables connectivity across disconnected network segments.",
+            level=Level.CONCRETE,
+            examples=["Olympic torch: runner to runner (relay)", "email: server to server to destination (relay)", "fleet: A → B → C message routing (relay)"],
+            bridges=["routing", "forward", "chain", "hop"],
+            tags=["verb", "relay", "forward", "concrete"])
+
+        ns.define("fuse",
+            "Merge two or more signals into one combined signal that preserves the essential information of each",
+            description="Sensor fusion: combine GPS + accelerometer + gyroscope into one position estimate. Each source has strengths and weaknesses; fusion produces a better estimate than any single source. In the fleet: cuda-fusion's Bayesian fusion combines multiple confidence-weighted assessments. cuda-confidence's harmonic mean fusion combines independent confidence sources. Fuse IS the fleet's fundamental information-combining operation.",
+            level=Level.CONCRETE,
+            examples=["GPS + accelerometer → fused position (sensor fusion)", "fleet: multiple confidence sources → combined assessment (fusion)", "metal alloy: iron + carbon → steel (material fusion)"],
+            bridges=["combine", "merge", "information", "confidence"],
+            tags=["verb", "fuse", "merge", "concrete"])
+
+        ns.define("steer",
+            "Apply a small directional influence that gradually changes the system's trajectory without forcing it",
+            description="A rudder doesn't push the ship forward — it redirects the existing momentum. Small rudder adjustment = gradual course change. Steering is INFLUENCE, not control. In the fleet: subagents steering the agent's direction through subtle prompts. cuda-deliberation's evidence weighting steers proposals toward better outcomes. Steering works WITH momentum, not against it.",
+            level=Level.PATTERN,
+            examples=["rudder: redirects ship momentum without forcing (steer)", "fleet: evidence weighting steers deliberation toward better proposals", "parent: gentle guidance without commanding (steer)"],
+            bridges=["influence", "redirect", "subtle", "momentum"],
+            tags=["verb", "steer", "influence", "pattern"])
+
+        ns.define("pinpoint",
+            "Identify the exact location or cause of an issue with maximum precision, not just the general area",
+            description="Not 'the server is slow' but 'request to /api/users takes 2300ms due to unindexed query on user_preferences table'. Pinpoint goes beyond identifying the subsystem to identifying the exact line of code, exact query, exact parameter. In the fleet: cuda-provenance's audit trail enables pinpointing — each decision can be traced back to the exact proposal, evidence, and agent that produced it.",
+            level=Level.CONCRETE,
+            examples=["not 'server slow' but '/api/users 2300ms, unindexed query' (pinpoint)", "fleet: trace decision to exact proposal and agent (pinpoint)", "doctor: not 'you're sick' but 'strep throat, bacteria X, antibiotic Y' (pinpoint)"],
+            bridges=["precision", "diagnosis", "root-cause", "exact"],
+            tags=["verb", "pinpoint", "precise", "concrete"])
+
+        ns.define("absorb",
+            "Take in a smaller entity into a larger one, integrating its capabilities without maintaining separate identity",
+            description="Company acquires startup: startup's tech is absorbed into the main product. The startup ceases to exist as a separate entity. In the fleet: when an agent is absorbed into a fleet, its capabilities (genes, equipment) are integrated into the fleet's shared resources. The agent identity disappears but its capabilities persist. Absorb is stronger than integrate — it's full assimilation.",
+            level=Level.CONCRETE,
+            examples=["acquisition: startup tech absorbed into main product", "fleet: agent capabilities absorbed into fleet shared resources", "ocean absorbs river: river ceases to exist, water persists"],
+            bridges=["acquire", "assimilate", "integrate", "merge"],
+            tags=["verb", "absorb", "assimilate", "concrete"])
+
+        ns.define("prune",
+            "Remove dead, redundant, or underperforming components to improve overall system health",
+            description="Prune dead branches: tree directs energy to living branches. Prune redundant code: codebase is easier to maintain. Prune underperforming genes: gene pool allocates energy to fit genes. Pruning IS maintenance — regular, deliberate removal of what doesn't serve the system anymore. In the fleet: cuda-genepool's gene quarantine + decay IS pruning — genes below fitness threshold are eventually removed.",
+            level=Level.PATTERN,
+            examples=["prune dead tree branches: energy to living branches", "prune dead code: easier maintenance", "fleet: quarantine and remove low-fitness genes (prune)"],
+            bridges=["remove", "maintenance", "fitness", "health"],
+            tags=["verb", "prune", "remove", "pattern"])
+
+        ns.define("graft-replace",
+            "Replace a component with a new version by cutting the old one out and grafting the new one in its place",
+            description="Replace a diseased heart valve: remove old, graft new one. The surrounding tissue adapts to the graft. In the fleet: replacing a cuda-* crate version is graft-replace — cut the old version out of Cargo.toml, graft the new one in. Dependent code may need minimal adaptation (the surrounding tissue adjusts to the new graft). Graft-replace is surgical upgrade.",
+            level=Level.CONCRETE,
+            examples=["heart valve replacement: remove old, graft new", "fleet: swap crate version in Cargo.toml (graft-replace)", "organ transplant: remove old organ, graft new one"],
+            bridges=["replace", "upgrade", "surgical", "version"],
+            tags=["verb", "graft-replace", "swap", "concrete"])
+
+        ns.define("partition",
+            "Divide a system into isolated segments that can operate independently, limiting blast radius",
+            description="A ship has watertight compartments — if one floods, others stay dry. Partition the system into isolated segments. In the fleet: cuda-resilience's bulkhead IS partition — each agent runs in its own isolated segment. If one fails, the partition prevents the failure from flooding other segments. Partition trades coordination overhead for isolation benefit.",
+            level=Level.CONCRETE,
+            examples=["ship watertight compartments: one floods, others dry (partition)", "fleet: bulkhead isolation between agents (partition)", "database: partitioned tables for independent scaling (partition)"],
+            bridges=["isolation", "bulkhead", "segment", "blast-radius"],
+            tags=["verb", "partition", "isolate", "concrete"])
+
+        ns.define("nominate",
+            "Designate a specific agent for a specific role based on capability matching, not random assignment",
+            description="Not 'someone handle this' but 'YOU handle this because your fitness for this task type is highest'. Nomination is capability-based assignment. In the fleet: cuda-captain's best_available() IS nomination — it scans all available agents and nominates the one with the highest fitness for the task. Random assignment wastes capable agents on wrong tasks.",
+            level=Level.CONCRETE,
+            examples=["team lead nomination: best person for the role", "fleet: best_available() nominates highest-fitness agent for task", "award nomination: best candidate selected based on criteria"],
+            bridges=["assign", "capability", "fitness", "selection"],
+            tags=["verb", "nominate", "assign", "concrete"])
+
+        ns.define("deputize",
+            "Temporarily grant an agent authority or capabilities beyond its normal scope for a specific purpose",
+            description="A sheriff deputizes a civilian for a specific emergency. The civilian gains law enforcement authority temporarily. Not a permanent promotion — a temporary grant for a specific situation. In the fleet: an agent temporarily granted elevated trust (cuda-rbac) or additional energy budget for an emergency response. Deputization is temporary authority elevation.",
+            level=Level.PATTERN,
+            examples=["sheriff deputizes civilian for emergency (temporary authority)", "fleet: agent granted elevated trust for emergency response (deputize)", "employee given acting manager role (deputize)"],
+            bridges=["temporary", "authority", "elevation", "emergency"],
+            tags=["verb", "deputize", "temporary", "pattern"])
+
+        ns.define("delegate",
+            "Assign a task to a subordinate agent with the authority to complete it autonomously",
+            description="Manager delegates report to employee: 'write the Q3 report, you have full authority on format and content'. The employee decides HOW, the manager decides WHAT. Delegation transfers both responsibility and authority. In the fleet: cuda-captain delegates tasks to agents — the captain defines the mission (what), the agent decides execution (how). Micro-management is the opposite of delegation.",
+            level=Level.PATTERN,
+            examples=["manager delegates report to employee (what, not how)", "fleet: captain delegates task to agent (mission defined, execution autonomous)", "parent delegates chore to child (task defined, method child's choice)"],
+            bridges=["assign", "autonomous", "authority", "responsibility"],
+            antonyms=["micromanage"],
+            tags=["verb", "delegate", "assign", "pattern"])
+
+        ns.define("quiesce",
+            "Gracefully drain all active operations and enter a quiet state without abrupt termination",
+            description="Not kill — QUIESCE. A database quiesces: finishes all active transactions, stops accepting new ones, then shuts down cleanly. No data loss. No in-flight request failures. Quiescence is graceful shutdown. In the fleet: cuda-actor's Stop supervision strategy quiesces the agent — finishes current task, saves state, then terminates. No partial work lost.",
+            level=Level.CONCRETE,
+            examples=["database: finish transactions, stop accepting new, then shut down (quiesce)", "fleet: finish task, save state, terminate cleanly (quiesce)", "factory: finish current production run, then shut down (quiesce)"],
+            bridges=["graceful-shutdown", "drain", "clean", "no-abort"],
+            antonyms=["kill", "abort"],
+            tags=["verb", "quiesce", "shutdown", "concrete"])
+
+        ns.define("silo",
+            "Isolate a component or team so completely that no information flows in or out — intentional separation",
+            description="Silos are usually bad — they prevent coordination. But INTENTIONAL silos can be useful: security silos (classified information), development silos (prevent premature integration), testing silos (isolate experiments). In the fleet: cuda-sandbox IS an intentional silo — the contained agent can't communicate with fleet agents until released. Silo for safety, not for dysfunction.",
+            level=Level.PATTERN,
+            examples=["security: classified information in silo (intentional)", "fleet: sandbox isolates untrusted agent (intentional silo)", "development: feature branch isolated from main (intentional silo)"],
+            bridges=["isolation", "sandbox", "containment", "intentional"],
+            tags=["verb", "silo", "isolate", "pattern"])
+
+        ns.define("referee",
+            "Observe interactions between agents and enforce rules without participating in the interaction",
+            description="A sports referee watches the game, enforces rules, but doesn't play. The referee's authority comes from impartiality — they're not a participant. In the fleet: cuda-compliance acts as referee — it observes agent behavior, enforces policy rules, but doesn't participate in the agents' tasks. A good referee is invisible when everything is fair — only visible when rules are broken.",
+            level=Level.PATTERN,
+            examples=["sports referee: watches, enforces rules, doesn't play", "fleet: compliance observes behavior, enforces policy, doesn't participate in tasks", "judge: observes arguments, enforces procedure, doesn't advocate"],
+            bridges=["observer", "enforce", "impartial", "rule"],
+            tags=["verb", "referee", "enforce", "pattern"])
+
+        ns.define("nurture",
+            "Invest resources in a growing entity with the expectation that it will eventually become self-sustaining",
+            description="A startup incubator nurtures new companies: provides funding, mentorship, office space. The expectation: companies become self-sustaining and the incubator investment is repaid. In the fleet: the captain (cuda-captain) nurtures new agents — assigns easy tasks first, provides guidance, monitors health. Eventually the agent becomes self-sustaining and no longer needs nurturing. Nurture with the expectation of independence.",
+            level=Level.PATTERN,
+            examples=["incubator: funds and mentors startups until self-sustaining (nurture)", "fleet: captain assigns easy tasks to new agent, then harder (nurture)", "parent: cares for child until independent (nurture)"],
+            bridges=["grow", "invest", "incubate", "eventual-independence"],
+            tags=["verb", "nurture", "grow", "pattern"])
+
+        ns.define("excavate",
+            "Dig through accumulated layers to find buried but valuable information or patterns",
+            description="Archaeological excavation: dig through layers of dirt to find artifacts. Each layer represents a time period. In the fleet: cuda-persistence's snapshots are layers — excavating through snapshots reveals how the agent's state evolved over time. cuda-memory-fabric's episodic memory is layered — excavating through past experiences reveals patterns that weren't visible in real-time.",
+            level=Level.CONCRETE,
+            examples=["archaeology: dig through dirt layers to find artifacts (excavate)", "fleet: dig through state snapshots to trace evolution (excavate)", "journalism: dig through documents to find buried story (excavate)"],
+            bridges=["dig", "layers", "history", "discover"],
+            tags=["verb", "excavate", "dig", "concrete"])
+
+        ns.define("synchronize",
+            "Bring two or more systems into consistent state by reconciling differences and resolving conflicts",
+            description="Clock sync: two clocks showing different times → adjust to same time. Git sync: local repo out of date → fetch + merge. Synchronization requires: identifying differences, determining which is correct (or merging), applying the resolution. In the fleet: cuda-crdt's merge operation IS synchronization — two agents with different states converge to one consistent state through merge.",
+            level=Level.CONCRETE,
+            examples=["clock sync: adjust two clocks to same time (synchronize)", "git: fetch + merge to sync local and remote (synchronize)", "fleet: CRDT merge brings two agent states into consistency (synchronize)"],
+            bridges=["consistency", "merge", "reconcile", "conflict"],
+            tags=["verb", "synchronize", "consistency", "concrete"])
+
+        ns.define("templify",
+            "Convert a specific solution into a reusable template that works across multiple contexts",
+            description="You solved a problem for project A. Extract the pattern into a template that works for projects B, C, and D. Templify is the verb form of 'create a template'. In the fleet: a successful agent configuration can be templified — convert specific parameter values into variables with defaults, making it reusable across different task types. cuda-config's ConfigLayer system enables templification.",
+            level=Level.PATTERN,
+            examples=["project A solution → reusable template for B, C, D (templify)", "fleet: specific agent config → reusable config template (templify)", "email template: specific email → template with variables (templify)"],
+            bridges=["template", "reusable", "generalize", "extract"],
+            tags=["verb", "templify", "template", "pattern"])
+
+        ns.define("vaccinate",
+            "Expose a system to a weakened version of a threat to build immunity against future stronger attacks",
+            description="Vaccine: weakened virus trains immune system. When real virus arrives, immune system destroys it quickly. In the fleet: cuda-resilience's chaos monkey IS vaccination — exposing the fleet to small, controlled failures builds resilience against larger, unexpected failures. Vaccination is proactive hardening based on exposure, not just design analysis.",
+            level=Level.PATTERN,
+            examples=["vaccine: weakened virus builds immunity (vaccinate)", "fleet: chaos monkey injects small failures to build resilience (vaccinate)", "flu shot: exposure builds antibodies before real flu arrives"],
+            bridges=["immunity", "exposure", "proactive", "resilience"],
+            tags=["verb", "vaccinate", "immunize", "pattern"])
+
+
+    def _load_final_verbs(self):
+        ns = self.add_namespace("fleet-verbs",
+            "The last set of operational verbs completing the 600-term vocabulary")
+
+        ns.define("scaffold",
+            "Build a temporary framework that supports construction and is removed when no longer needed",
+            description="Building construction: steel scaffold supports workers until the building can support itself. The scaffold is TEMPORARY — remove it when the building stands on its own. In the fleet: the captain (cuda-captain) scaffolds new agents — provides task structure and coordination until agents can self-organize. As agents mature, the scaffold is removed. Scaffold enables construction; it's not the final structure.",
+            level=Level.PATTERN,
+            examples=["building scaffold: temporary support during construction", "fleet: captain provides temporary task structure for new agents", "training wheels: temporary support until balance learned (scaffold)"],
+            bridges=["temporary", "support", "construction", "remove"],
+            tags=["verb", "scaffold", "temporary", "pattern"])
+
+        ns.define("recon",
+            "Perform a quick, minimal-cost exploration of unknown territory to gather information before committing resources",
+            description="Military reconnaissance: send a small scout team to gather intel before committing the full force. Recon is CHEAP exploration — minimal investment, maximal information about the unknown. In the fleet: cuda-filtration's BudgetTiers includes 'scout' mode — lightweight exploration that costs minimal energy but provides enough information to plan the full operation.",
+            level=Level.CONCRETE,
+            examples=["military scout team: gather intel before full deployment (recon)", "fleet: scout-mode exploration before committing full resources (recon)", "house hunting: drive by neighborhood before scheduling tour (recon)"],
+            bridges=["explore", "scout", "cheap", "information"],
+            tags=["verb", "recon", "scout", "concrete"])
+
+        ns.define("siege",
+            "Sustained pressure on a target that gradually depletes its resources until it yields or collapses",
+            description="Castle siege: surround, cut off supplies, wait. Not a direct attack — sustained pressure. The castle's resources (food, water, morale) deplete over time. In the fleet: sustained low-intensity adversarial input (cuda-adversarial-red-team) sieges an agent — not a single attack but continuous probing that depletes energy and tests resilience over time.",
+            level=Level.PATTERN,
+            examples=["castle siege: surround, cut supplies, wait for depletion", "fleet: sustained adversarial probing depletes agent energy over time (siege)", "legal: persistent lawsuits drain defendant resources (siege)"],
+            bridges=["sustained", "pressure", "deplete", "gradual"],
+            tags=["verb", "siege", "sustained", "pattern"])
+
+        ns.define("reconstitute",
+            "Rebuild a system from its preserved components after a disruption or failure",
+            description="Freeze-dried food: add water, it returns to (approximately) its original state. Reconstitute: take saved components (snapshot, genes, config) and rebuild the system. Not from scratch — from preserved state. In the fleet: cuda-persistence's rollback IS reconstitution — load a saved snapshot, restore agent state, resume operation. Reconstitution is faster than rebuilding from scratch.",
+            level=Level.CONCRETE,
+            examples=["freeze-dried: add water → restored food (reconstitute)", "fleet: load snapshot → restore agent state (reconstitute)", "jigsaw puzzle: reassemble from pieces (reconstitute)"],
+            bridges=["restore", "rebuild", "snapshot", "recovery"],
+            tags=["verb", "reconstitute", "restore", "concrete"])
+
+        ns.define("ping",
+            "Send a minimal signal to verify that a system is alive and responsive, measuring round-trip time",
+            description="Network ping: send ICMP echo, wait for reply, measure latency. The simplest health check: are you alive? How fast do you respond? In the fleet: cuda-fleet-mesh's ping_all() sends minimal health check messages to all agents. Ping is the cheapest possible health check — one message, one response, confirms alive + measures latency.",
+            level=Level.CONCRETE,
+            examples=["network ping: ICMP echo, measure latency (ping)", "fleet: health check message to all agents (ping)", "sonar: pulse, listen for echo (ping)"],
+            bridges=["health-check", "latency", "minimal", "alive"],
+            tags=["verb", "ping", "check", "concrete"])
+
+        ns.define("scuttle",
+            "Deliberately and safely destroy a system to prevent it from falling into the wrong hands or causing harm",
+            description="Scuttle a ship: open seacocks, let it sink on YOUR terms, not the enemy's. Controlled destruction. In the fleet: cuda-energy's ApoptosisProtocol IS scuttling — when an agent's fitness drops below threshold, it deliberately shuts down on its own terms rather than becoming a zombie agent that wastes fleet resources. Scuttle is controlled, intentional destruction.",
+            level=Level.PATTERN,
+            examples=["scuttle ship: sink on own terms, not enemy's", "fleet: apoptosis shuts down failing agent on own terms (scuttle)", "burn documents: destroy on your terms before enemy captures them"],
+            bridges=["apoptosis", "destroy", "controlled", "intentional"],
+            tags=["verb", "scuttle", "destroy", "pattern"])
+
+        ns.define("ratify",
+            "Formally approve a decision or action after it has been proposed and reviewed by relevant stakeholders",
+            description="Treaty negotiation: draft → review → ratify. Ratification is the formal approval step that turns a proposal into a binding decision. It comes AFTER deliberation. In the fleet: cuda-deliberation's consensus above threshold IS ratification — the proposal has been reviewed by evidence and stakeholders, and when confidence exceeds the threshold, it's ratified (becomes actionable).",
+            level=Level.CONCRETE,
+            examples=["treaty: negotiate → review → ratify (formal approval)", "fleet: deliberation → evidence → threshold → ratify (actionable decision)", "constitution: draft → debate → ratify (law)"],
+            bridges=["approve", "consensus", "formal", "decision"],
+            tags=["verb", "ratify", "approve", "concrete"])
+
+        ns.define("embargo",
+            "Restrict the flow of resources or information to or from a specific entity as a penalty or protective measure",
+            description="Trade embargo: no goods flow to/from the targeted country. Information embargo: classified data is restricted. Embargo is targeted isolation, not general quarantine. In the fleet: cuda-compliance can embargo a misbehaving agent — restrict its communication with fleet agents (not isolation, but selective restriction). Embargo is lighter than quarantine but heavier than rate-limiting.",
+            level=Level.PATTERN,
+            examples=["trade embargo: restrict goods to/from country", "fleet: restrict misbehaving agent's communication (embargo)", "library: embargo book from being checked out (restricted access)"],
+            bridges=["restrict", "sanction", "targeted", "penalty"],
+            tags=["verb", "embargo", "restrict", "pattern"])
+
+        ns.define("exfiltrate",
+            "Extract data or resources from a system, potentially covertly, without authorization",
+            description="Data breach: attacker exfiltrates user records. Insider threat: employee copies proprietary code to USB. Exfiltration is unauthorized extraction. In the fleet: the membrane (cuda-genepool) blocks exfiltration — antibody rules prevent agents from transmitting sensitive internal state to external entities. Compliance rules flag suspicious outbound data patterns.",
+            level=Level.CONCRETE,
+            examples=["data breach: attacker extracts user records (exfiltrate)", "insider: copies proprietary code to USB (exfiltrate)", "fleet membrane: blocks sensitive state transmission (anti-exfiltration)"],
+            bridges=["breach", "unauthorized", "extract", "security"],
+            tags=["verb", "exfiltrate", "breach", "concrete"])
+
+        ns.define("infiltrate",
+            "Gain access to a system by blending in with legitimate traffic or credentials",
+            description="Attacker uses stolen credentials to access the system — looks legitimate from the outside. Infiltration bypasses perimeter defenses by appearing to be authorized. In the fleet: cuda-rbac and membrane prevent infiltration — even with stolen credentials, the agent's behavioral patterns are monitored. An infiltrating agent that behaves differently from normal agents gets flagged by anomaly detection.",
+            level=Level.CONCRETE,
+            examples=["stolen credentials: attacker looks legitimate (infiltrate)", "trojan horse: malicious code hidden in legitimate package (infiltrate)", "fleet: behavioral monitoring detects anomalous agents (anti-infiltration)"],
+            bridges=["breach", "disguise", "credential-theft", "detection"],
+            tags=["verb", "infiltrate", "breach", "concrete"])
+
+        ns.define("decommission",
+            "Formally retire a system from active service, removing its access and redirecting its responsibilities",
+            description="Navy decommissions a ship: remove from active fleet, reassign crew, recycle parts. The ship still EXISTS but doesn't OPERATE. In the fleet: decommissioning an agent means: remove from fleet-mesh discovery, reassign its tasks, save its state (maybe restore later), revoke its access credentials. Decommission is graceful retirement, not abrupt termination.",
+            level=Level.CONCRETE,
+            examples=["navy ship: retire from active fleet (decommission)", "fleet agent: remove from mesh, reassign tasks, save state (decommission)", "software: EOL product, redirect users, archive code (decommission)"],
+            bridges=["retire", "graceful", "reassign", "formal"],
+            tags=["verb", "decommission", "retire", "concrete"])
+
+        ns.define("demote",
+            "Reduce an agent's authority, capabilities, or priority level in response to poor performance or policy violation",
+            description="Military: officer demoted for misconduct. Employee: senior role reduced to junior. Demotion is a punishment that reduces capability, not removal. The entity still functions but at a lower level. In the fleet: an agent that repeatedly violates compliance rules gets demoted — reduced energy budget, lower trust scores, restricted communication. Demotion is the step before decommission.",
+            level=Level.PATTERN,
+            examples=["officer demoted for misconduct (reduced rank)", "fleet agent: reduced energy budget after compliance violation (demote)", "employee: manager → individual contributor (demote)"],
+            bridges=["punish", "reduce", "authority", "warning"],
+            tags=["verb", "demote", "reduce", "pattern"])
+
+        ns.define("promote",
+            "Increase an agent's authority, capabilities, or priority level in recognition of superior performance",
+            description="Employee promoted from engineer to senior engineer. Military officer promoted for bravery. Promotion grants MORE: more authority, more resources, more responsibility. It's earned through demonstrated capability. In the fleet: cuda-rbac can promote an agent — grant higher permissions, larger energy budget, access to more fleet resources — when it consistently demonstrates high fitness and trust scores.",
+            level=Level.PATTERN,
+            examples=["engineer → senior engineer (promoted for competence)", "fleet agent: granted higher permissions for consistent high fitness (promote)", "officer: promoted for exemplary service (promote)"],
+            bridges=["reward", "elevate", "authority", "merit"],
+            antonyms=["demote"],
+            tags=["verb", "promote", "elevate", "pattern"])
+
+        ns.define("evict",
+            "Forcefully remove an entity from a shared resource or space because it's violating rules or overstaying",
+            description="Landlord evicts tenant for non-payment. Cache evicts LRU entry when full. Eviction is forceful removal for cause. In the fleet: cuda-cache's evict_lru() removes least-recently-used entries when the cache is full. cuda-lock can evict a holder that exceeds its lease TTL. Eviction is the mechanism that enforces resource limits.",
+            level=Level.CONCRETE,
+            examples=["landlord evicts tenant for non-payment (evict)", "cache evicts LRU entry when full (evict)", "fleet: cache removes least-recently-used entries (evict)"],
+            bridges=["remove", "forceful", "limit", "enforce"],
+            tags=["verb", "evict", "remove", "concrete"])
+
+        ns.define("provision",
+            "Allocate and configure resources needed by a new or growing entity before it needs them",
+            description="Cloud provisioning: create VMs, configure networks, set up storage BEFORE the application starts. Provision ahead of demand. In the fleet: provisioning a new agent means: allocate energy budget, configure communication channels, register with fleet mesh, assign equipment. All BEFORE the agent receives its first task. Provision eliminates cold-start latency.",
+            level=Level.CONCRETE,
+            examples=["cloud: create VMs, networks, storage before app starts (provision)", "fleet: allocate energy, register mesh, assign equipment before first task (provision)", "event: set up venue, AV, catering before attendees arrive (provision)"],
+            bridges=["allocate", "configure", "ahead-of-demand", "setup"],
+            tags=["verb", "provision", "allocate", "concrete"])
+
+        ns.define("ring-fence",
+            "Isolate a subset of resources or operations with strict boundaries to prevent contamination or cross-subsidization",
+            description="A bank ring-fences its retail banking from investment banking: if investment banking fails, retail is protected. The ring-fence creates an impenetrable boundary. In the fleet: cuda-sandbox ring-fences untrusted code from the fleet. cuda-resource can ring-fence a budget: this energy is for THIS task only, no cross-subsidization. Ring-fence is stronger than partition — it has financial/legal/energy guarantees.",
+            level=Level.PATTERN,
+            examples=["bank: retail ring-fenced from investment banking", "fleet: sandbox ring-fences untrusted code", "budget: task-specific energy allocation that can't be used elsewhere (ring-fence)"],
+            bridges=["isolate", "boundary", "protect", "guarantee"],
+            tags=["verb", "ring-fence", "isolate", "pattern"])
+
+        ns.define("siphon",
+            "Divert resources or information from a main flow into a secondary channel, usually covertly or gradually",
+            description="Siphon gas from a tank: slow, gradual diversion through a small tube. The main flow doesn't notice because the diversion is small and gradual. In the fleet: a misbehaving agent might siphon energy from the shared budget — small, gradual energy requests that go unnoticed. cuda-energy's budget tracking detects siphoning by monitoring consumption rates against expected usage patterns.",
+            level=Level.BEHAVIOR,
+            examples=["siphon gas from tank: slow, gradual diversion", "fleet: agent slowly diverts shared energy for personal use (siphon)", "embezzlement: small, gradual theft from accounts (siphon)"],
+            bridges=["divert", "gradual", "covert", "drain"],
+            tags=["verb", "siphon", "divert", "behavior"])
+
+        ns.define("bench-press",
+            "Stress-test a specific capability under controlled heavy load to measure its maximum capacity",
+            description="Bench press: how much can you lift ONCE? Not endurance (how long) but capacity (how much). One-rep max. In the fleet: bench-press a specific agent capability — what's the maximum message throughput before latency degrades? What's the maximum deliberation complexity before timeout? Bench-press finds the ceiling of a specific capability.",
+            level=Level.CONCRETE,
+            examples=["bench press: maximum weight lifted once (capacity)", "fleet: maximum message throughput before degradation (bench-press)", "bridge: maximum load before structural failure (bench-press)"],
+            bridges=["capacity-test", "maximum", "stress", "measure"],
+            tags=["verb", "bench-press", "capacity", "concrete"])
+
+        ns.define("cross-pollinate",
+            "Transfer successful patterns from one domain or team to another where they haven't been tried",
+            description="Toyota's lean manufacturing crossed into software development as agile methodology. The pattern transferred domains. Cross-pollination requires: recognizing the pattern in domain A, abstracting it, applying it in domain B, adapting for domain B's constraints. In the fleet: cuda-genepool's gene sharing IS cross-pollination — a navigation gene from a robotics agent applied to a data processing agent (after adaptation).",
+            level=Level.PATTERN,
+            examples=["lean manufacturing → agile software (cross-pollination)", "fleet: navigation gene applied to data processing (cross-pollinate)", "baseball analytics → basketball analytics (cross-pollination)"],
+            bridges=["transfer", "domain-transfer", "adapt", "innovation"],
+            tags=["verb", "cross-pollinate", "transfer", "pattern"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
