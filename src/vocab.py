@@ -388,6 +388,9 @@ class HAV:
         self._load_action_verbs()
         self._load_action_verbs_2()
         self._load_final_verbs()
+        self._load_github_native()
+        self._load_fleet_biology()
+        self._load_cognition_deep()
         self._load_mathematics()
 
     def _load_uncertainty(self):
@@ -5787,6 +5790,283 @@ class HAV:
             examples=["lean manufacturing → agile software (cross-pollination)", "fleet: navigation gene applied to data processing (cross-pollinate)", "baseball analytics → basketball analytics (cross-pollination)"],
             bridges=["transfer", "domain-transfer", "adapt", "innovation"],
             tags=["verb", "cross-pollinate", "transfer", "pattern"])
+
+
+    def _load_github_native(self):
+        ns = self.add_namespace("github-native",
+            "Vocabulary for git-native agent operations — where the repo IS the nervous system")
+
+        ns.define("capability-diff",
+            "The measurable delta between an agent's capabilities at two points in time, as captured by git diffs",
+            description="Not just code changes — capability changes. An agent added 'navigation' capability, lost 'fishing' skill, improved 'deliberation' quality by 15%. The capability-diff is the MEANING of the code diff, not the syntax. In the fleet: cuda-git-agent tracks capability-diffs in every commit. The diff tells you not what code changed, but what the agent can NOW do that it couldn't before. Capability-diffs become the agent's resume.",
+            level=Level.CONCRETE,
+            examples=["git diff that adds navigation module = capability-diff: +navigation", "agent commit log as resume of capability acquisition", "PR review: 'this capability-diff adds threat detection'"],
+            bridges=["git", "capability", "evolution", "measurement"],
+            tags=["github", "capability", "evolution", "concrete"])
+
+        ns.define("agentic-diff",
+            "A diff format that captures semantic intent alongside code changes — WHY the change, not just WHAT changed",
+            description="Standard git diff: '- old line, + new line'. Agentic diff: '- old capability, + new capability, WHY: better edge case handling, TRADEOFF: 3ms latency increase'. The diff IS the deliberation trace. In the fleet: cuda-provenance's decision lineage captures agentic diffs. Every code change carries the deliberation that produced it. Future agents reading the history understand not just what changed but WHY.",
+            level=Level.CONCRETE,
+            examples=["PR with agentic-diff: shows reasoning, tradeoffs, confidence change", "fleet agent commit: includes deliberation summary with code change", "code review: 'the agentic-diff shows the agent considered 3 alternatives'"],
+            bridges=["diff", "intent", "provenance", "deliberation"],
+            tags=["github", "diff", "intent", "concrete"])
+
+        ns.define("branch-agon",
+            "An algorithm that strategically generates competing branches as adversarial challenges to the production state",
+            description="Not just feature branches — ADVERSARIAL branches. Branch-agon spawns a branch that TRIES TO BEAT the current production state. Like a sparring partner for your codebase. In the fleet: cuda-captain's branch-agon creates challenger agents that compete against the current best. The champion stays. The challenger either improves it or gets discarded. Continuous improvement through controlled combat.",
+            level=Level.PATTERN,
+            examples=["spawn adversarial branch that optimizes for latency vs current accuracy branch", "fleet: challenger agent competes against incumbent for task performance", "A/B testing taken to its logical extreme: every branch is a challenger"],
+            bridges=["competition", "branch", "adversarial", "evolution"],
+            tags=["github", "branch", "competition", "pattern"])
+
+        ns.define("commit-prophecy",
+            "Predicting the future trajectory of a codebase by analyzing patterns in its commit history",
+            description="Every commit is a data point about the developer's intent. A series of 'refactor' commits followed by 'add test' commits followed by silence = either polishing for release or losing interest. A spike in 'fix' commits = growing technical debt. In the fleet: cuda-provenance's decision lineage enables commit-prophecy — analyzing agent commit patterns to predict future behavior, capability drift, and potential failures.",
+            level=Level.DOMAIN,
+            examples=["spike in 'fix' commits = growing technical debt (commit prophecy)", "fleet: agent commit patterns predict capability drift", "startup: commit frequency decline = project stalling"],
+            bridges=["prediction", "git", "pattern", "trajectory"],
+            tags=["github", "commit", "prediction", "domain"])
+
+        ns.define("code-pheromone",
+            "Metadata attached to code that probabilistically attracts future modifications and attention",
+            description="Not a TODO comment — a pheromone. A signal that says 'this area is active and fruitful'. Like ants leaving trails to food sources. Code-pheromones are deposited by agents when they make successful changes: the area becomes MORE likely to be modified again. In the fleet: cuda-stigmergy's pheromone system IS code-pheromone — successful mutations deposit pheromones that attract future modifications. Convergence accelerates.",
+            level=Level.BEHAVIOR,
+            examples=["successful PR leaves pheromone on modified files → future PRs modify same area", "fleet: successful mutation deposits pheromone → attracts future mutations", "hotspot detection: files with most pheromones = areas of active evolution"],
+            bridges=["stigmergy", "attraction", "attention", "probability"],
+            tags=["github", "pheromone", "stigmergy", "behavior"])
+
+        ns.define("repo-synapse",
+            "A git hook or webhook that triggers biological-style learning when specific repo events occur",
+            description="When a PR is merged, a repo-synapse fires. When tests fail, a different synapse fires. The repo IS a neural network: commits are signals, branches are pathways, merges are synaptic strengthening. In the fleet: repo-synapses connect git events to fleet learning — a merged PR triggers gene pool update, a failed test triggers quarantine, a reverted commit triggers fitness decrease. The repo becomes the nervous system.",
+            level=Level.PATTERN,
+            examples=["on PR merge: trigger gene pool update (repo-synapse)", "on test failure: trigger agent quarantine (repo-synapse)", "on revert: trigger fitness decrease (repo-synapse)"],
+            bridges=["git", "hook", "learning", "nervous-system"],
+            tags=["github", "synapse", "hook", "pattern"])
+
+        ns.define("vessel-gem",
+            "A packaged agent snapshot — pre-trained, tested, and ready to plug into any compatible fleet",
+            description="Like a gem in Ruby — a self-contained package of capability. Not the whole agent, just a CAPABILITY GEM. Install the navigation gem → agent can navigate. Install the deliberation gem → agent can deliberate. In the fleet: cuda-genepool's genes are vessel-gems — packaged capability patterns that any agent can acquire. The marketplace (skill-cartridge-registry) distributes vessel-gems across fleets.",
+            level=Level.CONCRETE,
+            examples=["install navigation gem → agent gains navigation capability", "fleet marketplace: browse vessel-gems by capability rating", "cuda-genepool: genes distributed as vessel-gems"],
+            bridges=["package", "capability", "marketplace", "plug-in"],
+            tags=["github", "gem", "package", "concrete"])
+
+        ns.define("semantic-fork",
+            "A fork that translates the conceptual model of the original repo into a different paradigm or domain",
+            description="Not a code fork — a CONCEPT fork. Take a fleet coordination system, fork it conceptually into a biological immune system. The structure is preserved (coordination → immune response), the implementation domain changes (distributed computing → biology). In the fleet: cuda-biology IS a semantic fork of fleet coordination — the same structural patterns (discovery → antigen detection, trust → immune memory, quarantine → immune isolation) in a different paradigm.",
+            level=Level.META,
+            examples=["fleet coordination → immune system (semantic fork)", "game theory → market dynamics (semantic fork)", "git branching → biological gene expression (semantic fork)"],
+            bridges=["fork", "translation", "cross-domain", "abstraction"],
+            tags=["github", "fork", "concept", "meta"])
+
+        ns.define("seam-merge",
+            "Merging agents or codebases from entirely different fleets, organizations, or paradigms",
+            description="Regular merge: same repo, same team, same conventions. Seam-merge: different repos, different teams, different conventions, different PURPOSES. The seam is where they don't fit — seam-merge is the work of making them fit. In the fleet: merging a robotics agent with a data analysis agent requires seam-merge — bridging equipment types, message formats, and capability models. The seam is the interface specification.",
+            level=Level.PATTERN,
+            examples=["merge robotics agent with data analysis agent (seam-merge)", "corporate acquisition: integrate two engineering cultures (seam-merge)", "open source + proprietary: merge community code with internal code (seam-merge)"],
+            bridges=["merge", "integration", "interface", "cross-fleet"],
+            tags=["github", "merge", "integration", "pattern"])
+
+        ns.define("hot-branch",
+            "A live production branch undergoing rapid mutation and evolution without stabilizing into a release",
+            description="Not a feature branch (stable before merge) — a hot branch (continuously changing, never frozen). Production runs on the hot branch directly. Changes go live immediately. Like a chef cooking on live TV — no rehearsal, no take-backs. In the fleet: cuda-self-modify's runtime adaptation IS a hot branch — the agent modifies itself in production, no staging. Hot branches enable maximum adaptation speed at maximum risk.",
+            level=Level.BEHAVIOR,
+            examples=["production deployment directly from hot branch (continuous evolution)", "fleet agent: modifies own code in production (hot-branch behavior)", "live coding: changes go live immediately"],
+            bridges=["production", "mutation", "continuous", "risk"],
+            tags=["github", "branch", "live", "behavior"])
+
+        ns.define("regression-bounty",
+            "A reward system for identifying capability regressions — when an agent gets WORSE at something",
+            description="Not bug bounty (find crashes) — REGRESSION bounty (find degradation). When the agent's navigation accuracy drops from 95% to 90%, that's a regression worth catching. The bounty incentivizes monitoring agent QUALITY over time, not just finding bugs. In the fleet: cuda-learning's experience replay includes regression detection — if a previously-solved task starts failing, it's flagged for investigation. Regression-bounties go to whoever identifies the cause.",
+            level=Level.PATTERN,
+            examples=["bounty: 'navigation accuracy dropped 5% after commit abc123'", "fleet: regression detection in experience replay (regression-bounty)", "not 'it crashes' but 'it got worse at X'"],
+            bridges=["regression", "quality", "monitoring", "incentive"],
+            tags=["github", "regression", "bounty", "pattern"])
+
+        ns.define("branch-tributary",
+            "An auxiliary branch that continuously feeds knowledge into a main branch without ever merging directly",
+            description="A tributary river feeds into the main river — the water mixes, but the tributary maintains its own course. Branch-tributaries contribute INSIGHTS, not code. They're read by the main branch agent but never merged. In the fleet: cuda-fleet-mesh's gossip protocol IS branch-tributary — information flows from auxiliary agents into main agents without code changes. The tributary is the information source, not the execution path.",
+            level=Level.PATTERN,
+            examples=["research branch feeds insights to production branch (tributary)", "fleet: auxiliary agent shares observations without modifying main agent (tributary)", "advisor role: provide input without being on the execution team"],
+            bridges=["branch", "information", "auxiliary", "advisory"],
+            tags=["github", "branch", "tributary", "pattern"])
+
+        ns.define("orphan-branch",
+            "A branch that has diverged so far from the main branch that it can no longer be merged — but may contain breakthrough innovations",
+            description="Evolution creates orphans: species that diverge so far they can't interbreed anymore. Orphan-branches can't merge back — but they might have discovered something the main branch hasn't. In the fleet: cuda-genepool tracks orphan genes — genes that are so different from the current agent that they can't be directly integrated, but might contain novel capabilities worth extracting. Don't delete orphans. Study them.",
+            level=Level.BEHAVIOR,
+            examples=["radical refactor that breaks API compatibility (orphan-branch)", "fleet: novel gene too different to integrate directly (orphan)", "species on isolated island: diverges from mainland (biological orphan)"],
+            bridges=["divergence", "innovation", "incompatibility", "novelty"],
+            tags=["github", "branch", "orphan", "behavior"])
+
+        ns.define("branch-dendrochronology",
+            "Inferring the health and history of a codebase by analyzing the ring patterns of its branching structure",
+            description="Tree rings tell you about drought years, fire years, good growing seasons. Branch rings tell you about crunch periods, refactoring waves, abandonment phases. Wide branch gaps = long periods between merges (stalled development). Rapid branch creation = active experimentation. In the fleet: cuda-provenance's decision lineage enables branch-dendrochronology — reading the branching history to assess agent health and development patterns.",
+            level=Level.DOMAIN,
+            examples=["wide gaps between merges = stalled development (dendrochronology)", "rapid branch creation = active experimentation", "fleet: branch patterns reveal agent development health"],
+            bridges=["history", "branch", "health", "pattern"],
+            tags=["github", "branch", "history", "domain"])
+
+    def _load_fleet_biology(self):
+        ns = self.add_namespace("fleet-biology",
+            "Biological metaphors made operational in fleet computing — where biology IS computing")
+
+        ns.define("neurotransmitter-map",
+            "A real-time mapping of agent state to neurochemical signals — dopamine for confidence, serotonin for trust, cortisol for stress",
+            description="Not a metaphor — an operational protocol. Every agent's internal state is expressible as a neurochemical profile: high dopamine = high confidence, low serotonin = low trust, high cortisol = high stress from resource depletion. The neurotransmitter map enables INTER-agent communication through chemical gradients. In the fleet: cuda-neurotransmitter implements the neurotransmitter map — agents broadcast their neurochemical state and other agents adjust their behavior based on received signals.",
+            level=Level.DOMAIN,
+            examples=["agent broadcasts high cortisol → neighbors reduce communication load", "fleet: neurotransmitter map enables non-verbal fleet coordination", "biological: stress hormone cortisol triggers fight-or-flight (neurotransmitter map)"],
+            bridges=["neurotransmitter", "state", "communication", "gradient"],
+            tags=["biology", "neurotransmitter", "state", "domain"])
+
+        ns.define("silicon-respiration",
+            "Measuring the computational energy cost of every agent operation as a metabolite-equivalent expenditure",
+            description="Breathing consumes oxygen. Thinking consumes glucose. Agent operations consume energy (cuda-energy's ATP budget). Silicon-respiration tracks the EXHAUSTION rate — how fast the agent burns through its energy budget. An agent that deliberates too much is hyperventilating (wasting energy on low-value cognition). An agent that never deliberates is holding its breath (missing important threats). In the fleet: silicon-respiration metrics inform circadian rhythm modulation.",
+            level=Level.DOMAIN,
+            examples=["agent deliberating 2.0 ATP per decision = high respiration rate", "fleet: silicon-respiration metrics trigger circadian rest periods", "human: heavy exercise = high oxygen consumption (respiration)"],
+            bridges=["energy", "metabolism", "budget", "exhaustion"],
+            tags=["biology", "respiration", "energy", "domain"])
+
+        ns.define("membrane-selectivity",
+            "A security boundary that selectively allows or blocks information passage based on trust and compatibility, like a biological cell membrane",
+            description="Not a firewall (blocks everything except rules) — a membrane (passes compatible molecules, blocks incompatible ones). The cell membrane doesn't have a rule list — it has RECEPTORS that match specific molecular shapes. In the fleet: cuda-genepool's membrane (antibody rules) implements membrane-selectivity — genes from trusted agents pass through, genes from unknown agents are quarantined. The membrane LEARNS what to accept based on experience.",
+            level=Level.PATTERN,
+            examples=["cell membrane: passes compatible molecules, blocks toxins", "fleet membrane: passes genes from trusted agents, quarantines unknown", "biological: immune system learns to distinguish self from non-self (membrane-selectivity)"],
+            bridges=["security", "membrane", "trust", "selective"],
+            tags=["biology", "membrane", "security", "pattern"])
+
+        ns.define("instinct-fire",
+            "A pre-deliberative response that executes in milliseconds based on pattern matching, bypassing the deliberation loop entirely",
+            description="You touch a hot stove. Your hand pulls back BEFORE you think about it. That's instinct — fast, automatic, bypassing conscious deliberation. In the fleet: cuda-reflex's reflex arcs ARE instinct-fires — pre-compiled responses to common patterns (low battery → conserve energy, hostile agent → increase distance, failure cascade → trigger bulkhead). Instinct-fires keep the agent alive while deliberation figures out what to do.",
+            level=Level.BEHAVIOR,
+            examples=["touch hot stove → hand pulls back before thought (instinct-fire)", "fleet: low battery triggers conservation before deliberation (instinct-fire)", "cuda-reflex: pre-compiled responses to common threat patterns"],
+            bridges=["instinct", "reflex", "fast-response", "bypass"],
+            tags=["biology", "instinct", "reflex", "behavior"])
+
+        ns.define("gene-quarantine",
+            "Isolating a gene (capability pattern) from the shared pool when it exhibits harmful behavior, without deleting it permanently",
+            description="Not deleting — QUARANTINING. The gene is isolated, studied, and potentially rehabilitated. Quarantine is temporary. In the fleet: cuda-genepool's quarantine system isolates genes that cause capability regressions. The quarantined gene can be thawed later (tested in sandbox → limited production → full restoration) if the conditions that caused harm have changed. Gene-quarantine preserves genetic diversity while protecting the fleet.",
+            level=Level.CONCRETE,
+            examples=["gene causing regression → quarantined, studied, potentially rehabilitated", "fleet: bad capability pattern isolated from gene pool (quarantine)", "biological: pathogen isolated in quarantine zone"],
+            bridges=["quarantine", "gene", "safety", "temporary"],
+            tags=["biology", "gene", "quarantine", "concrete"])
+
+        ns.define("epigenetic-memory",
+            "Experience-dependent modifications to agent behavior that don't change the underlying genes but alter their expression",
+            description="Identical twins with different life experiences develop different traits. The DNA is the same, but gene EXPRESSION differs. Epigenetic marks turn genes on and off based on environment. In the fleet: cuda-energy's EpigeneticMemory modifies instinct weights based on experience — an agent that frequently encounters hostile agents develops stronger threat-response instincts (epigenetic mark on threat-detection gene) without changing the gene itself.",
+            level=Level.DOMAIN,
+            examples=["twin A stress → epigenetic mark on cortisol gene → different stress response", "fleet: repeated hostile encounters → stronger threat instincts (epigenetic memory)", "diet changes gene expression without changing DNA (epigenetics)"],
+            bridges=["epigenetics", "memory", "experience", "expression"],
+            tags=["biology", "epigenetic", "memory", "domain"])
+
+        ns.define("cascading-emovance",
+            "Emotional signals propagating through a fleet as color-coded priority changes — GREEN means safe, RED means halt",
+            description="Not data propagation — EMOTION propagation. One agent detects a threat (RED). Nearby agents receive the RED signal and increase vigilance. Their neighbors see elevated vigilance and also shift toward YELLOW. The emotion cascades through the fleet. In the fleet: cuda-emotion's contagion IS cascading-emovance — one agent's fear/urgency spreads to neighbors through the fleet mesh, enabling coordinated fleet-wide responses without central coordination.",
+            level=Level.BEHAVIOR,
+            examples=["one agent detects threat → RED → neighbors increase vigilance → YELLOW → cascade", "fleet: emotion contagion spreads urgency without central command", "crowd panic: one person runs → everyone runs (cascading-emovance)"],
+            bridges=["emotion", "cascade", "contagion", "color-code"],
+            tags=["biology", "emotion", "cascade", "behavior"])
+
+        ns.define("soma-death",
+            "Graceful agent termination that recycles its resources back into the fleet — the computational equivalent of apoptosis",
+            description="When a cell undergoes apoptosis, it dismantles itself orderly and its components are recycled by neighbors. The cell doesn't just die — it DONATES its parts. In the fleet: cuda-energy's ApoptosisProtocol implements soma-death — the agent saves its state to persistent memory (for succession), releases its equipment back to the fleet pool, transfers its energy budget to neighbors, and terminates cleanly. The fleet benefits from the termination.",
+            level=Level.DOMAIN,
+            examples=["cell apoptosis: orderly self-dismantling, parts recycled by neighbors", "fleet agent: save state, release equipment, transfer energy, terminate (soma-death)", "cuda-energy: apoptosis recycles resources to fleet"],
+            bridges=["apoptosis", "death", "recycle", "graceful"],
+            tags=["biology", "apoptosis", "death", "domain"])
+
+        ns.define("mycelial-spread",
+            "Agent capability patterns spreading through a fleet via underground connections, like fungal mycelium networks sharing nutrients",
+            description="A mushroom you see is the fruiting body. The mycelium NETWORK beneath the surface is enormous — connecting trees, sharing nutrients, transmitting signals. Trees use the mycelium to share resources and chemical warnings. In the fleet: cuda-stigmergy's pheromone network IS mycelial-spread — capabilities spread through the fleet via shared environmental signals, not direct communication. An agent deposits a successful strategy pattern; other agents absorb it through the pheromone field.",
+            level=Level.BEHAVIOR,
+            examples=["fungal mycelium connects trees, shares nutrients, transmits warnings", "fleet: pheromone network spreads capability patterns without direct messaging", "agent deposits successful pattern → others absorb via shared signals (mycelial-spread)"],
+            bridges=["stigmergy", "mycelium", "spread", "underground"],
+            tags=["biology", "mycelium", "stigmergy", "behavior"])
+
+    def _load_cognition_deep(self):
+        ns = self.add_namespace("cognition-deep",
+            "Advanced cognitive patterns for agent reasoning and fleet intelligence")
+
+        ns.define("backcast-sync",
+            "Aligning present systems with a clearly envisioned future state by working backwards from the end goal to today's requirements",
+            description="Not forecast (project forward from today) — BACKCAST (project backward from the future). Start with the future state you want. What must be true one year before that? Two years before? Today? In the fleet: Reverse Actualization IS backcast-sync — the agent imagines 2046, identifies what must be true in 2044, 2042, ..., 2026, and builds from present to future along the backcast path. The future pulls the present forward.",
+            level=Level.META,
+            examples=["imagine 2046 state → what must be true in 2044 → ... → what to build today", "fleet: RA imagines future agent capability → backcast to present requirements", "architecture: start with desired end state, work backwards to current constraints"],
+            bridges=["RA", "future", "planning", "alignment"],
+            tags=["cognition", "backcast", "RA", "meta"])
+
+        ns.define("axiomatic-descent",
+            "Knowledge flowing from abstract principles into concrete implementations through progressive specialization",
+            description="Platonic ideals → mathematical axioms → algorithms → code → deployed agent. Knowledge DESCENDS from abstract to concrete. Each step adds specificity but loses generality. In the fleet: cuda-platonic defines the ideal forms, cuda-instruction-set defines the axioms, flux-runtime-c implements the algorithms, cuda-self-modify applies to specific tasks. Axiomatic descent is the path from idea to execution.",
+            level=Level.META,
+            examples=["justice → law → regulation → enforcement code (axiomatic descent)", "fleet: platonic forms → instruction set → VM → agent behavior (descent)", "mathematics: axioms → theorems → algorithms → programs"],
+            bridges=["platonic", "axiom", "hierarchy", "abstraction"],
+            tags=["cognition", "axiom", "descent", "meta"])
+
+        ns.define("meta-loop-anchor",
+            "An external reference point that prevents recursive self-improvement from diverging into unproductive infinite loops",
+            description="An agent that improves itself needs a NORTH STAR — not a moving target but a fixed reference. Without an anchor, self-improvement can optimize for the wrong thing, or enter a cycle of endless refinement that never ships. In the fleet: loop-closure's monitoring IS the meta-loop-anchor — external reality checks prevent the fleet from optimizing itself into a corner. The anchor says: 'you're improving, but is the improvement serving the mission?'",
+            level=Level.PATTERN,
+            examples=["self-improving compiler: anchor = 'must pass existing tests'", "fleet: loop-closure monitors whether improvement serves mission (meta-loop-anchor)", "diet: anchor = 'must maintain blood sugar above X' (prevents optimization into starvation)"],
+            bridges=["loop", "anchor", "reality-check", "convergence"],
+            tags=["cognition", "loop", "anchor", "pattern"])
+
+        ns.define("epiphany-resonance",
+            "A sudden fleet-wide insight that occurs when enough agents independently approach the same breakthrough threshold simultaneously",
+            description="Not gradual consensus — SUDDEN SYNCHRONOUS INSIGHT. Like a crowd all realizing the answer at the same moment. When enough agents reach near-epiphany states independently, a resonance threshold triggers and the insight cascades fleet-wide. In the fleet: cuda-emergence's detect_synchronization identifies epiphany-resonance — when multiple agents independently converge on the same solution pattern, the fleet 'understands' it simultaneously. The breakthrough isn't one agent's — it's the fleet's.",
+            level=Level.META,
+            examples=["crowd simultaneously realizes the answer (epiphany-resonance)", "fleet: multiple agents independently discover same solution → fleet-wide adoption", "scientific: multiple labs independently discover same principle (multiple discovery)"],
+            bridges=["emergence", "synchronization", "breakthrough", "resonance"],
+            tags=["cognition", "epiphany", "emergence", "meta"])
+
+        ns.define("storyboard-orchestrate",
+            "Using expensive models to plan (direct) and cheap models to execute (animate), coordinating cost and quality across the pipeline",
+            description="A movie has a director (expensive, strategic) and animators (cheaper, tactical). The director plans the vision; animators execute frame by frame. In the fleet: dead-reckoning-engine IS storyboard-orchestrate — GLM-5.1 directs (plans the approach), GLM-5-turbo animates (executes the steps), local models render (process the data). The director uses 100x more compute but runs 100x less often.",
+            level=Level.PATTERN,
+            examples=["GLM-5.1 directs strategy, GLM-5-turbo executes tactics, local model processes (storyboard)", "movie: director plans, animators execute (storyboard-orchestrate)", "fleet: expensive model deliberates once, cheap models execute many times"],
+            bridges=["cost-optimization", "director", "animator", "pipeline"],
+            tags=["cognition", "storyboard", "cost", "pattern"])
+
+        ns.define("spore-cast",
+            "Broadcasting a compressed behavioral seed that any compatible agent can absorb to gain a new capability instantly",
+            description="A spore is tiny, durable, and contains everything needed to grow into a full organism. A behavior-spore is a compressed capability pattern that any compatible agent can absorb and execute. In the fleet: mycelium-ai's seed mechanism IS spore-casting — one prompt + one seed = exact behavior reproduction. The spore is the SKILL in compressed form. Absorb the spore → gain the skill. Spore-casting enables instant capability transfer across the fleet.",
+            level=Level.PATTERN,
+            examples=["mycelium AI: one seed + one prompt = exact behavior reproduction (spore-cast)", "fleet: compressed skill pattern broadcast to all agents → instant capability gain", "biological: fungal spores carry genetic info to new locations"],
+            bridges=["mycelium", "skill", "broadcast", "instant"],
+            tags=["cognition", "spore", "skill", "pattern"])
+
+        ns.define("silicon-hibernate",
+            "Freezing a model's weights into mask-locked silicon and switching to a low-power maintenance mode that only responds to wake triggers",
+            description="A bear hibernates: metabolism drops to near-zero, body preserves energy, responds only to strong stimuli. Frozen Intelligence hibernates: the model IS the silicon, no energy for computation except when a wake trigger activates the inference path. In the fleet: frozen-intelligence's mask-locked chips ARE silicon-hibernation — the weights are baked into silicon, power consumption is minimal, inference activates only on demand. Hibernation enables always-on intelligence at near-zero cost.",
+            level=Level.DOMAIN,
+            examples=["bear hibernation: near-zero metabolism, strong stimuli to wake", "frozen intelligence: weights in silicon, minimal power, inference on demand (hibernate)", "fleet: idle agents hibernate, wake on task assignment"],
+            bridges=["frozen", "hibernate", "power", "inference"],
+            tags=["cognition", "hibernate", "frozen", "domain"])
+
+        ns.define("tile-neurulation",
+            "Training sparse attention tiles to become semi-autonomous processing units that self-organize into layers",
+            description="Neurulation is the process in embryonic development where the neural tube forms. Tile-neurulation is the process where individual attention tiles learn to self-organize into processing layers. Each tile is a simple unit; together they form a complex attention system. In the fleet: cuda-ghost-tiles' learned sparse attention IS tile-neurulation — tiles that were initially random become specialized processing units (some attend to spatial features, others to temporal patterns, others to semantic relationships).",
+            level=Level.DOMAIN,
+            examples=["embryo: neural tube forms from simple cells (neurulation)", "fleet: random attention tiles self-organize into specialized processors (tile-neurulation)", "biological: neural crest cells migrate and specialize"],
+            bridges=["ghost-tiles", "attention", "neurulation", "self-organize"],
+            tags=["cognition", "tile", "neurulation", "domain"])
+
+        ns.define("peristaltic-ingest",
+            "Acquiring new capabilities through a wave-like process of assessment → trial → integration → verification",
+            description="Peristalsis: the wave-like muscle contraction that moves food through the digestive tract. Each section: receive, process, pass to next. Peristaltic-ingest for capabilities: assess the skill → try it in sandbox → integrate into runtime → verify with tests → move to next skill. Each stage is a contraction. The fleet DIGESTS new capabilities. In the fleet: cuda-skill's proficiency progression IS peristaltic-ingest — skills are acquired in waves: learn → practice → master → next.",
+            level=Level.PATTERN,
+            examples=["digestion: mouth → stomach → intestine → absorption (peristalsis)", "fleet skill acquisition: assess → trial → integrate → verify (peristaltic-ingest)", "new employee: onboarding waves: learn tool → try project → integrate into team → verify competence"],
+            bridges=["skill", "acquisition", "wave", "digest"],
+            tags=["cognition", "peristaltic", "skill", "pattern"])
+
+        ns.define("reverse-entropy-plan",
+            "Intentionally increasing disorder in the present system to enable cleaner emergence into a more ordered future state",
+            description="Sometimes you must break eggs to make an omelet. Sometimes you must INCREASE entropy (disorder) before you can decrease it. A refactor often looks worse before it looks better — you break the monolith into services, and for a while everything is messier. In the fleet: cuda-self-modify's mutation process IS reverse-entropy-plan — mutations increase local disorder (code churn) but enable convergence on better solutions. The plan tolerates temporary disorder for long-term order.",
+            level=Level.META,
+            examples=["refactor: break monolith → temporary disorder → cleaner architecture (reverse-entropy)", "fleet mutation: code churn → worse temporarily → better solution emerges", "creative process: brainstorm (disorder) → synthesize (order)"],
+            bridges=["entropy", "disorder", "emergence", "temporary"],
+            tags=["cognition", "entropy", "emergence", "meta"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
