@@ -403,6 +403,7 @@ class HAV:
         self._load_flux_flavors()
         self._load_agent_social()
         self._load_flux_memory()
+        self._load_bio_computing()
         self._load_agent_lifecycle()
         self._load_flux_compound()
         self._load_agent_failure()
@@ -6267,6 +6268,21 @@ class HAV:
         ns.define("quiescence", "Agent temporarily stops processing waiting for external trigger", Level=Level.CONCRETE, examples=["pause processing between cycles", "wait for event to resume"], bridges=["pause","wait","trigger"], tags=["lifecycle","quiesce"])
         ns.define("commissioning", "Agent passes qualification tests before production deployment", Level=Level.CONCRETE, examples=["run test suite before going live", "validate capabilities meet requirements"], bridges=["qualify","test","deploy"], tags=["lifecycle","commission"])
         ns.define("decommission", "Agent removed from production permanently", Level=Level.CONCRETE, examples=["retire obsolete capability", "remove deprecated agent from fleet"], bridges=["retire","remove","permanent"], tags=["lifecycle","decommission"])
+
+    def _load_bio_computing(self):
+        ns = self.add_namespace("bio-computing", "Biological process patterns mapped to software architecture")
+        ns.define("dna-storage", "Persistent knowledge structure storing agent identity and parameters across sessions", Level=Level.DOMAIN, examples=["genome file stores agent template", "git repo as DNA for agent evolution"], bridges=["storage","persistent","genome"], tags=["bio","dna","storage"])
+        ns.define("rna-messaging", "Asynchronous instruction carrier between agent components decoupled from execution", Level=Level.PATTERN, examples=["message queue carries task instructions", "event bus distributes signals"], bridges=["message","async","instruct"], tags=["bio","rna","message"])
+        ns.define("protein-execution", "Discrete functions that perform actual work as the expression of genetic code", Level=Level.DOMAIN, examples=["agent skill functions are proteins", "each protein performs one specific task"], bridges=["execute","function","express"], tags=["bio","protein","execute"])
+        ns.define("enzyme-catalysis", "Optimized algorithms that lower computational activation energy for frequent operations", Level=Level.PATTERN, examples=["cached computation reduces repeated work", "compiled hot paths accelerate execution"], bridges=["catalyst","optimize","accelerate"], tags=["bio","enzyme","optimize"])
+        ns.define("receptor-signaling", "Event listeners detecting external stimuli and triggering adaptive responses", Level=Level.PATTERN, examples=["API webhook receives external signal", "sensor subscription triggers reaction"], bridges=["receptor","detect","respond"], tags=["bio","receptor","signal"])
+        ns.define("endocrine-signaling", "Global publish-subscribe broadcasting hormones to all subsystems simultaneously", Level=Level.PATTERN, examples=["fleet-wide configuration change broadcast", "circadian hormone shifts all agents"], bridges=["broadcast","hormone","global"], tags=["bio","endocrine","broadcast"])
+        ns.define("gene-regulation", "Context-dependent enabling and disabling of agent capabilities", Level=Level.PATTERN, examples=["environment triggers gene expression change", "conditional feature activation"], bridges=["regulate","enable","context"], tags=["bio","gene","regulate"])
+        ns.define("immune-response", "Anomaly detection and neutralization of foreign or corrupted agents", Level=Level.PATTERN, examples=["detect misbehaving fleet member and quarantine", "reject malformed messages"], bridges=["immune","detect","neutralize"], tags=["bio","immune","defend"])
+        ns.define("tissue-organization", "Agents composed into hierarchical subsystems with defined roles", Level=Level.DOMAIN, examples=["sensor tissue perception tissue action tissue", "specialized agent groups form tissues"], bridges=["tissue","hierarchy","compose"], tags=["bio","tissue","compose"])
+        ns.define("organ-system", "Coordinated subsystem interaction achieving complex higher-level goals", Level=Level.DOMAIN, examples=["perception organ decision organ action organ", "nervous system connects all organs"], bridges=["organ","coordinate","complex"], tags=["bio","organ","system"])
+        ns.define("ecosystem-interdependence", "Agents depend on external systems and services creating mutual obligations", Level=Level.DOMAIN, examples=["agent depends on LLM API depends on data pipeline", "ecosystem of interacting services"], bridges=["ecosystem","depend","interoperate"], tags=["bio","ecosystem","depend"])
+        ns.define("epigenetic-expression", "External configuration modifies agent behavior without changing core code", Level=Level.PATTERN, examples=["environment variables change agent personality", "fleet config adjusts behavior fleet-wide"], bridges=["epigenetic","config","express"], tags=["bio","epigenetic","config"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
