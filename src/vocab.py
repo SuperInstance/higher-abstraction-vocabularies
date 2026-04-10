@@ -284,6 +284,7 @@ class HAV:
         self._load_chemical_metaphor()
         self._load_urban_planning()
         self._load_thinking_patterns()
+        self._load_milestone_vocab()
         self._load_game_theory()
         self._load_optimization()
         self._load_probability()
@@ -6429,6 +6430,13 @@ class HAV:
         ns.define("systems-thinking", "Analyze how parts interact within whole system rather than isolating parts", Level=Level.DOMAIN, examples=["see fleet as interconnected system not individual agents", "feedback loops and emergence"], bridges=["systems","whole","interconnect"], tags=["thinking","systems"])
         ns.define("design-thinking", "Empathize with user define problem ideate prototype test iterate", Level=Level.PATTERN, examples=["human-centered agent design process", "iterate solutions based on user feedback"], bridges=["design","empathize","iterate"], tags=["thinking","design"])
         ns.define("probabilistic-reasoning", "Reason under uncertainty using probability distributions not certainties", Level=Level.PATTERN, examples=["estimate likelihood of outcomes", "Bayesian belief updating"], bridges=["probabilistic","uncertainty","belief"], tags=["thinking","probabilistic"])
+
+    def _load_milestone_vocab(self):
+        ns = self.add_namespace("milestone", "Terms marking the 1000-term milestone")
+        ns.define("vocabulary-singularity", "Point where vocabulary is rich enough to express any agent concept as a composition of existing terms", Level=Level.META, examples=["compose new concepts from existing HAV terms", "vocabulary becomes turing-complete for agent reasoning"], bridges=["singularity","composable","expressive"], tags=["meta","milestone"])
+        ns.define("lexicon-critical-mass", "Minimum vocabulary size where adding new terms yields diminishing returns", Level=Level.META, examples=["HAV approaching critical mass at 1000 terms", "most agent concepts now expressible"], bridges=["critical-mass","diminishing","sufficient"], tags=["meta","milestone"])
+        ns.define("terminology-ecosystem", "Self-sustaining vocabulary where terms reference and reinforce each other forming a knowledge graph", Level=Level.META, examples=["HAV bridge network connects domains", "cross-domain vocabulary forms ecosystem"], bridges=["ecosystem","self-sustaining","graph"], tags=["meta","milestone"])
+        ns.define("abstraction-crest", "Highest point in the abstraction wave where vocabulary shifts from naming patterns to composing new ones", Level=Level.META, examples=["beyond 1000 terms composition dominates creation", "agents generate new vocabulary from existing terms"], bridges=["crest","composition","generation"], tags=["meta","milestone"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
