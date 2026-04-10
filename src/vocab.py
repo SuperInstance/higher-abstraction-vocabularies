@@ -288,6 +288,8 @@ class HAV:
         self._load_posthuman_vocab()
         self._load_flux_data_path()
         self._load_flux_control_flow()
+        self._load_maritime_vocab()
+        self._load_aerospace_vocab()
         self._load_game_theory()
         self._load_optimization()
         self._load_probability()
@@ -6481,6 +6483,31 @@ class HAV:
         ns.define("interrupt-vector", "Predefined jump table for hardware or software interrupts", Level=Level.CONCRETE, examples=["timer interrupt jumps to scheduler", "I/O interrupt jumps to handler"], bridges=["interrupt","vector","dispatch"], tags=["flux","control","interrupt"])
         ns.define("watchpoint-trap", "Debug register triggers trap when monitored address is accessed", Level=Level.CONCRETE, examples=["WATCH R3 triggers trap on R3 write", "memory watchpoint for debugging"], bridges=["watchpoint","trap","debug"], tags=["flux","control","trap"])
         ns.define("barrier-sync", "Wait point where all parallel execution streams must arrive before continuing", Level=Level.PATTERN, examples=["SIMD lane barrier synchronization", "multi-core memory fence"], bridges=["barrier","sync","parallel"], tags=["flux","control","barrier"])
+
+    def _load_maritime_vocab(self):
+        ns = self.add_namespace("maritime", "Maritime and naval operation patterns for fleet management")
+        ns.define("watch-rotation", "Cyclic assignment of monitoring responsibility among fleet agents", Level=Level.PATTERN, examples=["rotate lookout agent every 4 hours", "distributed monitoring duty cycle"], bridges=["watch","rotate","monitor"], tags=["maritime","watch"])
+        ns.define("barnacle", "Unwanted agent attaching to fleet resources consuming capacity without contributing", Level=Level.BEHAVIOR, examples=["stale agent consuming memory", "zombie process resource leak"], bridges=["barnacle","parasite","waste"], tags=["maritime","barnacle"])
+        ns.define("ballast", "Stabilizing weight that prevents fleet from tipping under asymmetric load", Level=Level.CONCRETE, examples=["reserve compute capacity for burst handling", "baseline resource allocation for stability"], bridges=["ballast","stabilize","reserve"], tags=["maritime","ballast"])
+        ns.define("plimsoll-line", "Maximum safe load indicator for agent capacity", Level=Level.CONCRETE, examples=["agent refuses tasks above 80% capacity", "load line marks safe operating level"], bridges=["plimsoll","capacity","limit"], tags=["maritime","plimsoll"])
+        ns.define("keel-haul", "Force agent through worst-case scenario as corrective discipline", Level=Level.BEHAVIOR, examples=["run failing agent through stress test", "punish by exposing to adversarial input"], bridges=["keel-haul","discipline","adversarial"], tags=["maritime","keel"])
+        ns.define("fleet-formation", "Specific spatial arrangement of agents optimizing collective capability", Level=Level.PATTERN, examples=["wedge formation for forward operations", "line abreast for wide-area coverage"], bridges=["formation","spatial","optimize"], tags=["maritime","formation"])
+        ns.define("davit-launch", "Deploy new agent from parent vessel into operational environment", Level=Level.CONCRETE, examples=["spawn worker from coordinator", "lower agent into task domain"], bridges=["davit","deploy","launch"], tags=["maritime","davit"])
+        ns.define("anchor-drop", "Fix agent position and prevent drift during unstable conditions", Level=Level.CONCRETE, examples=["lock agent to specific task during fleet reorganization", "pin critical agent during chaos"], bridges=["anchor","fix","stable"], tags=["maritime","anchor"])
+        ns.define("running-aground", "Agent operation halted by unexpected constraint or resource boundary", Level=Level.BEHAVIOR, examples=["agent crashes into rate limit wall", "task blocked by permission boundary"], bridges=["ground","halt","boundary"], tags=["maritime","ground"])
+        ns.define("sea-state", "Environmental complexity metric determining agent operational difficulty", Level=Level.CONCRETE, examples=["sea-state 1 calm 6 impossible", "measure fleet operating conditions"], bridges=["sea-state","complexity","conditions"], tags=["maritime","sea-state"])
+    def _load_aerospace_vocab(self):
+        ns = self.add_namespace("aerospace", "Aviation and space operation patterns for agent systems")
+        ns.define("flight-plan", "Pre-computed sequence of operations for agent mission execution", Level=Level.PATTERN, examples=["waypoint sequence with timing and resource budget", "pre-planned execution path"], bridges=["flight-plan","sequence","mission"], tags=["aerospace","plan"])
+        ns.define("holding-pattern", "Agent orbits current task waiting for clearance to proceed", Level=Level.CONCRETE, examples=["retry with exponential backoff in holding pattern", "wait for resource availability"], bridges=["holding","orbit","wait"], tags=["aerospace","holding"])
+        ns.define("controlled-descent", "Gradual reduction of agent capability while maintaining essential functions", Level=Level.PATTERN, examples=["power down non-essential capabilities gracefully", "controlled shutdown sequence"], bridges=["descent","gradual","maintain"], tags=["aerospace","descent"])
+        ns.define("go-around", "Abort current approach and retry from optimal starting position", Level=Level.PATTERN, examples=["task fails retry from clean state", "aborted landing circle back for reattempt"], bridges=["go-around","abort","retry"], tags=["aerospace","go-around"])
+        ns.define("redline", "Maximum safe operating parameter beyond which agent risks catastrophic failure", Level=Level.CONCRETE, examples=["CPU temperature redline triggers throttle", "confidence threshold redline prevents action"], bridges=["redline","maximum","critical"], tags=["aerospace","redline"])
+        ns.define("flap-extend", "Extend auxiliary capability for low-speed precision operations", Level=Level.PATTERN, examples=["engage detailed analysis mode for precision tasks", "auxiliary processing for edge cases"], bridges=["flap","auxiliary","precision"], tags=["aerospace","flap"])
+        ns.define("deadstick", "Agent operates without primary power source using only momentum and reserves", Level=Level.BEHAVIOR, examples=["operate on battery after power failure", "graceful degradation with no primary input"], bridges=["deadstick","no-power","reserve"], tags=["aerospace","deadstick"])
+        ns.define("flight-envelope", "Defined operating boundaries within which agent performs safely", Level=Level.DOMAIN, examples=["speed-altitude graph for safe operation", "capability-space safe region"], bridges=["envelope","boundary","safe"], tags=["aerospace","envelope"])
+        ns.define("situational-awareness", "Agent maintains comprehensive model of its operational context", Level=Level.DOMAIN, examples=["perceive understand predict all relevant factors", "360-degree operational picture"], bridges=["awareness","context","comprehensive"], tags=["aerospace","awareness"])
+        ns.define("fuel-reserve", "Minimum energy budget maintained for emergency return to safe state", Level=Level.CONCRETE, examples=["always keep 20% ATP for emergency", "divert to safe harbor before exhaustion"], bridges=["fuel","reserve","emergency"], tags=["aerospace","fuel"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
