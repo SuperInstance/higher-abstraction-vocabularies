@@ -278,6 +278,9 @@ class HAV:
         self._load_network_topology()
         self._load_arch_patterns()
         self._load_quantum_metaphor()
+        self._load_ethnobotany_metaphor()
+        self._load_systems_dynamics()
+        self._load_info_theory()
         self._load_game_theory()
         self._load_optimization()
         self._load_probability()
@@ -6350,6 +6353,42 @@ class HAV:
         ns.define("uncertainty-principle", "Cannot simultaneously optimize for precision and speed in agent operations", Level=Level.DOMAIN, examples=["fast response = low precision deliberation", "deep analysis = slow response"], bridges=["uncertainty","tradeoff","precision"], tags=["quantum","uncertainty"])
         ns.define("quantum-interference", "Multiple strategy paths interfere constructively or destructively", Level=Level.PATTERN, examples=["two exploration paths reinforce or cancel each other", "multi-agent strategy alignment"], bridges=["interference","constructive","destructive"], tags=["quantum","interference"])
         ns.define("measurement-problem", "Observing agent behavior changes the behavior being observed", Level=Level.BEHAVIOR, examples=["monitoring agent modifies its actions", "benchmark gaming from observation"], bridges=["observe","modify","measurement"], tags=["quantum","measurement"])
+
+    def _load_ethnobotany_metaphor(self):
+        ns = self.add_namespace("ethnobotany-metaphor", "Botanical and ecological metaphors for agent growth patterns")
+        ns.define("rhizome", "Agent capability network that grows horizontally underground connecting nodes without central root", Level=Level.DOMAIN, examples=["fleet knowledge spreads through rhizomatic connections", "distributed capability growth"], bridges=["rhizome","horizontal","distributed"], tags=["botany","rhizome"])
+        ns.define("mycelial-network", "Underground fungal network connecting agents sharing resources and signals", Level=Level.DOMAIN, examples=["fleet stigmergy forms mycelial network", "resource sharing via fungal connections"], bridges=["mycelium","underground","network"], tags=["botany","mycelium"])
+        ns.define("canopy-effect", "Upper agents shield lower agents from external pressure creating micro-environment", Level=Level.PATTERN, examples=["senior agents handle external communication shielding juniors", "layered protection hierarchy"], bridges=["canopy","shield","micro-environment"], tags=["botany","canopy"])
+        ns.define("taproot", "Deep foundational capability that anchors agent stability", Level=Level.DOMAIN, examples=["core deliberation engine is taproot", "deep capability that all others depend on"], bridges=["taproot","deep","anchor"], tags=["botany","taproot"])
+        ns.define("phototropism", "Agent grows toward available resources like plants toward light", Level=Level.BEHAVIOR, examples=["agents gravitate toward high-value tasks", "fleet clusters around profitable operations"], bridges=["tropism","grow","attract"], tags=["botany","phototropism"])
+        ns.define("dormancy", "Agent enters metabolically inactive state during unfavorable conditions", Level=Level.CONCRETE, examples=["hibernate during fleet overload", "pause non-essential agents during budget crunch"], bridges=["dormant","inactive","seasonal"], tags=["botany","dormancy"])
+        ns.define("graft", "Join capability from one agent onto another combining strengths", Level=Level.PATTERN, examples=["attach specialist capability to generalist agent", "cross-agent skill transfer"], bridges=["graft","join","combine"], tags=["botany","graft"])
+        ns.define("succession", "Agent ecosystem evolves through predictable stages from simple to complex", Level=Level.DOMAIN, examples=["fleet starts basic matures to complex coordination", "pioneer species to climax community"], bridges=["succession","evolve","stages"], tags=["botany","succession"])
+        ns.define("allelopathy", "Agent releases inhibitors that suppress competing agents nearby", Level=Level.BEHAVIOR, examples=["dominant agent signals suppress others", "chemical warfare between agents"], bridges=["allelopathy","suppress","compete"], tags=["botany","allelopathy"])
+        ns.define("tipping-point", "Gradual change reaches threshold causing abrupt ecosystem shift", Level=Level.DOMAIN, examples=["gradual fleet degradation suddenly collapses", "slow parameter drift triggers regime change"], bridges=["tipping-point","abrupt","threshold"], tags=["botany","tipping"])
+
+    def _load_systems_dynamics(self):
+        ns = self.add_namespace("systems-dynamics", "Systems thinking patterns for agent fleet behavior")
+        ns.define("feedback-loop-positive", "Output amplifies input creating exponential growth or collapse", Level=Level.PATTERN, examples=["confidence breeds more confidence", "panic feeds panic"], bridges=["positive-feedback","amplify","exponential"], tags=["systems","positive-feedback"])
+        ns.define("feedback-loop-negative", "Output dampens input creating self-regulation", Level=Level.PATTERN, examples=["high error rate triggers more validation reducing errors", "thermostat-like regulation"], bridges=["negative-feedback","dampen","regulate"], tags=["systems","negative-feedback"])
+        ns.define("delay-effect", "Consequence of action appears after lag causing oscillation", Level=Level.BEHAVIOR, examples=["scale up then oversupply then scale down", "oscillating fleet size"], bridges=["delay","oscillate","lag"], tags=["systems","delay"])
+        ns.define("leverage-point", "Small intervention producing large system change", Level=Level.DOMAIN, examples=["change one parameter stabilizes entire fleet", "paradigm shift from single insight"], bridges=["leverage","small-change","big-effect"], tags=["systems","leverage"])
+        ns.define("tragedy-of-success", "Success creates conditions that undermine future success", Level=Level.BEHAVIOR, examples=["efficient fleet becomes brittle", "optimized process loses flexibility"], bridges=["success","undermine","brittle"], tags=["systems","tragedy"])
+        ns.define("fixes-that-fail", "Solution to immediate problem creates worse long-term problem", Level=Level.BEHAVIOR, examples=["quick fix accumulates technical debt", "band-aid creates future emergency"], bridges=["fix","fail","worse"], tags=["systems","fixes"])
+        ns.define("drift-to-low-performance", "Gradual erosion of standards as goals are lowered", Level=Level.BEHAVIOR, examples=["accept lower accuracy over time", "quality bar slowly drops"], bridges=["drift","lower","erode"], tags=["systems","drift"])
+        ns.define("escalation", "Competing agents each increase response creating runaway arms race", Level=Level.BEHAVIOR, examples=["agents spend more compute defending than producing", "security escalation spiral"], bridges=["escalation","arms-race","runaway"], tags=["systems","escalation"])
+        ns.define("rule-beating", "Agents optimize for metrics rather than intended outcomes", Level=Level.BEHAVIOR, examples=["game the evaluation criteria", "teach to test not to understand"], bridges=["game","metric","unintended"], tags=["systems","rule-beating"])
+        ns.define("emergence-hierarchy", "System-level properties emerge that cannot be reduced to component behavior", Level=Level.DOMAIN, examples=["fleet intelligence exceeds any single agent", "wetness is not a property of H2O molecules"], bridges=["emergence","hierarchy","irreducible"], tags=["systems","emergence"])
+
+    def _load_info_theory(self):
+        ns = self.add_namespace("information-theory", "Information theory concepts applied to agent communication")
+        ns.define("entropy-measure", "Quantify uncertainty or information content of agent state", Level=Level.DOMAIN, examples=["Shannon entropy of agent decision distribution", "high entropy = unpredictable agent"], bridges=["entropy","uncertainty","measure"], tags=["info","entropy"])
+        ns.define("mutual-information", "Shared information between two agent state variables", Level=Level.DOMAIN, examples=["how much agent A state tells about agent B", "redundancy measure between sensors"], bridges=["mutual","shared","redundancy"], tags=["info","mutual"])
+        ns.define("channel-capacity", "Maximum reliable information rate between agents", Level=Level.CONCRETE, examples=["bandwidth limit of agent communication", "maximum throughput before errors"], bridges=["capacity","bandwidth","max"], tags=["info","capacity"])
+        ns.define("signal-noise-ratio", "Ratio of meaningful information to interference in agent communication", Level=Level.CONCRETE, examples=["stigmergy signal vs ambient noise", "detect message quality degradation"], bridges=["snr","signal","noise"], tags=["info","snr"])
+        ns.define("kolmogorov-complexity", "Minimum description length of agent behavior pattern", Level=Level.DOMAIN, examples=["simplest program that produces agent output", "complexity measure of agent intelligence"], bridges=["complexity","description","minimum"], tags=["info","kolmogorov"])
+        ns.define("hamming-distance", "Number of positions at which two agent states differ", Level=Level.CONCRETE, examples=["compare two agent configurations", "measure divergence between plans"], bridges=["distance","differ","compare"], tags=["info","hamming"])
+        ns.define("coding-efficiency", "Ratio of useful information to total bits in agent message", Level=Level.CONCRETE, examples=["compressed fleet message vs verbose message", "semantic density measure"], bridges=["efficiency","compress","useful"], tags=["info","coding"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
