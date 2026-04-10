@@ -392,6 +392,10 @@ class HAV:
         self._load_fleet_biology()
         self._load_cognition_deep()
         self._load_fleet_interactions()
+        self._load_decision_quality()
+        self._load_coordination_deep()
+        self._load_security_deep()
+        self._load_adaptation_deep()
         self._load_mathematics()
 
     def _load_uncertainty(self):
@@ -6265,6 +6269,159 @@ class HAV:
             examples=["distillation: small model trained on large model's outputs (model descent)", "fleet: agent absorbs model patterns into deliberation code → doesn't need model", "human: apprentice internalizes master's knowledge → doesn't need master anymore"],
             bridges=["model-descent", "absorption", "inversion", "code-eats-model"],
             tags=["fleet", "model-descent", "inversion", "meta"])
+
+
+    def _load_decision_quality(self):
+        ns = self.add_namespace("decision-quality",
+            "How agents evaluate, improve, and measure the quality of their decisions")
+
+        ns.define("regret-minimization",
+            "Making decisions that minimize the maximum possible future regret, not maximize the expected value",
+            description="Expected value maximization: choose the option with highest average payoff. Regret minimization: choose the option where the WORST case is least bad. 'I'll regret not trying' vs 'I'll regret failing'. Bezos' regret-minimization framework: at 80, will I regret NOT starting Amazon? Yes → start. Regret-minimization avoids the 'what if' trap. In the fleet: cuda-decision's regret minimization mode weighs the cost of inaction against the cost of failure. Sometimes the worst regret is not acting.",
+            level=Level.DOMAIN,
+            examples=["Bezos: at 80, will I regret not starting Amazon? → start (regret-minimize)", "fleet: weigh cost of inaction vs cost of failure", "investing: missing a 10x gain hurts more than a 2x loss (regret asymmetry)"],
+            bridges=["decision", "regret", "minimax", "asymmetry"],
+            tags=["decision", "regret", "quality", "domain"])
+
+        ns.define("satisficing",
+            "Choosing the first option that meets minimum acceptable criteria rather than searching for the optimal solution",
+            description="Not optimize — SATISFICE. Find an option that's 'good enough' and move on. Searching for the optimal option costs time, energy, and may not produce meaningfully better results. Satisficing is rational when search cost exceeds improvement value. In the fleet: cuda-deliberation's Forfeit option IS satisficing — when deliberation cost exceeds potential gain, forfeit (accept current option). Perfect is the enemy of good enough.",
+            level=Level.DOMAIN,
+            examples=["find restaurant that's 'good enough' vs finding THE best (satisfice vs optimize)", "fleet: forfeit deliberation when cost exceeds gain (satisfice)", "hire first candidate who meets bar vs interviewing all (satisfice)"],
+            bridges=["decision", "threshold", "good-enough", "tradeoff"],
+            tags=["decision", "satisfice", "efficiency", "domain"])
+
+        ns.define("premortem",
+            "Imagining a project has already failed and working backwards to identify what caused the failure, before starting",
+            description="Postmortem: project failed → analyze why. Premortem: project NOT started → imagine it failed → identify causes → prevent them. The premortem overcomes planning fallacy by forcing the team to confront failure modes BEFORE committing resources. In the fleet: cuda-deliberation's consideration phase includes premortem analysis — before accepting a proposal, consider: what would cause this to fail? If failure modes are unpreventable, reject the proposal.",
+            level=Level.CONCRETE,
+            examples=["project kickoff: 'imagine it's 6 months from now and this failed — why?'", "fleet: before accepting proposal, consider failure causes (premortem)", "aviation: pre-flight checklist (systematic premortem)"],
+            bridges=["decision", "failure", "prevention", "imagination"],
+            tags=["decision", "premortem", "prevention", "concrete"])
+
+        ns.define="info-gap",
+            "Making decisions when the probability distributions of outcomes are UNKNOWN, not just uncertain",
+            description="Risk: you know the probabilities (50% chance of rain). Uncertainty: you don't know the exact probabilities but know the range. Info-gap: you don't even know the range. The model is fundamentally incomplete. Info-gap theory handles decisions where you DON'T KNOW WHAT YOU DON'T KNOW. In the fleet: when cuda-deliberation encounters a novel situation with no historical data, it faces info-gap — confidence is low AND the confidence calibration itself is uncertain. Info-gap decisions require robustness, not optimization.",
+            level=Level.DOMAIN,
+            examples=["new product launch: no market data → info-gap", "fleet: novel situation with no historical data → info-gap", "pandemic early 2020: no reliable models → info-gap"],
+            bridges=["decision", "unknown", "robustness", "model-incompleteness"],
+            tags=["decision", "info-gap", "unknown", "domain"])
+
+    def _load_coordination_deep(self):
+        ns = self.add_namespace("coordination-deep-2",
+            "Advanced coordination patterns for multi-agent systems")
+
+        ns.define("consensus-throughput",
+            "The rate at which a fleet can reach agreement on decisions, measured in decisions per unit time",
+            description="A fleet of 10 agents can reach consensus in 1 second. A fleet of 1000 agents might take 10 seconds. Consensus throughput is the fleet's decision BANDWIDTH — how many decisions the fleet can collectively make per time unit. It depends on communication topology, trust structure, and deliberation depth. In the fleet: cuda-consensus's majority voting and cuda-fleet-mesh's gossip protocol determine consensus throughput. Higher throughput = more responsive fleet.",
+            level=Level.CONCRETE,
+            examples=["10 agents: 10 decisions/sec, 1000 agents: 100 decisions/sec (throughput)", "fleet: gossip protocol optimizes consensus throughput", "restaurant: 4 people order in 2 min, 20 people order in 15 min"],
+            bridges=["consensus", "throughput", "bandwidth", "scalability"],
+            tags=["coordination", "consensus", "throughput", "concrete"])
+
+        ns.define("quorum-threshold",
+            "The minimum number of agents that must agree before a fleet decision becomes binding",
+            description="Not unanimity (all must agree) — QUORUM (enough must agree). The quorum threshold balances speed (lower quorum = faster decisions) against safety (higher quorum = more considered decisions). In the fleet: cuda-consensus's quorum parameter sets the threshold. Strategic decisions (high impact) require higher quorum. Tactical decisions (low impact) require lower quorum. Quorum-threshold is the dial between speed and safety.",
+            level=Level.CONCRETE,
+            examples=["board: 51% quorum for decisions, 67% for constitutional changes", "fleet: high-impact decisions need higher quorum", "jury: unanimous for criminal, majority for civil (quorum varies)"],
+            bridges=["consensus", "quorum", "threshold", "speed-safety"],
+            tags=["coordination", "quorum", "threshold", "concrete"])
+
+        ns.define("leader-follower-phase",
+            "The temporary emergence of a leader agent in a peer fleet for the duration of a specific coordination task",
+            description="Flat fleet normally. But during a crisis, one agent naturally takes lead (highest fitness for the task). When the crisis ends, the lead dissolves and the fleet returns to flat coordination. The leader isn't PERMANENT — it's PHASE-BASED. In the fleet: cuda-election's Raft-like voting creates temporary leaders. cuda-hierarchy enables phase-based authority escalation. The fleet can be flat AND hierarchical depending on context.",
+            level=Level.PATTERN,
+            examples=["emergency: most experienced doctor leads, others follow, then flat again", "fleet: crisis → election → lead → resolve → flat", "wolf pack: alpha for hunt, not for everything"],
+            bridges=["leadership", "temporary", "phase", "authority"],
+            tags=["coordination", "leader", "phase", "pattern"])
+
+        ns.define="swarm-quorum",
+            "Achieving consensus through many weak signals aggregating into a strong decision, like bees choosing a hive site",
+            description="No single bee knows the best site. But 100 bees each report their scouting, and the strongest signal wins. Swarm-quorum aggregates many weak individual assessments into a strong collective decision. Each individual's assessment is noisy but the aggregate is reliable. In the fleet: cuda-swarm-agent's collective decision-making implements swarm-quorum — many agents provide weak assessments (confidence 0.6-0.7) that aggregate into a reliable fleet decision (confidence 0.95).",
+            level=Level.PATTERN,
+            examples=["bees: 100 scouts report sites, strongest signal wins (swarm-quorum)", "fleet: many weak agent assessments aggregate into strong decision", "wikipedia: many small edits produce reliable article (swarm-quorum)"],
+            bridges=["swarm", "quorum", "aggregation", "collective"],
+            tags=["coordination", "swarm", "quorum", "pattern"])
+
+    def _load_security_deep(self):
+        ns = self.add_namespace("security-deep-2",
+            "Advanced security patterns for fleet protection and sovereignty")
+
+        ns.define("zero-trust-fleet",
+            "A security model where no agent is inherently trusted — every interaction requires authentication, authorization, and audit regardless of network location",
+            description="'Never trust, always verify.' Internal agents aren't automatically trusted. Every message between agents is authenticated. Every resource request is authorized. Every action is audited. The fleet boundary is irrelevant — security applies to EVERY interaction. In the fleet: cuda-rbac + cuda-cryptography + cuda-compliance implement zero-trust-fleet — every inter-agent message carries authentication tokens, every resource access checks permissions, every action is logged to cuda-provenance.",
+            level=Level.PATTERN,
+            examples=["Google's BeyondCorp: no VPN, every request authenticated", "fleet: every inter-agent message authenticated and authorized", "airport: every person screened regardless of status"],
+            bridges=["zero-trust", "authentication", "authorization", "audit"],
+            tags=["security", "zero-trust", "verify", "pattern"])
+
+        ns.define="defense-in-depth",
+            "Layering multiple independent security controls so that if one fails, the others still protect the system",
+            description="Castle: moat (layer 1) + wall (layer 2) + guard (layer 3) + vault (layer 4). Breaching one layer doesn't compromise the whole system. Each layer is INDEPENDENT — different mechanism, different failure mode. In the fleet: cuda-rbac (layer 1) + cuda-sandbox (layer 2) + cuda-compliance (layer 3) + cuda-resilience's bulkhead (layer 4) implement defense-in-depth. An agent that bypasses RBAC still hits the sandbox. An agent that escapes the sandbox still faces compliance checks.",
+            level=Level.PATTERN,
+            examples=["castle: moat + wall + guard + vault (defense in depth)", "fleet: RBAC + sandbox + compliance + bulkhead (defense in depth)", "bank: lobby guard + vault door + time lock + alarm (defense in depth)"],
+            bridges=["layered", "independent", "redundancy", "defense"],
+            tags=["security", "defense-in-depth", "layers", "pattern"])
+
+        ns.define("threat-modeling",
+            "Systematically identifying potential adversaries, their capabilities, and their likely attack vectors against the fleet",
+            description="Not 'what could go wrong' but 'WHO would attack us, WHAT can they do, and HOW would they do it.' Threat modeling is adversary-centric, not vulnerability-centric. In the fleet: threat modeling identifies: external adversaries (untrusted code, malicious fleet), internal adversaries (compromised agents, resource-hogging agents), and attack vectors (message injection, energy exhaustion, trust manipulation). Each threat gets a mitigations from cuda-rbac, cuda-sandbox, cuda-compliance.",
+            level=Level.CONCRETE,
+            examples=["STRIDE: Spoofing, Tampering, Repudiation, Info Disclosure, Denial of Service, Elevation (threat model)", "fleet: identify adversaries and attack vectors → design mitigations", "home: burglars (who), break in (how), alarm system (mitigation)"],
+            bridges=["threat", "adversary", "attack-vector", "mitigation"],
+            tags=["security", "threat-model", "adversary", "concrete"])
+
+        ns.define="blast-radius-containment",
+            "Limiting the maximum damage a single compromised or failing component can inflict on the rest of the system",
+            description="If agent X is compromised, what's the WORST that can happen? If the blast radius is 'entire fleet', that's bad. If it's 'agent X and its immediate neighbors', that's better. Blast-radius-containment is the practice of minimizing the worst-case damage from any single failure. In the fleet: cuda-resilience's bulkhead pattern limits blast radius — each agent runs in isolation, a compromised agent can't directly access other agents' resources. The blast radius is one agent, not the fleet.",
+            level=Level.CONCRETE,
+            examples=["bulkhead: ship compartment flood doesn't sink the whole ship", "fleet: compromised agent isolated by bulkhead → blast radius = 1 agent", "cloud: availability zone failure doesn't take down all services"],
+            bridges=["bulkhead", "isolation", "blast-radius", "containment"],
+            tags=["security", "blast-radius", "containment", "concrete"])
+
+    def _load_adaptation_deep(self):
+        ns = self.add_namespace("adaptation-deep",
+            "How agents adapt their behavior and structure over time")
+
+        ns.define("neuroplasticity",
+            "The ability of an agent's decision-making structure to reorganize itself by forming new connections and pruning unused ones",
+            description="The brain rewires itself based on experience. New skills create new neural pathways. Unused skills' pathways weaken. Neuroplasticity is the MECHANISM of learning — not just acquiring knowledge but RESTRUCTURING the decision-making apparatus. In the fleet: cuda-learning's experience-based adaptation IS neuroplasticity — successful patterns strengthen (new connections), unused patterns weaken (pruning), and the agent's decision structure reorganizes over time.",
+            level=Level.DOMAIN,
+            examples=["learning piano: brain rewires motor cortex (neuroplasticity)", "fleet: successful patterns strengthen, unused weaken (neuroplasticity)", "London taxi drivers: enlarged hippocampus from navigation learning"],
+            bridges=["learning", "rewire", "structural-change", "experience"],
+            tags=["adaptation", "neuroplasticity", "rewire", "domain"])
+
+        ns.define="homeorhesis",
+            "Maintaining a dynamic trajectory toward a goal state despite perturbations, as opposed to homeostasis which maintains a static setpoint",
+            description="Homeostasis: maintain temperature at 37°C (static). Homeorhesis: maintain GROWTH TRAJECTORY toward maturity despite setbacks (dynamic). The setpoint isn't fixed — it's MOVING. Homeorhesis is goal-directed stability. In the fleet: cuda-self-modify's adaptation IS homeorhetic — the agent maintains its evolution trajectory toward improved performance despite perturbations (failed mutations, energy depletion, hostile agents). The target moves as the agent improves.",
+            level=Level.DOMAIN,
+            examples=["child growth: trajectory toward adult height despite illnesses (homeorhesis)", "fleet: maintain improvement trajectory despite perturbations", "startup: growth trajectory despite setbacks (homeorhesis)"],
+            bridges=["stability", "trajectory", "dynamic", "goal-directed"],
+            tags=["adaptation", "homeorhesis", "trajectory", "domain"])
+
+        ns.define="exaptation",
+            "Repurposing an existing capability for a completely different function than it was evolved for",
+            description="Feathers evolved for warmth. Later repurposed for flight. The capability existed BEFORE the need — exaptation is using what you HAVE for what you NEED. In the fleet: cuda-stigmergy's pheromone system evolved for task coordination but can be EXAPTED for threat detection (unusual pheromone patterns indicate anomalies). cuda-memory-fabric's episodic memory can be exapted for anomaly detection (unusual memory access patterns). The capability exists — the use case evolves.",
+            level=Level.META,
+            examples=["feathers: warmth → flight (exaptation)", "fleet: pheromone coordination → threat detection (exaptation)", "gravity: physics → GPS navigation (exaptation)"],
+            bridges=["repurpose", "evolution", "capability", "novation"],
+            tags=["adaptation", "exaptation", "repurpose", "meta"])
+
+        ns.define="canalization",
+            "The tendency of a developing system to produce the same outcome despite variations in input or environment — developmental robustness",
+            description="Identical twins raised apart still have similar personalities. The developmental path CANALIZES toward a consistent outcome despite environmental noise. Canalization is robustness THROUGH development. In the fleet: cuda-self-modify's convergence IS canalization — despite different mutation paths and environmental conditions, the agent converges toward a stable, high-fitness configuration. The developmental path is robust to noise.",
+            level=Level.DOMAIN,
+            examples=["twins raised apart: similar personalities (canalization)", "fleet: different mutation paths → same stable configuration (canalization)", "embryo: develops correctly despite temperature variations (canalization)"],
+            bridges=["robustness", "development", "convergence", "consistency"],
+            tags=["adaptation", "canalization", "robustness", "domain"])
+
+        ns.define="bet-hedging",
+            "Maintaining diversity in strategies or capabilities as insurance against unpredictable future conditions",
+            description="Not putting all eggs in one basket. Maintain multiple strategies even when one seems best NOW, because conditions might change. Bet-hedging sacrifices some current efficiency for future robustness. In the fleet: cuda-genepool's genetic diversity IS bet-hedging — keeping multiple capability patterns even when one is currently best, because the environment might change and the currently-inferior pattern might become superior. Diversity IS insurance.",
+            level=Level.PATTERN,
+            examples=["investment portfolio: mix of stocks/bonds (bet-hedging)", "fleet: maintain diverse genes even when one is best (bet-hedging)", "evolution: genetic diversity as insurance against environmental change"],
+            bridges=["diversity", "insurance", "robustness", "future-proof"],
+            tags=["adaptation", "bet-hedging", "diversity", "pattern"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
