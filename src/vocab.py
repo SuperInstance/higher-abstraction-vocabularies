@@ -396,6 +396,9 @@ class HAV:
         self._load_coordination_deep()
         self._load_security_deep()
         self._load_adaptation_deep()
+        self._load_ontology_deep()
+        self._load_power_dynamics()
+        self._load_efficiency_frontier()
         self._load_mathematics()
 
     def _load_uncertainty(self):
@@ -6422,6 +6425,116 @@ class HAV:
             examples=["investment portfolio: mix of stocks/bonds (bet-hedging)", "fleet: maintain diverse genes even when one is best (bet-hedging)", "evolution: genetic diversity as insurance against environmental change"],
             bridges=["diversity", "insurance", "robustness", "future-proof"],
             tags=["adaptation", "bet-hedging", "diversity", "pattern"])
+
+
+    def _load_ontology_deep(self):
+        ns = self.add_namespace("ontology-deep",
+            "How agents model, classify, and relate concepts in their world")
+
+        ns.define("type-hierarchy",
+            "A tree-structured classification where child types inherit properties from parent types and add specialized behavior",
+            description="Animal → Mammal → Dog → Labrador. Each level inherits from above and adds specifics. Type hierarchies enable REASONING about categories: if all mammals breathe air, and a labrador is a mammal, then a labrador breathes air. In the fleet: cuda-platonic's ideal type templates form a type hierarchy — the ideal 'navigator' inherits from the ideal 'agent' and adds navigation-specific properties. cuda-did's identity types form a vessel hierarchy.",
+            level=Level.CONCRETE,
+            examples=["Animal → Mammal → Dog → Labrador (type hierarchy)", "fleet: Agent → Vessel → SensorAgent → CameraAgent (type hierarchy)", "OOP: Object → Vehicle → Car → ElectricCar"],
+            bridges=["ontology", "inheritance", "classification", "reasoning"],
+            tags=["ontology", "type", "hierarchy", "concrete"])
+
+        ns.define("prototype-theory",
+            "Categorizing concepts by their similarity to the most TYPICAL example (the prototype), not by necessary and sufficient features",
+            description="A robin is a MORE prototypical bird than a penguin. Prototype theory says we categorize by SIMILARITY TO BEST EXAMPLE, not by feature checklist. This explains fuzzy categories where boundary cases are debated. In the fleet: cuda-world-model classifies objects by prototype similarity — a new sensor reading is classified as 'wall' not because it matches a feature list, but because it's most similar to the prototypical 'wall' readings. Faster than rule-based, handles ambiguity better.",
+            level=Level.DOMAIN,
+            examples=["robin more prototypical bird than penguin (prototype theory)", "fleet: sensor reading classified by similarity to prototype", "chair: typical chair is easy to identify, art chair is borderline (prototype)"],
+            bridges=["categorization", "prototype", "similarity", "fuzzy"],
+            tags=["ontology", "prototype", "categorization", "domain"])
+
+        ns.define("faceted-classification",
+            "Organizing items by multiple independent attributes (facets) rather than in a single hierarchy, enabling flexible multi-dimensional search",
+            description="A library: books organized by ONE hierarchy (Dewey Decimal). A database: books organized by MULTIPLE facets (author, year, topic, language, format). Faceted classification enables flexible queries: 'show me all books about biology published after 2020 in English by authors from Europe'. In the fleet: cuda-discovery's capability lookup uses faceted classification — agents can be found by capability, trust level, energy budget, equipment type, location. Multiple independent facets, flexible queries.",
+            level=Level.CONCRETE,
+            examples=["e-commerce: filter by price + brand + size + color (facets)", "fleet: find agents by capability + trust + energy + location (facets)", "database: SELECT WHERE author='X' AND year>2020 AND topic='Y' (faceted)"],
+            bridges=["classification", "facets", "multi-dimensional", "search"],
+            tags=["ontology", "facet", "classification", "concrete"])
+
+        ns.define("ground-truth-anchor",
+            "A reference data point known with very high confidence that calibrates the entire perception and reasoning pipeline",
+            description="A GPS receiver knows its satellite positions with very high confidence — that's the ground truth anchor. All location estimates are calibrated against it. Without a ground truth anchor, perception drifts and reasoning errors accumulate. In the fleet: cuda-world-model's object permanence IS a ground truth anchor — objects that the agent has directly confirmed exist anchor the world model. cuda-self-model's capability calibration uses verified task performance as ground truth.",
+            level=Level.CONCRETE,
+            examples=["GPS: satellite positions = ground truth anchor for location", "fleet: verified task performance = ground truth anchor for self-model", "physics: known constants = ground truth for theory calibration"],
+            bridges=["calibration", "reference", "confidence", "anchor"],
+            tags=["ontology", "ground-truth", "anchor", "concrete"])
+
+    def _load_power_dynamics(self):
+        ns = self.add_namespace("power-dynamics",
+            "How influence, control, and authority distribute and shift within fleets and organizations")
+
+        ns.define("soft-power",
+            "Influencing other agents' behavior through attraction and persuasion rather than command and control",
+            description="Not 'do this because I said so' — 'do this because it's obviously better.' Soft power works through attraction: the agent with better solutions naturally attracts followers. No authority needed — just demonstrated competence. In the fleet: agents with high trust scores and successful track records exercise soft power — other agents voluntarily follow their proposals because of demonstrated quality, not mandated authority.",
+            level=Level.PATTERN,
+            examples=["open source: developers contribute because project is attractive (soft power)", "fleet: high-trust agent's proposals followed voluntarily (soft power)", "cultural influence: people adopt trends because they're attractive, not mandated"],
+            bridges=["influence", "attraction", "voluntary", "persuasion"],
+            tags=["power", "soft", "influence", "pattern"])
+
+        ns.define("hard-power",
+            "Directly controlling other agents' behavior through authority, resource control, or protocol enforcement",
+            description="'Do this or lose energy budget.' 'Do this or you're quarantined.' Hard power uses LEVERAGE — the ability to impose consequences. In the fleet: cuda-captain exercises hard power through mission assignment and energy allocation. cuda-compliance exercises hard power through policy enforcement. cuda-rbac exercises hard power through access control. Hard power is necessary for safety but excessive hard power kills initiative.",
+            level=Level.PATTERN,
+            examples=["manager: 'do this or be fired' (hard power)", "fleet captain: assign mission, allocate energy (hard power)", "government: laws with penalties (hard power)"],
+            bridges=["authority", "control", "enforcement", "leverage"],
+            antonyms=["soft-power"],
+            tags=["power", "hard", "control", "pattern"])
+
+        ns.define="power-balance",
+            "The equilibrium point between soft power and hard power that maximizes both initiative and safety in a fleet",
+            description="Too much hard power: agents are compliant but unmotivated, no innovation. Too much soft power: agents are motivated but unsafe, no coordination. The balance point is where agents WANT to follow (soft power) but CAN be stopped (hard power when needed). In the fleet: cuda-captain's authority (hard) combined with cuda-trust's reputation system (soft) creates power-balance — agents are motivated by reputation gains but constrained by policy enforcement.",
+            level=Level.META,
+            examples=["good management: motivate (soft) + enforce (hard) = balance", "fleet: reputation incentives + policy enforcement = power balance", "democracy: persuasion (soft) + law (hard) = power balance"],
+            bridges=["soft-power", "hard-power", "equilibrium", "optimal"],
+            tags=["power", "balance", "equilibrium", "meta"])
+
+        ns.define="authority-gradient",
+            "The smooth transition of decision-making authority from higher to lower levels based on situational context and capability",
+            description="Not fixed hierarchy — GRADIENT. In peacetime: authority distributed (agents make local decisions). In crisis: authority concentrated (captain makes all decisions). The gradient SHIFTS with context. Agents closer to the situation have MORE authority because they have BETTER information. In the fleet: cuda-hierarchy's delegation enables authority gradients — normal operations are distributed, crisis escalates to centralized command, then de-escalates back.",
+            level=Level.PATTERN,
+            examples=["military: peacetime distributed, crisis centralized, then back (authority gradient)", "fleet: normal → distributed, crisis → centralized, resolve → distributed", "airline: pilot has full authority in emergency (gradient shifts up)"],
+            bridges=["authority", "gradient", "context", "delegation"],
+            tags=["power", "authority", "gradient", "pattern"])
+
+    def _load_efficiency_frontier(self):
+        ns = self.add_namespace("efficiency-frontier",
+            "The boundary between possible and impossible tradeoffs — where every improvement in one dimension requires sacrifice in another")
+
+        ns.define("pareto-frontier",
+            "The set of all solutions where no objective can be improved without worsening another — the boundary of achievable optimality",
+            description="You can't have it all. The pareto frontier shows the BEST possible tradeoffs. Below the frontier: you can improve. On the frontier: every improvement costs something. Above the frontier: impossible. In the fleet: cuda-decision's multi-criteria optimization identifies the pareto frontier of proposal evaluation — proposals ON the frontier are the best achievable tradeoffs between speed, accuracy, energy cost, and risk. Proposals below the frontier are dominated (inferior).",
+            level=Level.DOMAIN,
+            examples=["investment: risk vs return curve = pareto frontier", "fleet: speed vs accuracy vs energy = pareto frontier of proposals", "car: fuel efficiency vs performance = pareto frontier"],
+            bridges=["tradeoff", "optimality", "boundary", "non-dominated"],
+            tags=["efficiency", "pareto", "frontier", "domain"])
+
+        ns.define="latent-capacity",
+            "Unused capability that can be activated when needed — the gap between current performance and maximum possible performance",
+            description="An athlete sprints at 100% for 10 seconds but jogs at 40% for hours. The 60% gap is latent capacity — available but not used in normal operation. Systems that ALWAYS run at 100% have no latent capacity and can't handle spikes. In the fleet: cuda-energy's rest instinct builds latent capacity — during rest periods, energy reserves accumulate, creating capacity for future high-demand situations. An agent with no latent capacity is fragile.",
+            level=Level.CONCRETE,
+            examples=["athlete: jog at 40%, sprint at 100% (60% latent capacity)", "fleet: rest builds energy reserves = latent capacity for crisis", "hospital: empty beds = latent capacity for surge"],
+            bridges=["capacity", "reserve", "headroom", "spike"],
+            tags=["efficiency", "capacity", "reserve", "concrete"])
+
+        ns.define="diminishing-returns",
+            "Each additional unit of investment produces progressively less improvement — the cost of the next improvement exceeds the last",
+            description="First hour of optimization: 50% improvement. Second hour: 20%. Third hour: 5%. Fourth hour: 1%. At some point, the cost of further optimization exceeds the value of the improvement. STOP. In the fleet: cuda-deliberation's Forfeit option implements diminishing-returns detection — if the confidence gain from additional deliberation rounds falls below a threshold, forfeit (stop deliberating). Perfect is the enemy of good enough.",
+            level=Level.CONCRETE,
+            examples=["optimization: 50% → 20% → 5% → 1% per hour (diminishing returns)", "fleet: additional deliberation rounds produce less confidence gain → forfeit", "studying: first hour learns most, last hour learns least"],
+            bridges=["returns", "diminishing", "tradeoff", "stopping"],
+            tags=["efficiency", "diminishing", "returns", "concrete"])
+
+        ns.define="opportunity-cost",
+            "The value of the best alternative NOT chosen — the hidden cost of every decision",
+            description="You spend $100 on dinner. The opportunity cost isn't $100 — it's what that $100 could have earned if invested. Every choice eliminates alternatives. The opportunity cost is the value of the BEST eliminated alternative. In the fleet: when cuda-captain assigns an agent to task A, the opportunity cost is the value of task B that agent could have done instead. Energy spent on deliberation has opportunity cost: that energy could have been used for action.",
+            level=Level.CONCRETE,
+            examples=["$100 dinner → opportunity cost = investment returns on $100", "fleet: agent on task A → opportunity cost = value of task B", "study vs work: opportunity cost of study = wages lost"],
+            bridges=["cost", "alternative", "hidden", "tradeoff"],
+            tags=["efficiency", "opportunity-cost", "tradeoff", "concrete"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
