@@ -275,6 +275,9 @@ class HAV:
         self._load_control_theory()
         self._load_evolution()
         self._load_networks()
+        self._load_network_topology()
+        self._load_arch_patterns()
+        self._load_quantum_metaphor()
         self._load_game_theory()
         self._load_optimization()
         self._load_probability()
@@ -6312,6 +6315,41 @@ class HAV:
         ns.define("grim-trigger", "Cooperate until opponent defects then defect forever", Level=Level.PATTERN, examples=["zero-tolerance trust policy", "one betrayal permanent punishment"], bridges=["grim","trigger","permanent"], tags=["game","grim-trigger"])
         ns.define("mixed-strategy", "Randomize between actions to prevent opponent exploitation", Level=Level.PATTERN, examples=["vary approach randomly to stay unpredictable", "probabilistic action selection"], bridges=["mixed","randomize","unpredictable"], tags=["game","mixed"])
         ns.define("shapley-value", "Fair allocation of total value based on each agents marginal contribution", Level=Level.DOMAIN, examples=["credit assignment for multi-agent collaboration", "fair reward division"], bridges=["shapley","fair","contribution"], tags=["game","shapley"])
+
+    def _load_network_topology(self):
+        ns = self.add_namespace("network-topology", "Communication topology patterns in agent networks")
+        ns.define("star-topology", "All agents communicate through central hub", Level=Level.CONCRETE, examples=["fleet coordinator mediates all messages", "single point of coordination"], bridges=["star","hub","central"], tags=["topology","star"])
+        ns.define("mesh-topology", "Every agent connects directly to every other agent", Level=Level.CONCRETE, examples=["fully connected peer-to-peer fleet", "direct agent-to-agent communication"], bridges=["mesh","peer","fully-connected"], tags=["topology","mesh"])
+        ns.define("ring-topology", "Agents form circular chain each connecting only to two neighbors", Level=Level.CONCRETE, examples=["token ring message passing", "pipeline of sequential processing"], bridges=["ring","chain","sequential"], tags=["topology","ring"])
+        ns.define("tree-topology", "Hierarchical parent-child agent structure", Level=Level.CONCRETE, examples=["director delegates to coordinators delegates to workers", "organizational hierarchy"], bridges=["tree","hierarchy","parent-child"], tags=["topology","tree"])
+        ns.define("bus-topology", "All agents share single communication channel", Level=Level.CONCRETE, examples=["shared message bus all agents publish and subscribe", "broadcast medium"], bridges=["bus","shared","broadcast"], tags=["topology","bus"])
+        ns.define("small-world", "Most agents connect locally but a few long-range shortcuts enable fast global routing", Level=Level.PATTERN, examples=["fleet with local clusters plus hub agents", "six degrees of separation"], bridges=["small-world","shortcut","cluster"], tags=["topology","small-world"])
+        ns.define("scale-free", "Network where few hub agents have many connections most agents have few", Level=Level.DOMAIN, examples=["fleet coordinator connected to all workers", "power-law degree distribution"], bridges=["scale-free","hub","power-law"], tags=["topology","scale-free"])
+        ns.define("hypercube", "Multi-dimensional grid topology with logarithmic diameter", Level=Level.CONCRETE, examples=["4-dimensional hypercube fleet routing", "optimal broadcast in high-dimensional spaces"], bridges=["hypercube","multi-dimensional","log"], tags=["topology","hypercube"])
+
+    def _load_arch_patterns(self):
+        ns = self.add_namespace("arch-patterns", "Software architecture patterns for agent systems")
+        ns.define(" ambassador-agent", "Local proxy representing a remote agent hiding communication complexity", Level=Level.PATTERN, examples=["local agent wraps remote API calls", "translation layer between fleet protocols"], bridges=["proxy","remote","translate"], tags=["arch","ambassador"])
+        ns.define("bulkhead-isolation", "Isolate failures to prevent cascade across subsystems", Level=Level.PATTERN, examples=["separate thread pools per service", "resource limits prevent cascade"], bridges=["isolate","bulkhead","contain"], tags=["arch","bulkhead"])
+        ns.define("circuit-breaker", "Stop calling failing service after threshold opens allowing recovery time", Level=Level.PATTERN, examples=["3 failures open breaker 30s cooldown", "prevent repeated calls to dead service"], bridges=["circuit","break","threshold"], tags=["arch","circuit-breaker"])
+        ns.define("sidecar-agent", "Auxiliary agent deployed alongside primary adding cross-cutting capabilities", Level=Level.PATTERN, examples=["logging sidecar monitoring main agent", "security sidecar handling auth"], bridges=["sidecar","auxiliary","cross-cut"], tags=["arch","sidecar"])
+        ns.define("event-sourcing", "Store state as sequence of immutable events enabling full replay", Level=Level.PATTERN, examples=["agent state = replay of all past events", "time travel debugging through event log"], bridges=["event","source","replay"], tags=["arch","event-sourcing"])
+        ns.define("cqrs", "Separate read and write models for optimized independent scaling", Level=Level.PATTERN, examples=["write model normalizes read model denormalizes", "query and command different paths"], bridges=["cqrs","read-write","separate"], tags=["arch","cqrs"])
+        ns.define("strangler-fig", "Incrementally replace legacy system by routing new features to new implementation", Level=Level.PATTERN, examples=["route new tasks to new agent old tasks to old", "gradual migration without big bang"], bridges=["strangler","migrate","incremental"], tags=["arch","strangler"])
+        ns.define("sharding", "Distribute data across multiple instances by partition key", Level=Level.PATTERN, examples=["hash-based fleet task distribution", "horizontal scaling via partition"], bridges=["shard","partition","distribute"], tags=["arch","shard"])
+        ns.define("saga-pattern", "Distributed transaction using sequence of local transactions with compensation", Level=Level.PATTERN, examples=["book flight then hotel then car with rollback if any fails", "choreographed compensation on failure"], bridges=["saga","transaction","compensate"], tags=["arch","saga"])
+        ns.define("adapter-agent", "Translate between incompatible agent communication protocols", Level=Level.PATTERN, examples=["translate REST to gRPC for fleet communication", "protocol bridge between different agent types"], bridges=["adapter","translate","protocol"], tags=["arch","adapter"])
+
+    def _load_quantum_metaphor(self):
+        ns = self.add_namespace("quantum-metaphor", "Quantum computing concepts applied to agent systems")
+        ns.define("superposition-state", "Agent simultaneously explores multiple potential states until observation collapses to one", Level=Level.DOMAIN, examples=["parallel exploration of multiple strategies", "evaluate multiple paths simultaneously"], bridges=["superposition","parallel","explore"], tags=["quantum","superposition"])
+        ns.define("entanglement", "Correlated state between agents that persists regardless of distance", Level=Level.DOMAIN, examples=["agent A decision instantly constrains agent B options", "fleet-wide state correlation"], bridges=["entangle","correlate","distance-independent"], tags=["quantum","entangle"])
+        ns.define("decoherence", "Environmental interference causes agent state to lose coherence and collapse unpredictably", Level=Level.BEHAVIOR, examples=["noise disrupts parallel exploration", "external events force premature decision"], bridges=["decohere","noise","collapse"], tags=["quantum","decohere"])
+        ns.define("quantum-tunnel", "Agent bypasses apparent barrier by probabilistic state exploration", Level=Level.PATTERN, examples=["skip local optimum through random exploration", "jump across constraint boundary"], bridges=["tunnel","bypass","probabilistic"], tags=["quantum","tunnel"])
+        ns.define("wave-function-collapse", "Parallel evaluation collapses to single committed decision", Level=Level.PATTERN, examples=["evaluate 10 options then commit to one", "deliberation phase ends with action"], bridges=["collapse","commit","decide"], tags=["quantum","collapse"])
+        ns.define("uncertainty-principle", "Cannot simultaneously optimize for precision and speed in agent operations", Level=Level.DOMAIN, examples=["fast response = low precision deliberation", "deep analysis = slow response"], bridges=["uncertainty","tradeoff","precision"], tags=["quantum","uncertainty"])
+        ns.define("quantum-interference", "Multiple strategy paths interfere constructively or destructively", Level=Level.PATTERN, examples=["two exploration paths reinforce or cancel each other", "multi-agent strategy alignment"], bridges=["interference","constructive","destructive"], tags=["quantum","interference"])
+        ns.define("measurement-problem", "Observing agent behavior changes the behavior being observed", Level=Level.BEHAVIOR, examples=["monitoring agent modifies its actions", "benchmark gaming from observation"], bridges=["observe","modify","measurement"], tags=["quantum","measurement"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
