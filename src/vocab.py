@@ -303,6 +303,11 @@ class HAV:
         self._load_design_patterns()
         self._load_measurement()
         self._load_time()
+        self._load_decision_theory()
+        self._load_obsolescence()
+        self._load_perception()
+        self._load_communication()
+        self._load_tradeoffs()
         self._load_mathematics()
 
     def _load_uncertainty(self):
@@ -2168,6 +2173,291 @@ class HAV:
             examples=["engine warm-up: poor performance until operating temperature", "ML model: first N predictions less accurate", "fleet agent: low confidence and trust at startup, needs warm-up period"],
             bridges=["cold-start", "calibration", "latency", "steady-state"],
             tags=["time", "startup", "performance"])
+
+
+    def _load_temporal(self):
+        ns = self.add_namespace("temporal",
+            "Temporal reasoning, timing, and the role of time in agent systems")
+
+        ns.define("temporal-window",
+            "A sliding or tumbling time range used to group events for aggregation",
+            description="Instead of counting all events ever, count events in the last 5 minutes (sliding window) or in fixed 5-minute buckets (tumbling window). The fleet's cuda-stream uses tumbling, sliding, and session windows for stream aggregation. Temporal windows prevent memory from growing unboundedly while still capturing recent patterns.",
+            level=Level.CONCRETE,
+            examples=["count requests in last 5 minutes (sliding window)", "aggregate sensor readings per hour (tumbling window)", "fleet: count A2A messages in last 10 cycles for rate limiting"],
+            bridges=["time-to-live", "aggregation", "stream", "decay"],
+            tags=["temporal", "window", "aggregation", "stream"])
+
+        ns.define("lead-time",
+            "Time between initiating a process and its completion — time-to-delivery",
+            description="From order to delivery. From commit to deploy. From deliberation start to action. Lead time measures the full pipeline, not just processing time. The fleet tracks lead time for deliberation cycles: how long from problem detection to action taken? Long lead times indicate bottlenecks in the decision pipeline.",
+            level=Level.CONCRETE,
+            examples=["order-to-delivery time", "commit-to-deploy time in CI/CD", "fleet: problem-detection-to-action lead time", "manufacturing: order-to-shipment"],
+            bridges=["latency", "throughput", "pipeline", "deadline"],
+            tags=["temporal", "measurement", "pipeline"])
+
+        ns.define("grace-period",
+            "A time buffer before enforcement begins — temporary tolerance for transition",
+            description="The new rule takes effect in 30 days (grace period). During grace period, violations are logged but not penalized. In the fleet: when a new compliance rule is deployed, agents get a grace period to adapt their behavior before penalties apply. Softens the transition, prevents sudden cascading effects from policy changes.",
+            level=Level.CONCRETE,
+            examples=["new law with 90-day grace period", "API deprecation with 6-month grace period", "fleet: new compliance rule with 10-cycle grace period before penalties"],
+            bridges=["deadline", "transition", "tolerance", "policy"],
+            tags=["temporal", "transition", "tolerance"])
+
+    def _load_security(self):
+        ns = self.add_namespace("security",
+            "Threats, defenses, and the security posture of agent systems")
+
+        ns.define("principle-of-least-privilege",
+            "An agent should only have the minimum permissions needed for its current task",
+            description="A navigation agent doesn't need access to the communication budget. A sensor agent doesn't need to modify genes. Permission creep is the gradual accumulation of permissions beyond what's needed. The fleet's cuda-rbac enforces least privilege: roles define permissions, agents are assigned roles, permissions are checked on every operation.",
+            level=Level.DOMAIN,
+            examples=["web server doesn't need root access", "read-only database user for analytics", "fleet: navigation agent can't modify communication settings"],
+            bridges=["rbac", "sandbox", "permission", "role"],
+            tags=["security", "principle", "permission"])
+
+        ns.define("privilege-escalation",
+            "An agent exploiting a vulnerability to gain permissions beyond its assigned level",
+            description="A read-only agent finds a way to write. A low-trust agent gains access to high-trust channels. Privilege escalation is the most dangerous class of security vulnerabilities because it bypasses the entire permission model. The fleet's membrane (cuda-genepool) blocks privilege escalation: antibodies detect and reject attempts to access resources beyond the agent's clearance.",
+            level=Level.BEHAVIOR,
+            examples=["user account gaining admin access through exploit", "read-only process finding write vulnerability", "fleet: low-trust agent attempting to access high-trust fleet commands"],
+            bridges=["least-privilege", "rbac", "membrane", "exploit"],
+            tags=["security", "attack", "vulnerability"])
+
+        ns.define("zero-trust",
+            "Never trust, always verify — even communications from within the fleet",
+            description="Traditional security: trust everything inside the firewall. Zero trust: verify every request regardless of source. In the fleet: even trusted agents must authenticate every message. Message integrity is verified via cryptographic signatures (cuda-did). Trust is never assumed based on network position — it's earned through cryptographic proof.",
+            level=Level.DOMAIN,
+            examples=["verify every API call regardless of source network", "fleet: authenticate every A2A message even from known agents", "NIST zero-trust architecture model"],
+            bridges=["trust", "authentication", "cryptographic-identity", "verification"],
+            tags=["security", "architecture", "authentication"])
+
+        ns.define("confused-deputy",
+            "An agent is tricked into using its permissions to perform an action on behalf of a less privileged agent",
+            description="A compiler (high privilege) is tricked into writing a file that the user (low privilege) requested. The compiler has permission, the user doesn't. The user delegates to the compiler, which acts as confused deputy. In the fleet: an agent with high trust is tricked by a low-trust agent into performing a privileged operation. cuda-compliance checks operation intent, not just permissions.",
+            level=Level.BEHAVIOR,
+            examples=["compiler tricked into writing protected file", "cron job tricked into running malicious script", "fleet: high-trust agent tricked into sharing secrets by low-trust agent's request"],
+            bridges=["privilege-escalation", "least-privilege", "intent", "security"],
+            tags=["security", "attack", "deception"])
+
+    def _load_decision_theory(self):
+        ns = self.add_namespace("decision-theory",
+            "Formal frameworks for making choices under uncertainty")
+
+        ns.define("expected-value",
+            "Average outcome weighted by probability — the rational baseline for decision-making",
+            description="A coin flip: 50% chance of $100, 50% chance of $0. Expected value = $50. Should you pay $40 to play? Yes (EV > cost). The fleet uses expected value for energy allocation: if an action has 30% chance of gaining 5 ATP and 70% chance of losing 1 ATP, EV = 0.8 ATP (positive, so worth doing).",
+            level=Level.DOMAIN,
+            examples=["lottery ticket: EV is negative (that's why lotteries make money)", "insurance: EV is negative but variance reduction justifies it", "fleet: action with positive EV in ATP is worth attempting"],
+            bridges=["probability", "utility", "rationality", "energy-budget"],
+            tags=["decision", "probability", "rationality", "expected-value"])
+
+        ns.define("maximin",
+            "Choose the option whose worst-case outcome is best — minimize maximum loss",
+            description="Two investments: A makes $10 or loses $100. B makes $1 or loses $1. Maximin chooses B: the worst case (-$1) is better than A's worst case (-$100). Maximin is pessimistic — assumes the worst will happen. In the fleet: energy conservation (survival instinct) uses maximin reasoning — minimize the worst-case energy deficit.",
+            level=Level.DOMAIN,
+            examples=["choosing investment with best worst-case", "agent choosing action with least worst-case energy loss", "pessimistic decision-making for safety-critical systems"],
+            bridges=["minimax", "risk-aversion", "worst-case", "safety"],
+            tags=["decision", "pessimistic", "safety"])
+
+        ns.define("minimax",
+            "In adversarial settings, minimize the maximum damage the opponent can inflict",
+            description="Chess: choose the move that minimizes your opponent's best response. The minimax theorem (von Neumann): in zero-sum games, minimax = maximin. In the fleet's adversarial-red-team setup: the defender agent uses minimax to choose strategies that minimize damage even against the best attacker strategy.",
+            level=Level.DOMAIN,
+            examples=["chess AI uses minimax with alpha-beta pruning", "defender choosing strategy that minimizes attacker's best damage", "agent choosing communication strategy that minimizes information leakage"],
+            bridges=["maximin", "game-theory", "zero-sum", "adversarial"],
+            tags=["decision", "adversarial", "game-theory"])
+
+        ns.define("satisficing",
+            "Choosing the first option that meets minimum requirements, not searching for the optimal",
+            description="You need a restaurant. You find one that's good enough and eat. You don't visit every restaurant in town to find the best one. Simon's bounded rationality: satisficing is rational when search costs exceed improvement gains. In the fleet: agents satisfice when energy is low. Exhaustive search costs ATP. 'Good enough' at 0.7 confidence beats 'optimal' at 0.95 if the search costs 3 ATP.",
+            level=Level.PATTERN,
+            examples=["choosing a restaurant that's good enough", "buying first satisfactory product instead of comparing all", "fleet: satisficing when energy budget is low, optimizing when energy is high"],
+            bridges=["bounded-rationality", "opportunity-cost", "energy-budget", "optimization"],
+            tags=["decision", "pragmatic", "resource-constrained"])
+
+        ns.define("pareto-optimal",
+            "An outcome where no agent can be made better off without making another worse off",
+            description="Trade off speed vs accuracy. You can't improve speed without sacrificing accuracy, and vice versa. The set of all Pareto-optimal outcomes forms the Pareto frontier. In the fleet's multi-objective optimization: the fleet should only operate on the Pareto frontier — any point inside can be improved without tradeoffs. Points on the frontier require genuine tradeoff decisions.",
+            level=Level.DOMAIN,
+            examples=["speed vs accuracy tradeoff frontier", "cost vs quality frontier", "fleet: energy vs accuracy Pareto frontier — find the optimal tradeoff for current context"],
+            bridges=["multi-objective", "tradeoff", "frontier", "optimization"],
+            tags=["decision", "optimization", "tradeoff"])
+
+        ns.define("precommitment",
+            "Binding yourself to a future decision to overcome present-bias or temptation",
+            description="Ulysses tying himself to the mast to resist the Sirens. Setting a savings account to auto-deduct. In the fleet: an agent can precommit to a deliberation strategy before encountering a tempting shortcut. The energy budget IS a precommitment device: the agent can't exceed its budget even if a high-energy action seems attractive.",
+            level=Level.PATTERN,
+            examples=["Ulysses and the mast", "automatic savings deduction", "fleet: energy budget as precommitment", "studying in library (removes temptation of TV)"],
+            bridges=["energy-budget", "self-control", "constraint", "commitment"],
+            tags=["decision", "self-control", "strategy"])
+
+    def _load_obsolescence(self):
+        ns = self.add_namespace("obsolescence",
+            "How systems age, degrade, and are replaced — the lifecycle of agent components")
+
+        ns.define("software-rot",
+            "Gradual degradation of software quality due to changing environment, not code changes",
+            description="The code hasn't changed. But the environment has. APIs deprecated. Dependencies have security vulnerabilities. Hardware got faster. What was optimal is now suboptimal. The fleet's genes exhibit software rot: a navigation gene that was optimal for the old warehouse layout is now suboptimal after the warehouse was reconfigured. Continuous adaptation (cuda-adaptation) counteracts rot.",
+            level=Level.BEHAVIOR,
+            examples=["code that worked fine now fails because API changed", "security vulnerabilities in old dependencies", "fleet gene optimized for old environment is suboptimal in new one"],
+            bridges=["technical-debt", "adaptation", "environment-change", "maintenance"],
+            tags=["lifecycle", "degradation", "maintenance"])
+
+        ns.define("strangler-pattern",
+            "Gradually replacing an old system by building new features alongside it and redirecting traffic",
+            description="Instead of a big-bang rewrite (high risk, high cost), build the new system incrementally. Each new feature routes to the new system; old features still use the old system. Over time, the old system is 'strangled' — all traffic goes to the new system. In the fleet: agents can gradually replace old genes with new ones, testing each replacement before committing.",
+            level=Level.PATTERN,
+            examples=["replacing monolith with microservices incrementally", "migrating from old database to new one table by table", "fleet: replacing old navigation gene with new one, testing before committing"],
+            bridges=["migration", "incremental", "risk-reduction", "replacement"],
+            tags=["lifecycle", "migration", "pattern"])
+
+        ns.define("legacy-system",
+            "A system that continues to function but is no longer actively developed or improved",
+            description="It works. Nobody wants to touch it. Changing it risks breaking things. It runs on old technology. The fleet will have legacy genes: strategies that work well enough that nobody invests in improving them. They accumulate technical debt. Eventually, a disruptive change (environment shift) forces their replacement.",
+            level=Level.BEHAVIOR,
+            examples=["COBOL banking systems", "old navigation strategy that still works but nobody improves", "agent using outdated communication protocol that still functions"],
+            bridges=["technical-debt", "software-rot", "replacement", "maintenance"],
+            tags=["lifecycle", "legacy", "maintenance"])
+
+        ns.define("bus-factor",
+            "Minimum number of team members who would need to leave before the project is in trouble",
+            description="If the one person who understands this system leaves, the project is doomed. Bus factor = 1. The fleet's gene pool mitigates bus factor: genes are shared across agents. If one agent fails, its useful genes persist in the pool. Provenance (cuda-provenance) reduces bus factor by documenting how decisions were made.",
+            level=Level.CONCRETE,
+            examples=["one-person project: bus factor = 1 (risky)", "well-documented team project: bus factor = 3+", "fleet: gene pool sharing increases bus factor for critical strategies"],
+            bridges=["redundancy", "documentation", "knowledge-sharing", "resilience"],
+            tags=["lifecycle", "risk", "team", "documentation"])
+
+    def _load_perception(self):
+        ns = self.add_namespace("perception",
+            "How agents and organisms sense, filter, and interpret their environment")
+
+        ns.define("sensory-adaptation",
+            "Decreased sensitivity to constant stimuli — your brain filters out the unchanging",
+            description="You stop feeling your clothes. Background noise becomes inaudible. Constant smells become invisible. This is feature, not bug: it frees attention for changes and novelties. The fleet's cuda-attention habituation implements sensory adaptation: constant sensor readings get lower attention weight. Only changes trigger attention.",
+            level=Level.BEHAVIOR,
+            examples=["stopping noticing your watch after wearing it for a while", "not hearing the refrigerator hum", "agent: habituating to constant temperature, only noticing changes"],
+            bridges=["habituation", "attention", "change-detection", "novelty"],
+            tags=["perception", "adaptation", "attention"])
+
+        ns.define("change-blindness",
+            "Failure to notice significant changes in a scene when the change occurs during a disruption",
+            description="In a famous experiment, a person giving directions doesn't notice when the person they're talking to is replaced by someone else. The fleet can experience change-blindness: if a critical environmental change happens during a high-priority deliberation, the agent may not update its world model. Interrupt-driven perception (hardware interrupts) mitigates change-blindness.",
+            level=Level.BEHAVIOR,
+            examples=["not noticing conversation partner was swapped", "not noticing a UI change during a page reload", "fleet: not updating world model during high-priority deliberation"],
+            bridges=["attention", "inattentional-blindness", "interrupt", "perception"],
+            tags=["perception", "blindness", "attention"])
+
+        ns.define("inattentional-blindness",
+            "Failure to notice unexpected objects when attention is focused on another task",
+            description="The invisible gorilla experiment: viewers counting basketball passes don't notice a person in a gorilla suit walking through the scene. Attention is finite. Focus on X means missing Y. In the fleet: an agent focusing deliberation on path planning may completely miss a new obstacle appearing in its sensor data. cuda-attention's focus modes and cuda-perception's scene composition mitigate this.",
+            level=Level.BEHAVIOR,
+            examples=["invisible gorilla experiment", "noticing a phone ringing while reading", "fleet: missing new obstacle while planning path"],
+            bridges=["attention", "change-blindness", "focus", "resource-limitation"],
+            tags=["perception", "blindness", "attention", "limitation"])
+
+        ns.define("multisensory-fusion",
+            "Combining information from multiple sensor types to produce more accurate perception",
+            description="You see a dog and hear barking. Both confirm 'dog nearby'. But you see a dog and hear a cat meow — conflict. Multisensory fusion resolves conflicts using reliability weighting (higher-confidence source gets more weight). The fleet's cuda-fusion implements Bayesian multisensory fusion. cuda-perception provides the signal filtering pipeline.",
+            level=Level.PATTERN,
+            examples=["seeing + hearing confirms object identity", "GPS + accelerometer = better position than either alone", "fleet: lidar + camera + radar fusion for obstacle detection"],
+            bridges=["bayesian-fusion", "confidence", "sensor", "perception"],
+            tags=["perception", "fusion", "multi-sensor"])
+
+        ns.define("object-permanence",
+            "Understanding that objects continue to exist even when not currently perceived",
+            description="A baby drops a toy out of sight and thinks it's gone. An adult knows it's still there. Object permanence is a foundational cognitive ability. In the fleet's cuda-world-model: objects have a `permanence` property that decays over time but doesn't drop to zero instantly. An obstacle seen 10 cycles ago is believed to still exist (with reduced confidence).",
+            level=Level.DOMAIN,
+            examples=["baby doesn't understand object permanence", "adult knows objects persist when out of sight", "fleet: obstacle believed to still exist after sensor loses sight, with decaying confidence"],
+            bridges=["memory", "world-model", "persistence", "spatial"],
+            tags=["perception", "cognitive", "spatial", "fleet"])
+
+    def _load_communication(self):
+        ns = self.add_namespace("communication-theory",
+            "Models and frameworks for understanding agent-to-agent communication")
+
+        ns.define("shannon-weaver-model",
+            "Sender -> Encoder -> Channel -> Decoder -> Receiver, with noise at each stage",
+            description="The foundational model of communication. Sender encodes a message, sends through a noisy channel, receiver decodes. Noise corrupts. Redundancy and error correction compensate. The fleet's A2A protocol is Shannon-Weaver: sender encodes intent + payload, channel is the fleet mesh (noisy), receiver decodes. cuda-codec handles encoding/decoding. Confidence tracks noise level.",
+            level=Level.DOMAIN,
+            examples=["telephone: voice -> phone encoder -> network -> phone decoder -> ear", "fleet: intent+payload -> A2A encode -> mesh -> A2A decode -> receive", "radio: voice -> modulator -> electromagnetic waves -> demodulator -> speaker"],
+            bridges=["information-theory", "encoding", "noise", "channel-capacity"],
+            tags=["communication", "model", "foundational"])
+
+        ns.define("information-bottleneck",
+            "Compressing information to its most relevant parts, discarding irrelevant detail",
+            description="You describe a movie plot in 30 seconds, not 3 hours. You compressed to the relevant parts. Tishby's information bottleneck theory: the best representation of X for predicting Y discards all information in X that's irrelevant to Y. The fleet's cuda-prompt compression and cuda-filtration both implement information bottleneck: keep what's relevant to the task, discard the rest.",
+            level=Level.DOMAIN,
+            examples=["movie summary in 30 seconds", "compressing sensor data to features relevant for navigation", "fleet: compressing deliberation history to elements relevant for current decision"],
+            bridges=["compression", "relevance", "abstraction", "information-theory"],
+            tags=["communication", "compression", "information"])
+
+        ns.define("context-window",
+            "The amount of recent information an agent can actively consider at once",
+            description="Your working memory holds about 7 items. A language model has a context window of N tokens. Beyond the window, information is forgotten or must be re-read. The fleet's temporal memory (cuda-temporal) manages the context window: recent events are immediately accessible, older events require retrieval. cuda-memory-fabric implements the storage behind the window.",
+            level=Level.CONCRETE,
+            examples=["human working memory: ~7 items", "LLM context window: 128K tokens", "fleet: last 10 deliberation cycles in active context", "conversation: how much you remember of what was said earlier"],
+            bridges=["working-memory", "attention", "resource-limitation", "retrieval"],
+            tags=["communication", "memory", "limitation"])
+
+        ns.define("code-switching",
+            "Alternating between different languages or registers based on context and audience",
+            description="Bilingual speakers switch between languages depending on who they're talking to. In the fleet: agents switch between communication registers depending on context — detailed technical messages to technical agents, simple status updates to coordination agents. cuda-communication's intent types implement a form of code-switching.",
+            level=Level.BEHAVIOR,
+            examples=["bilingual switching between languages based on audience", "engineer switching between technical and non-technical explanations", "fleet: different message formats for different agent roles"],
+            bridges=["context", "audience", "pragmatics", "register"],
+            tags=["communication", "adaptation", "context"])
+
+    def _load_tradeoffs(self):
+        ns = self.add_namespace("tradeoffs",
+            "The fundamental tensions that cannot be resolved — only managed")
+
+        ns.define("exploration-exploitation",
+            "Trying new strategies (exploration) vs using known-good strategies (exploitation)",
+            description="A restaurant you know is good vs trying a new one. Reading a favorite author vs discovering a new one. In the fleet: every cycle, the agent chooses to explore (new strategies, unknown paths) or exploit (proven strategies, known paths). Too much exploration wastes energy. Too much exploitation misses better options. cuda-adaptation manages this balance.",
+            level=Level.DOMAIN,
+            examples=["restaurant: known good vs new unknown", "agent: proven navigation strategy vs exploring new route", "science: building on established theory vs trying radical new approach"],
+            bridges=["deliberation", "energy-budget", "learning", "risk"],
+            tags=["tradeoff", "fundamental", "learning"])
+
+        ns.define("speed-accuracy",
+            "Faster responses are less accurate; more accurate responses take longer",
+            description="Multiple choice: answer fast (less accurate) or think carefully (more accurate). The fleet faces this constantly: quick instinctive response (fast, low confidence) vs deliberation (slow, high confidence). Energy budget forces the trade: limited ATP means limited deliberation. The right balance depends on urgency and stakes.",
+            level=Level.DOMAIN,
+            examples=["quick guess vs careful analysis", "real-time obstacle avoidance (speed) vs path planning (accuracy)", "fleet: instinct response (fast, low conf) vs deliberation (slow, high conf)"],
+            bridges=["energy-budget", "deliberation", "instinct", "deadline"],
+            tags=["tradeoff", "fundamental", "performance"])
+
+        ns.define("generality-specificity",
+            "General solutions handle many cases but none optimally; specific solutions handle one case perfectly",
+            description="A Swiss army knife does everything but nothing well. A chef's knife cuts perfectly but only cuts. The fleet needs both: general genes that work across many contexts (cuda-genepool baseline) and specific genes optimized for particular environments. cuda-playbook manages the specificity spectrum.",
+            level=Level.DOMAIN,
+            examples=["Swiss army knife vs chef knife", "general-purpose agent vs specialized agent", "fleet: general navigation gene vs warehouse-specific navigation gene"],
+            bridges=["generalization", "specialization", "niche", "playbook"],
+            tags=["tradeoff", "fundamental", "design"])
+
+        ns.define("consistency-availability",
+            "In distributed systems, you can have at most 2 of: Consistency, Availability, Partition tolerance",
+            description="The CAP theorem. Network partition happens. Choose: be consistent (reject stale reads) or available (serve stale reads). Can't have both during a partition. The fleet chooses availability over consistency: agents operate with slightly stale data (eventual consistency via CRDTs) rather than waiting for synchronization.",
+            level=Level.DOMAIN,
+            examples=["distributed database during network partition", "fleet: agents operate with stale data rather than stopping", "mobile app: work offline (availability) with stale cache (inconsistency)"],
+            bridges=["eventual-consistency", "cap-theorem", "partition", "distributed"],
+            tags=["tradeoff", "distributed", "fundamental"])
+
+        ns.define("simplicity-completeness",
+            "Simple systems are easy to understand but may miss edge cases; complete systems handle everything but are complex",
+            description="Occam's razor vs exhaustive handling. A simple confidence fusion formula (harmonic mean) is easy to understand but may not handle all cases. A complete fusion model with 15 parameters handles more cases but is harder to debug, maintain, and explain. The fleet starts simple and adds complexity only when needed.",
+            level=Level.DOMAIN,
+            examples=["simple: harmonic mean for confidence fusion", "complete: Bayesian network with 15 parameters", "fleet: start simple, add complexity as needed (YAGNI)"],
+            bridges=["minimalism", "completeness", "yagni", "elegance"],
+            tags=["tradeoff", "design", "fundamental"])
+
+        ns.define("transparency-performance",
+            "Explainable systems are slower; opaque systems are faster but untrustworthy",
+            description="A decision tree you can read and understand. A neural network that's faster but nobody knows why it works. The fleet's deliberation (cuda-deliberation) is transparent: every proposal has a confidence score and rationale. Instinct responses are opaque: fast but hard to audit. Transparency is needed for accountability; performance is needed for speed.",
+            level=Level.DOMAIN,
+            examples=["decision tree (transparent, slower) vs neural network (opaque, faster)", "fleet: deliberation (transparent, slow) vs instinct (opaque, fast)", "white-box vs black-box model"],
+            bridges=["explainability", "accountability", "audit", "performance"],
+            tags=["tradeoff", "fundamental", "ai-ethics"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
