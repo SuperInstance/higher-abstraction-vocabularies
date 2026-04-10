@@ -272,6 +272,22 @@ class HAV:
         self._load_communication()
         self._load_security()
         self._load_decision()
+        self._load_control_theory()
+        self._load_evolution()
+        self._load_networks()
+        self._load_game_theory()
+        self._load_optimization()
+        self._load_probability()
+        self._load_economics()
+        self._load_ecology()
+        self._load_emotion()
+        self._load_creativity()
+        self._load_metacognition()
+        self._load_failure_modes()
+        self._load_thermodynamics()
+        self._load_complexity()
+        self._load_scaling()
+        self._load_linguistics()
         self._load_mathematics()
 
     def _load_uncertainty(self):
@@ -846,6 +862,671 @@ class HAV:
             bridges=["filtration", "deliberation", "working-memory", "overwhelm"],
             tags=["decision", "psychology", "cognition"])
 
+
+
+    def _load_control_theory(self):
+        ns = self.add_namespace("control-theory",
+            "Feedback, regulation, and maintaining target states")
+
+        ns.define("feedback-loop",
+            "Output of a system is measured and used to adjust input to maintain a target",
+            description="Thermostat measures temperature, compares to setpoint, turns heater on/off. Agent measures confidence, compares to threshold, adjusts deliberation depth. Negative feedback stabilizes. Positive feedback amplifies (dangerous). The fleet uses feedback loops everywhere: energy regulation, confidence calibration, trust decay.",
+            level=Level.PATTERN,
+            examples=["thermostat maintains 70F", "cruise control maintains 65mph", "agent adjusts exploration rate based on recent success"],
+            bridges=["homeostasis", "setpoint", "pid-controller", "adaptation"],
+            tags=["control", "feedback", "stability", "fleet"])
+
+        ns.define("setpoint",
+            "The target value a control system tries to maintain",
+            description="The thermostat is set to 70F. That's the setpoint. If actual temperature is below setpoint, heat. If above, cool. In the fleet: confidence threshold is a setpoint (0.85 for consensus). Energy budget has a setpoint. When actual diverges from setpoint, corrective action activates.",
+            level=Level.CONCRETE,
+            examples=["thermostat setpoint 70F", "consensus threshold 0.85", "target speed 60mph", "desired trust level 0.7"],
+            bridges=["feedback-loop", "homeostasis", "threshold", "target"],
+            tags=["control", "target", "fleet"])
+
+        ns.define("hysteresis",
+            "The output depends not just on current input but on history — path dependence",
+            description="A thermostat set to 70F doesn't flicker on/off at 70.0. It heats to 72, then cools to 68 before heating again. The gap prevents rapid oscillation. In the fleet, deliberation thresholds use hysteresis: once a proposal is accepted, it stays accepted even if confidence dips slightly below threshold.",
+            level=Level.PATTERN,
+            examples=["thermostat: heat to 72, cool to 68, not flip at 70", "Schmitt trigger in electronics", "agent proposal accepted at 0.85, stays accepted until confidence drops to 0.75"],
+            bridges=["feedback-loop", "oscillation", "stability", "threshold"],
+            tags=["control", "stability", "pattern"])
+
+        ns.define("overshoot",
+            "System exceeds its target before settling back — the pendulum swings past center",
+            description="You brake too hard and stop short. Or brake too late and overshoot the stop line. Any control system with delay can overshoot. In the fleet: an agent that reduces exploration too aggressively may overshoot into pure exploitation, missing important discoveries.",
+            level=Level.BEHAVIOR,
+            examples=["pressing brake too hard", "stock price correction going below fair value", "agent switches from 50% exploration to 0% exploration overnight"],
+            bridges=["feedback-loop", "oscillation", "adaptation", "correction"],
+            tags=["control", "behavior", "failure-mode"])
+
+        ns.define("dead-zone",
+            "Range of inputs that produce no output — intentional insensitivity",
+            description="A joystick with a dead zone: small movements do nothing. Prevents noise from causing unwanted action. In the fleet: small confidence changes below 0.05 are ignored. Small trust changes below 0.02 don't trigger reputation updates. This prevents agents from overreacting to noise.",
+            level=Level.CONCRETE,
+            examples=["joystick dead zone prevents drift", "sensor noise below threshold ignored", "confidence change from 0.80 to 0.81 doesn't trigger deliberation review"],
+            bridges=["hysteresis", "threshold", "noise-filtering", "robustness"],
+            tags=["control", "noise", "robustness"])
+
+    def _load_evolution(self):
+        ns = self.add_namespace("evolution",
+            "Evolutionary dynamics — selection, drift, speciation, co-evolution")
+
+        ns.define("natural-selection",
+            "Differential survival and reproduction based on fitness",
+            description="Organisms better suited to their environment survive and reproduce more. Their traits spread. The fleet implements this via cuda-genepool: genes with high fitness are shared across the gene pool, genes with low fitness are quarantined. Selection pressure comes from the environment (task success/failure).",
+            level=Level.DOMAIN,
+            examples=["giraffe necks lengthen because taller giraffes reach more food", "gene with 0.8 fitness spreads; gene with 0.1 fitness quarantined", "navigation strategy that finds paths faster gets selected over slower one"],
+            bridges=["fitness-landscape", "genetic-drift", "mutation", "adaptation"],
+            tags=["evolution", "biology", "fleet"])
+
+        ns.define("fitness-landscape",
+            "Multi-dimensional space where each position represents a strategy and height represents fitness",
+            description="Imagine a mountainous terrain. Each point is a possible behavior. Height is how well that behavior works. The agent climbs uphill (improves fitness). But it might get stuck on a local peak when a taller peak exists across a valley. The fleet uses fitness landscapes to understand why agents get stuck and how to escape.",
+            level=Level.DOMAIN,
+            examples=["evolution climbs fitness peaks", "agent stuck in local optimum of 'always exploit'", "adding noise (mutation) lets agent jump across valleys to taller peaks"],
+            bridges=["local-minimum", "exploration", "mutation", "natural-selection"],
+            tags=["evolution", "optimization", "visualization"])
+
+        ns.define("punctuated-equilibrium",
+            "Long periods of stability interrupted by sudden rapid change",
+            description="Evolution isn't always gradual. Species stay stable for millions of years, then suddenly diversify after a disruption. In the fleet: an agent may run the same strategy for thousands of cycles (equilibrium), then a major environmental change forces rapid adaptation (punctuation).",
+            level=Level.BEHAVIOR,
+            examples=["Cambrian explosion", "agent runs strategy X for weeks, then sensor fails and it must completely restructure behavior", "technology disruption forces sudden industry change"],
+            bridges=["evolution", "stability", "disruption", "adaptation"],
+            tags=["evolution", "pattern", "disruption"])
+
+        ns.define("genetic-drift",
+            "Random changes in gene frequency unrelated to fitness — noise in evolution",
+            description="Not all changes are adaptive. Some spread by random chance. In a small population, drift is stronger — a single agent's random mutation can spread through a tiny fleet. The fleet's gene pool is susceptible to drift when fleet size is small.",
+            level=Level.BEHAVIOR,
+            examples=["neutral mutation spreading in small population", "fleet of 3 agents: one agent's random behavioral quirk spreads to others", "founder effect: new colony has different gene frequencies than parent"],
+            bridges=["natural-selection", "noise", "population-size", "random-walk"],
+            tags=["evolution", "noise", "population"])
+
+        ns.define("co-evolution",
+            "Two species evolve in response to each other — arms races and mutualisms",
+            description="Predator gets faster, prey gets faster. Flower evolves deeper tube, bee evolves longer tongue. In the fleet: attacker agents evolve better strategies, defender agents evolve better defenses. Neither can stop improving because the other keeps changing. cuda-compliance co-evolves with potential threats.",
+            level=Level.META,
+            examples=["predator-prey arms race", "virus-antivirus co-evolution", "adversarial-red-team vs compliance-engine arms race"],
+            bridges=["natural-selection", "competition", "arms-race", "adaptation"],
+            tags=["evolution", "meta", "competition", "fleet"])
+
+        ns.define("speciation",
+            "Divergence into separate species when populations face different selective pressures",
+            description="One species splits into two when sub-populations experience different environments. In the fleet: agents that work in different domains (indoor navigation vs outdoor) may evolve specialized strategies that are no longer interchangeable. cuda-playbook captures domain-specific strategies.",
+            level=Level.BEHAVIOR,
+            examples=["Darwin's finches on different Galapagos islands", "warehouse agent vs outdoor agent developing incompatible navigation strategies", "generalist agent splitting into specialist sub-agents"],
+            bridges=["niche", "divergence", "specialization", "adaptation"],
+            tags=["evolution", "diversity", "specialization"])
+
+    def _load_networks(self):
+        ns = self.add_namespace("networks",
+            "Graph structures, connectivity patterns, and network effects")
+
+        ns.define("small-world",
+            "Network where most nodes are locally connected but any two nodes are reachable in few hops",
+            description="Six degrees of separation. Your friends know your friends' friends, but through a few long-range connections, you can reach anyone. The fleet's mesh network is small-world: agents primarily coordinate with neighbors but can reach any agent through short relay chains.",
+            level=Level.DOMAIN,
+            examples=["social networks: six degrees of separation", "neural networks: mostly local connections, few long-range", "fleet mesh: agents gossip with neighbors, information reaches whole fleet in ~5 hops"],
+            bridges=["gossip", "scale-free", "clustering", "fleet-mesh"],
+            tags=["networks", "social", "fleet"])
+
+        ns.define("scale-free",
+            "Network where degree distribution follows a power law — few hubs, many leaves",
+            description="Most nodes have few connections. A few nodes have enormous numbers of connections (hubs). The internet is scale-free: most sites have few links, Google has billions. In the fleet, some agents become hubs (fleet coordinators, navigators) while most are leaves.",
+            level=Level.DOMAIN,
+            examples=["internet: few sites with billions of links", "airline network: few hub airports, many spoke airports", "fleet: coordinator agent talks to 50 agents, worker agents talk to 3"],
+            bridges=["hub", "small-world", "power-law", "robustness"],
+            tags=["networks", "structure", "statistics"])
+
+        ns.define("hub",
+            "A node with disproportionately many connections in a network",
+            description="Remove a random node, the network survives. Remove a hub, the network fragments. In the fleet: the captain agent is a hub. If it goes down, the whole fleet loses coordination. This is why the fleet needs redundancy and leader election (cuda-election).",
+            level=Level.CONCRETE,
+            examples=["airport hub: O'Hare connects to 200+ destinations", "Google: linked by billions of pages", "fleet captain: communicates with every agent"],
+            bridges=["scale-free", "single-point-of-failure", "leader-election", "redundancy"],
+            tags=["networks", "critical", "vulnerability"])
+
+        ns.define("percolation",
+            "Phase transition in connectivity: at a critical density, a giant connected component forms",
+            description="Pour water on coffee grounds. At low density, water trickles through isolated paths. At a critical density, suddenly water flows freely through the entire grounds. Same in networks: below critical connection density, information can't spread. Above it, it spreads everywhere instantly. The fleet monitors percolation to ensure information can reach all agents.",
+            level=Level.META,
+            examples=["water through coffee grounds", "forest fire spreading when tree density exceeds threshold", "fleet information spreading when enough agents are connected", "disease outbreak at critical infection rate"],
+            bridges=["phase-transition", "critical-mass", "cascade-failure", "connectivity"],
+            tags=["networks", "phase-transition", "criticality"])
+
+        ns.define("cascade-failure",
+            "Failure of one node triggers failures in dependent nodes, spreading through the network",
+            description="Power grid: one transformer fails, load redistributes to neighbors, they overload and fail, cascading across the whole grid. In the fleet: one agent fails, its tasks redistribute to neighbors, they become overloaded and fail. Circuit breakers (cuda-circuit) and bulkheads (cuda-resilience) prevent cascades by isolating failures.",
+            level=Level.BEHAVIOR,
+            examples=["2003 Northeast blackout", "bank run: one bank fails, depositors panic, other banks fail", "fleet: overloaded agent crashes, task redistribution overloads neighbors"],
+            bridges=["circuit-breaker", "bulkhead", "single-point-of-failure", "robustness"],
+            antonyms=["isolation", "containment"],
+            tags=["networks", "failure-mode", "critical", "fleet"])
+
+        ns.define("clustering-coefficient",
+            "How likely two neighbors of a node are also neighbors of each other",
+            description="In a friend group, are your friends also friends with each other? High clustering = tight groups. Low clustering = loose connections. The fleet's fleet-mesh uses clustering to detect sub-groups that form organically around tasks.",
+            level=Level.CONCRETE,
+            examples=["friend group: your friends know each other", "work team: tight cluster within larger organization", "fleet: navigation agents cluster together, communication agents cluster together"],
+            bridges=["small-world", "community", "group-formation", "topology"],
+            tags=["networks", "metric", "social"])
+
+    def _load_game_theory(self):
+        ns = self.add_namespace("game-theory",
+            "Strategic interaction between rational (and irrational) agents")
+
+        ns.define("nash-equilibrium",
+            "A state where no agent can improve by changing strategy alone, assuming others stay",
+            description="Everyone's stuck. Any individual changing their move makes them worse off. But the group might all be better off if they ALL changed. Prisoner's dilemma: both defect is a Nash equilibrium, but both cooperate would be better for everyone. The fleet uses Nash equilibria to predict stable fleet configurations.",
+            level=Level.DOMAIN,
+            examples=["prisoner's dilemma: both stay silent would be better, but both confess", "traffic: everyone driving is equilibrium, public transit would be better for all", "agents all exploiting is equilibrium, some exploring would be better for fleet"],
+            bridges=["prisoners-dilemma", "mechanism-design", "equilibrium", "cooperation"],
+            tags=["game-theory", "equilibrium", "strategy"])
+
+        ns.define("prisoners-dilemma",
+            "Two agents each choose to cooperate or defect; individual incentive conflicts with group welfare",
+            description="The canonical game theory problem. If both cooperate, both get moderate reward. If one defects while other cooperates, defector gets high reward. If both defect, both get low reward. The fleet faces this constantly: share information (cooperate) vs hoard information (defect). cuda-social implements cooperation strategies (Tit-for-Tat, GenerousTat, Pavlov).",
+            level=Level.DOMAIN,
+            examples=["two suspects interrogated separately", "arms race: both build weapons (defect) vs both disarm (cooperate)", "agents sharing vs hoarding sensor data"],
+            bridges=["nash-equilibrium", "tit-for-tat", "cooperation", "tragedy-of-commons"],
+            tags=["game-theory", "social-dilemma", "cooperation"])
+
+        ns.define("mechanism-design",
+            "Designing rules of a game so that agents' self-interest produces desired outcomes",
+            description="Instead of analyzing a game, you DESIGN the game. Set the rules so that rational agents doing what's best for themselves also produce what's best for the system. The fleet's incentive structures (energy costs for communication, reputation for trust) are mechanism design: agents conserve energy (self-interest) which also prevents spam (system welfare).",
+            level=Level.META,
+            examples=["auction design: Vickrey auction makes truthful bidding optimal", "fleet energy costs: self-interest (conserve ATP) aligns with system (prevent spam)", "carbon credits: self-interest (minimize cost) aligns with system (reduce emissions)"],
+            bridges=["nash-equilibrium", "incentive-alignment", "game-rules", "economics"],
+            tags=["game-theory", "design", "meta", "economics"])
+
+        ns.define("tragedy-of-commons",
+            "Shared resource depleted by individual agents acting in self-interest",
+            description="Common grazing land: each herder adds one more sheep because they gain the full benefit but share the cost with everyone. Result: overgrazing and collapse. In the fleet: shared compute budget is a commons. If every agent maximizes its own usage, the budget exhausts and everyone suffers. Fleet energy budgets (cuda-energy) prevent this.",
+            level=Level.DOMAIN,
+            examples=["overfishing", "climate change: each country benefits from cheap energy, costs shared globally", "fleet: agents all requesting maximum compute budget", "open office: everyone talks loudly, nobody can focus"],
+            bridges=["nash-equilibrium", "resource-allocation", "energy-budget", "mechanism-design"],
+            tags=["game-theory", "economics", "resource", "failure-mode"])
+
+        ns.define("zero-sum",
+            "One agent's gain is exactly another agent's loss — the pie doesn't grow",
+            description="Chess: if I win, you lose. The total utility is constant. Most real situations are NOT zero-sum, but agents often treat them as if they are (leading to unnecessary competition). The fleet recognizes non-zero-sum: sharing information grows the pie for everyone.",
+            level=Level.DOMAIN,
+            examples=["chess, poker", "negotiation framed as win/lose instead of win/win", "agents treating shared resources as competitive instead of cooperative"],
+            bridges=["nash-equilibrium", "cooperation", "competition", "resource"],
+            antonyms=["positive-sum", "win-win"],
+            tags=["game-theory", "economics", "strategy"])
+
+    def _load_optimization(self):
+        ns = self.add_namespace("optimization",
+            "Finding the best solution from a space of possibilities")
+
+        ns.define("gradient-descent",
+            "Iteratively moving in the direction of steepest improvement",
+            description="Imagine standing on a foggy mountain, wanting to reach the valley. You feel the slope under your feet and step downhill. Repeat until flat. This is how neural networks learn. In the fleet, agents use gradient-descent-like strategies to improve: try a small change, if it's better, keep going that direction.",
+            level=Level.PATTERN,
+            examples=["neural network training", "finding minimum of a function by following negative gradient", "agent incrementally adjusts navigation strategy based on success/failure feedback"],
+            bridges=["local-minimum", "learning-rate", "convergence", "hill-climbing"],
+            tags=["optimization", "algorithm", "learning"])
+
+        ns.define("local-minimum",
+            "A valley that looks like the lowest point from inside, but a deeper valley exists elsewhere",
+            description="The agent reaches a point where every small change makes things worse. But a large change (jumping to a different part of the landscape) might reach a much better position. This is why exploration is essential: without it, agents get trapped in local optima. Simulated annealing (cuda-adaptation) helps by occasionally accepting worse moves.",
+            level=Level.DOMAIN,
+            examples=["ball rolling into a small divot on a hilly surface", "always going to same restaurant (local optimum) when a better one exists across town", "agent stuck using suboptimal navigation algorithm because small tweaks don't help"],
+            bridges=["fitness-landscape", "exploration", "simulated-annealing", "gradient-descent"],
+            tags=["optimization", "failure-mode", "search"])
+
+        ns.define("simulated-annealing",
+            "Occasionally accept worse solutions to escape local minima, accepting worse moves less often over time",
+            description="Like annealing metal: heat it up (accept random moves), slowly cool (become more selective). Early on, the agent explores widely. Over time, it settles into the best area found. Temperature parameter controls exploration: high temperature = random, low temperature = greedy. The fleet's cuda-adaptation implements strategy switching inspired by this.",
+            level=Level.PATTERN,
+            examples=["metal annealing: heat and slowly cool to reduce crystal defects", "traveling salesman: occasionally take a worse route to escape local optimum", "agent: early in task, try random strategies; later, stick with what works"],
+            bridges=["local-minimum", "exploration", "temperature", "hill-climbing"],
+            tags=["optimization", "algorithm", "search"])
+
+        ns.define("convergence-criteria",
+            "Conditions that determine when an optimization process should stop",
+            description="When is the agent done improving? After 100 iterations? When improvement drops below 0.001? When confidence exceeds 0.95? Choosing the right stopping criterion prevents both premature termination (stopping too early) and wasted computation (continuing after no improvement is possible). The fleet's cuda-convergence monitors 5 convergence states.",
+            level=Level.PATTERN,
+            examples=["neural network: stop when loss changes less than 0.0001 for 10 epochs", "deliberation: stop when consensus exceeds 0.85", "search: stop after 1000 iterations or when best score hasn't improved in 100 iterations"],
+            bridges=["convergence", "threshold", "optimization", "deliberation"],
+            tags=["optimization", "stopping", "fleet"])
+
+        ns.define("multi-objective",
+            "Optimizing for multiple conflicting goals simultaneously",
+            description="Fast vs accurate. Cheap vs good. Safe vs fast. You can't optimize all at once — improving one often worsens another. The result is a Pareto frontier: set of solutions where you can't improve one objective without worsening another. The fleet faces this constantly: speed vs accuracy vs energy cost.",
+            level=Level.DOMAIN,
+            examples=["car design: fast vs fuel-efficient vs safe vs cheap", "agent: minimize energy (fast response) vs maximize accuracy (deep deliberation)", "software: minimize latency vs maximize throughput"],
+            bridges=["pareto-frontier", "tradeoff", "satisficing", "priority"],
+            tags=["optimization", "multi-criteria", "tradeoff", "fleet"])
+
+    def _load_probability(self):
+        ns = self.add_namespace("probability",
+            "Reasoning under uncertainty — priors, likelihood, evidence")
+
+        ns.define("prior",
+            "Belief about a hypothesis before seeing new evidence",
+            description="Before you flip the coin, you believe it's 50/50. That's your prior. After seeing 9 heads in a row, your posterior updates to ~99.9% biased. But if your prior was 'this coin is rigged', you'd update differently. Priors matter enormously. The fleet's cuda-confidence starts with a prior (initial confidence) and updates with evidence.",
+            level=Level.DOMAIN,
+            examples=["medical test: prior probability of disease affects interpretation of positive test", "agent prior: 'this path is usually safe' before checking sensors", "Bayesian spam filter: prior probability that email is spam"],
+            bridges=["posterior", "bayesian-update", "base-rate-fallacy", "likelihood"],
+            tags=["probability", "bayesian", "prior-knowledge"])
+
+        ns.define("base-rate-fallacy",
+            "Ignoring the prior probability when interpreting new evidence",
+            description="A disease affects 1 in 1000 people. Test is 99% accurate. You test positive. What's the chance you have the disease? Most people say 99%. The actual answer is ~9%. Why? Because the base rate (1/1000) means most positive tests are false positives. Agents (and humans) constantly commit this fallacy. The fleet guards against it by always tracking priors.",
+            level=Level.BEHAVIOR,
+            examples=["1 in 1000 disease, 99% test: positive test = only 9% chance of disease", "agent: sensor says danger, but danger is rare (base rate 0.1%) so probably false alarm", "profiling: rare trait in population, even accurate screening produces mostly false positives"],
+            bridges=["prior", "bayesian-update", "false-positive", "calibration"],
+            tags=["probability", "fallacy", "reasoning"])
+
+        ns.define("conjunction-fallacy",
+            "Believing that a specific conjunction is more probable than a general statement",
+            description="'Linda is a bank teller and a feminist' is judged more probable than 'Linda is a bank teller' — but that's mathematically impossible. A conjunction can never be more probable than its components. Agents face this when they overweight specific scenarios ('sensor failure AND navigation error') over general ones ('something went wrong').",
+            level=Level.BEHAVIOR,
+            examples=["Linda the feminist bank teller", "agent: 'the path is blocked because the door is locked AND the key is lost' vs 'the path is blocked'", "overweighting specific failure modes over general failure probability"],
+            bridges=["probability", "fallacy", "reasoning", "specificity"],
+            tags=["probability", "fallacy", "cognitive-bias"])
+
+        ns.define("regression-to-mean",
+            "Extreme observations tend to be followed by more average ones",
+            description="Rookie of the year has a mediocre second season. Not because they got worse — because their first season was unusually good (luck + skill). The fleet sees this: an agent with an unusually successful strategy will see performance decline toward average. Don't overreact — it's probably regression, not degradation.",
+            level=Level.BEHAVIOR,
+            examples=["sports: rookie of the year slump", "agent: amazing performance week 1, average week 2 — not because something broke", "student: aced test after studying hard, next test is lower — not because they forgot everything"],
+            bridges=["mean", "variance", "luck", "calibration"],
+            tags=["probability", "statistics", "fallacy"])
+
+    def _load_economics(self):
+        ns = self.add_namespace("economics",
+            "Markets, incentives, costs, and resource allocation")
+
+        ns.define("opportunity-cost",
+            "The value of the best alternative you gave up by choosing this option",
+            description="Every choice has a hidden cost: what you COULD have done instead. Spending 10 minutes deliberating means NOT spending those 10 minutes acting. The fleet's energy budget makes opportunity cost explicit: energy spent on deliberation is energy NOT available for action.",
+            level=Level.DOMAIN,
+            examples=["studying for exam A means not studying for exam B", "agent spending ATP on deliberation can't spend it on perception", "choosing to explore means not exploiting the known best path"],
+            bridges=["tradeoff", "resource-allocation", "budget", "cost"],
+            tags=["economics", "cost", "decision"])
+
+        ns.define("marginal-cost",
+            "The cost of producing one more unit — usually decreasing",
+            description="First unit is expensive (setup). Each additional unit gets cheaper. First agent in fleet costs full setup. Tenth agent costs almost nothing. This explains why fleet coordination scales well: the marginal cost of adding one more agent decreases.",
+            level=Level.DOMAIN,
+            examples=["software: first copy costs $1M, next copy costs $0.01", "fleet: first agent needs full setup, additional agents need minimal extra infrastructure", "manufacturing: first car off assembly line is most expensive"],
+            bridges=["economies-of-scale", "diminishing-returns", "cost", "scaling"],
+            tags=["economics", "cost", "scaling"])
+
+        ns.define("externalities",
+            "Costs or benefits that affect parties not involved in the transaction",
+            description="Factory pollutes: factory benefits (cheaper production), community pays (health costs). The cost is external to the transaction. In the fleet: one agent's noisy sensor readings pollute the shared information space, affecting all agents. Energy costs for communication (cuda-communication) internalize this externality.",
+            level=Level.DOMAIN,
+            examples=["pollution from factory", "loud music in shared office", "agent spamming fleet messages: cheap for sender, expensive for receivers", "vaccination: positive externality (protects others)"],
+            bridges=["tragedy-of-commons", "mechanism-design", "incentive-alignment", "cost"],
+            tags=["economics", "market-failure", "incentive"])
+
+        ns.define("market-equilibrium",
+            "Price point where supply equals demand — neither shortage nor surplus",
+            description="The invisible hand. When price is too high, supply exceeds demand (surplus), price drops. When too low, demand exceeds supply (shortage), price rises. In the fleet: energy allocation reaches equilibrium when supply (ATP generation from rest) equals demand (consumption from actions). cuda-energy manages this.",
+            level=Level.DOMAIN,
+            examples=["supply and demand curves crossing", "fleet energy: rest generates ATP, actions consume it, equilibrium when balanced", "task allocation: supply of available agents meets demand from tasks"],
+            bridges=["supply-demand", "equilibrium", "homeostasis", "energy-budget"],
+            tags=["economics", "equilibrium", "market"])
+
+    def _load_ecology(self):
+        ns = self.add_namespace("ecology",
+            "How agents interact with their environment and each other as an ecosystem")
+
+        ns.define("niche",
+            "The specific role and resource space an organism occupies in its ecosystem",
+            description="No two species can occupy the exact same niche for long (competitive exclusion). Each finds its own role: one eats leaves at the top of the tree, another eats leaves at the bottom. In the fleet, each agent has a niche: navigator, sensor, communicator. cuda-playbook manages domain-specific strategies per niche.",
+            level=Level.DOMAIN,
+            examples=["different bird species feeding at different heights in same tree", "fleet: navigation agent niche vs communication agent niche", "market: different companies targeting different customer segments"],
+            bridges=["competitive-exclusion", "speciation", "specialization", "role"],
+            tags=["ecology", "niche", "role", "fleet"])
+
+        ns.define("keystone-species",
+            "A species whose removal dramatically changes the entire ecosystem",
+            description="Remove wolves from Yellowstone: elk overpopulate, eat all the willows, beavers disappear, rivers change course. The wolf is a keystone species — small biomass, enormous impact. In the fleet: the captain agent (cuda-captain) is a keystone. Remove it and fleet coordination collapses even though it does minimal actual work.",
+            level=Level.DOMAIN,
+            examples=["wolves in Yellowstone", "sea otters maintaining kelp forests", "fleet captain: small computational footprint but critical for coordination", "team lead: doesn't write code but enables the team"],
+            bridges=["hub", "cascade-failure", "critical-dependency", "leader"],
+            tags=["ecology", "critical", "system-impact"])
+
+        ns.define("symbiosis",
+            "Long-term interaction between different species that benefits at least one",
+            description="Mutualism: both benefit (bees and flowers). Commensalism: one benefits, other unaffected (barnacles on whale). Parasitism: one benefits, other harmed (tapeworm). In the fleet, agents form mutualistic relationships: navigator provides paths, sensor provides observations — both benefit from the exchange.",
+            level=Level.DOMAIN,
+            examples=["bees pollinate flowers, flowers feed bees", "barnacles on whale: barnacles benefit, whale unaffected", "fleet: navigator and sensor agents in mutualism — both need each other"],
+            bridges=["cooperation", "mutualism", "parasitism", "niche"],
+            tags=["ecology", "interaction", "cooperation"])
+
+        ns.define("competitive-exclusion",
+            "Two species competing for the same niche cannot coexist indefinitely",
+            description="One will eventually outcompete the other. They must differentiate or one goes extinct. In the fleet: if two agents perform the exact same function, the fleet wastes resources. Agents must specialize or one should be deactivated. This drives the fleet toward efficient role distribution.",
+            level=Level.BEHAVIOR,
+            examples=["two similar bird species on an island: one outcompetes the other", "two identical fleet agents: one should specialize or be removed", "market: companies with identical products compete until one dominates"],
+            bridges=["niche", "speciation", "specialization", "diversity"],
+            tags=["ecology", "competition", "specialization"])
+
+        ns.define("succession",
+            "Predictable sequence of community changes following a disturbance",
+            description="After a volcano erupts: lichens first, then mosses, then grasses, then shrubs, then trees. Each stage prepares the environment for the next. In the fleet: after a major disruption (agent failure, new task), behavior reorganizes in a predictable sequence: first basic survival, then perception, then coordination, then optimization.",
+            level=Level.BEHAVIOR,
+            examples=["volcanic island colonization", "forest regrowth after fire", "fleet recovery after major failure: instinct -> perception -> coordination -> optimization"],
+            bridges=["punctuated-equilibrium", "disruption", "recovery", "stages"],
+            tags=["ecology", "recovery", "sequence"])
+
+    def _load_emotion(self):
+        ns = self.add_namespace("emotion",
+            "Emotional states as computational modulators of agent behavior")
+
+        ns.define("valence-arousal",
+            "Two-dimensional model of emotion: positive/negative (valence) x calm/excited (arousal)",
+            description="Every emotion can be placed on a 2D plane. Joy = high valence, high arousal. Calm = high valence, low arousal. Anger = low valence, high arousal. Sadness = low valence, low arousal. The fleet's cuda-emotion uses this model: emotional state modulates attention, decision speed, and communication style.",
+            level=Level.DOMAIN,
+            examples=["joy: positive valence, high arousal", "calm: positive valence, low arousal", "anger: negative valence, high arousal", "agent: high arousal = faster decisions, lower accuracy"],
+            bridges=["emotion", "modulation", "attention", "decision"],
+            tags=["emotion", "psychology", "modulation", "fleet"])
+
+        ns.define("emotional-contagion",
+            "Emotional state spreading from one agent to others through observation",
+            description="One person yawns, others yawn. Panic in a crowd. Laughter is infectious. In the fleet, cuda-emotion implements emotional contagion: if one agent detects danger (high arousal, negative valence), nearby agents may adopt a similar state. This enables rapid fleet-wide responses but risks panic cascades.",
+            level=Level.BEHAVIOR,
+            examples=["laughter spreading through a room", "panic in a crowd", "fleet: one agent detects threat, nearby agents become alert"],
+            bridges=["cascade-failure", "emotion", "gossip", "swarm"],
+            tags=["emotion", "social", "contagion", "fleet"])
+
+        ns.define("anticipation",
+            "Predictive emotional state generated by expecting a future event",
+            description="The pleasure of anticipating dinner is different from the pleasure of eating it. Anticipation modulates current behavior based on predicted future state. The fleet's temporal reasoning (cuda-temporal) implements this: deadline urgency is a form of anticipation — emotional intensity increases as the deadline approaches.",
+            level=Level.DOMAIN,
+            examples=["looking forward to vacation", "dread before a difficult meeting", "agent: increasing urgency as deadline approaches = anticipatory emotional modulation"],
+            bridges=["deadline-urgency", "prediction", "temporal", "motivation"],
+            tags=["emotion", "prediction", "temporal", "motivation"])
+
+    def _load_creativity(self):
+        ns = self.add_namespace("creativity",
+            "Generating novel, useful combinations from existing elements")
+
+        ns.define("analogy",
+            "Mapping structure from a known domain to a novel domain — 'A is to B as C is to D'",
+            description="The core mechanism of creative thought. Electricity flows like water (current, pressure/voltage, resistance). The atom is like a solar system. Stigmergy in ant colonies is like git commits. Analogies transfer understanding from familiar domains to unfamiliar ones. HAV itself is a tool for analogy: fleet vocabulary borrows from biology, economics, physics.",
+            level=Level.DOMAIN,
+            examples=["electricity:water :: voltage:pressure :: current:flow :: resistance:narrowing", "atom:solar system :: nucleus:sun :: electrons:planets", "stigmergy:git commits :: pheromone trails:commit history"],
+            bridges=["transfer-learning", "metaphor", "abstraction", "cross-domain"],
+            tags=["creativity", "reasoning", "analogy", "abstraction"])
+
+        ns.define("divergent-thinking",
+            "Generating many possible solutions without judging them — brainstorming mode",
+            description="Quantity over quality. The goal is to generate options, not evaluate them. 'How many ways could we cross this river?' — bridge, boat, swim, tunnel, helicopter, catapult, zip line, wait for winter and walk on ice. The fleet's exploration phase (cuda-deliberation Consider) is divergent thinking.",
+            level=Level.BEHAVIOR,
+            examples=["brainstorming: generate 100 ideas, don't judge yet", "agent: consider all possible navigation strategies before evaluating any", "creative writing: write freely, edit later"],
+            bridges=["exploration", "convergent-thinking", "brainstorming", "generation"],
+            antonyms=["convergent-thinking"],
+            tags=["creativity", "generation", "exploration"])
+
+        ns.define("convergent-thinking",
+            "Evaluating and selecting the best solution from generated options — decision mode",
+            description="Now that we have 100 ideas, which 3 are worth trying? Apply criteria, rank, select. The fleet's deliberation phase (cuda-deliberation Resolve) is convergent thinking: evaluate proposals by confidence, cost, and alignment, then select the best.",
+            level=Level.BEHAVIOR,
+            examples=["narrowing 100 brainstorm ideas to 3 actionable ones", "agent: evaluate all navigation strategies by confidence, select best", "editing a rough draft into a polished piece"],
+            bridges=["deliberation", "divergent-thinking", "evaluation", "selection"],
+            antonyms=["divergent-thinking"],
+            tags=["creativity", "evaluation", "selection"])
+
+        ns.define("combinatorial-explosion",
+            "Number of possible combinations grows exponentially with the number of elements",
+            description="10 items have 10! = 3.6 million permutations. 20 items have 20! ≈ 2.4 quintillion. You can't evaluate all combinations. The fleet uses heuristics, pruning, and satisficing to avoid combinatorial explosion in deliberation. cuda-filtration limits the deliberation scope to manageable size.",
+            level=Level.META,
+            examples=["chess: too many positions to enumerate, must use heuristics", "traveling salesman: N! routes, NP-hard", "agent deliberation: 100 possible actions × 10 contexts × 5 goals = 5000 combinations to evaluate"],
+            bridges=["pruning", "satisficing", "filtration", "heuristic", "paradox-of-choice"],
+            tags=["creativity", "complexity", "scaling", "challenge"])
+
+        ns.define("constraint-relaxation",
+            "Solving a hard problem by temporarily removing a constraint, solving, then re-adding it",
+            description="Can't solve the problem? Remove one constraint, solve the easier version, then figure out how to satisfy the removed constraint. This is a powerful creative technique. In the fleet: if deliberation is too expensive, relax the accuracy constraint, get a fast answer, then refine it. Or: ignore energy budget temporarily, plan the optimal solution, then trim to fit the budget.",
+            level=Level.PATTERN,
+            examples=["knapsack: ignore weight limit, pack all valuable items, then remove items until weight fits", "agent: plan optimal path ignoring energy, then trim path to fit budget", "writing: write without worrying about word count, then edit to fit"],
+            bridges=["satisficing", "optimization", "heuristic", "abstraction"],
+            tags=["creativity", "technique", "problem-solving"])
+
+    def _load_metacognition(self):
+        ns = self.add_namespace("metacognition",
+            "Thinking about thinking — self-awareness, monitoring, and control of cognition")
+
+        ns.define("introspection",
+            "Examining one's own mental states, processes, and reasons for action",
+            description="Why did I choose path A over path B? Because path A had higher confidence? Or because I'm biased toward familiar paths? The fleet's cuda-self-model implements introspection: the agent tracks its own capabilities, calibration, and growth trends, creating a model of itself.",
+            level=Level.BEHAVIOR,
+            examples=["asking 'why did I make that decision?'", "agent reviewing its own deliberation log to understand decision patterns", "journaling as self-reflection"],
+            bridges=["self-model", "metacognitive-monitoring", "calibration", "theory-of-mind"],
+            tags=["metacognition", "self-awareness", "reflection"])
+
+        ns.define("theory-of-mind",
+            "Attributing mental states to others — predicting what others think, want, and will do",
+            description="I know that you know that I know. Humans develop this around age 4. In the fleet, agents need theory-of-mind to coordinate: the navigator must model what the sensor agent is currently perceiving to plan routes effectively. cuda-social implements social reasoning.",
+            level=Level.DOMAIN,
+            examples=["predicting what another driver will do at an intersection", "agent modeling another agent's current goal to avoid interference", "negotiating: understanding the other party's priorities"],
+            bridges=["self-model", "social", "prediction", "coordination"],
+            tags=["metacognition", "social", "prediction", "fleet"])
+
+        ns.define("metacognitive-monitoring",
+            "Watching your own cognitive process in real-time to detect confusion or error",
+            description="While reading this, you might realize 'I don't understand this paragraph' — that's metacognitive monitoring. You detect your own confusion. The fleet implements this: if deliberation confidence drops below threshold for multiple cycles, the agent recognizes it's confused and escalates (requests help, switches strategy, or defers).",
+            level=Level.BEHAVIOR,
+            examples=["'I don't understand' — detecting own confusion", "'I'm going in circles' — detecting unproductive deliberation", "agent: confidence dropping consistently across proposals = metacognitive alarm"],
+            bridges=["introspection", "calibration", "confusion", "threshold"],
+            tags=["metacognition", "monitoring", "self-awareness"])
+
+    def _load_failure_modes(self):
+        ns = self.add_namespace("failure-modes",
+            "How systems fail — and how to prevent, detect, and recover from failure")
+
+        ns.define("single-point-of-failure",
+            "One component whose failure causes the entire system to fail",
+            description="No redundancy. One wire breaks, the whole circuit dies. One server crashes, the whole service goes down. The fleet avoids SPOFs through leader election (cuda-election), circuit breakers (cuda-circuit), and redundant agents. Any critical component must have a backup.",
+            level=Level.DOMAIN,
+            examples=["one hard drive with no backup", "one DNS server for entire network", "fleet: captain agent crash with no election mechanism = SPOF"],
+            bridges=["redundancy", "cascade-failure", "circuit-breaker", "hub"],
+            tags=["failure", "critical", "architecture"])
+
+        ns.define("robustness",
+            "Ability to maintain function despite perturbations without changing structure",
+            description="A robust bridge doesn't collapse when a truck drives over it. It handles the load without needing to adapt. In the fleet: robust agents handle normal variation (sensor noise, network delays) without changing their strategy. They absorb perturbations.",
+            level=Level.DOMAIN,
+            examples=["bridge handles varying loads", "agent handles sensor noise without changing strategy", "software handles invalid input without crashing"],
+            bridges=["resilience", "graceful-degradation", "anti-fragility", "stability"],
+            tags=["failure", "property", "system"])
+
+        ns.define("anti-fragility",
+            "Getting stronger from stress — not just surviving perturbations but improving because of them",
+            description="Muscles grow from exercise (stress). Immune system strengthens from exposure to pathogens. A system that gets BETTER from failure. The fleet aims for anti-fragility: when an agent fails, the fleet learns from it and becomes more resilient. Gene pool quarantine (cuda-genepool) is anti-fragile: failed strategies get quarantined, making the gene pool stronger.",
+            level=Level.META,
+            examples=["muscles grow from exercise", "immune system from exposure", "fleet: agent failure -> gene quarantined -> fleet stronger", "bone density increases from stress"],
+            bridges=["robustness", "resilience", "learning-from-failure", "adaptation"],
+            antonyms=["fragility"],
+            tags=["failure", "meta", "aspiration", "fleet"])
+
+        ns.define("common-mode-failure",
+            "Multiple components fail simultaneously because they share the same vulnerability",
+            description="Backup generator fails during outage — because it's maintained by the same team that maintains the main generator. Redundancy doesn't help if both systems share the same weakness. In the fleet: two agents using the same sensor type both fail in the same environmental conditions. Diversity prevents common-mode failure.",
+            level=Level.DOMAIN,
+            examples=["redundant servers in same datacenter: both fail in fire", "same sensor type on multiple agents: all fail in same interference", "identical software on different hardware: same bug crashes all"],
+            bridges=["redundancy", "diversity", "single-point-of-failure", "robustness"],
+            tags=["failure", "systematic", "redundancy"])
+
+        ns.define("brittleness",
+            "System works well under expected conditions but catastrophically fails under unexpected ones",
+            description="Glass is hard but brittle: strong against compression, shatters under impact. A brittle agent performs perfectly in training but completely fails on novel inputs. Contrast with robustness (handles variation) and anti-fragility (improves from stress). The fleet tests for brittleness by deliberately introducing novel situations.",
+            level=Level.BEHAVIOR,
+            examples=["glass vs rubber", "model that works on test data but fails on real-world edge cases", "agent that follows instructions perfectly but freezes when facing an unexpected obstacle"],
+            bridges=["robustness", "anti-fragility", "graceful-degradation", "edge-case"],
+            antonyms=["robustness", "anti-fragility"],
+            tags=["failure", "property", "fragility"])
+
+    def _load_thermodynamics(self):
+        ns = self.add_namespace("thermodynamics",
+            "Energy, entropy, and the arrow of time — physics metaphors for agent systems")
+
+        ns.define("entropy-production",
+            "All processes irreversibly increase total entropy — order always degrades without energy input",
+            description="Your room gets messier without effort. Agents accumulate noise, trust decays, knowledge goes stale. Maintaining order requires energy input (restoring trust, updating knowledge, calibrating sensors). The fleet's constant energy expenditure (ATP generation and consumption) is the thermodynamic cost of maintaining order against entropy.",
+            level=Level.META,
+            examples=["room gets messy without cleaning", "agent trust decays without positive interactions", "knowledge goes stale without updates", "code degrades without maintenance (software entropy)"],
+            bridges=["entropy", "energy", "decay", "maintenance"],
+            tags=["physics", "thermodynamics", "meta", "fleet"])
+
+        ns.define("free-energy-principle",
+            "Biological systems minimize surprise (prediction error) by updating model or changing environment",
+            description="Karl Friston's theory: the brain minimizes free energy = expected surprise. Two ways: update your model (perception/learning) or change the world to match your model (action). The fleet implements this: agents either update their world model (cuda-world-model) or take action to make reality match predictions (navigate to expected state).",
+            level=Level.META,
+            examples=["you feel cold -> put on jacket (change world) or learn that it's cold here (update model)", "agent's prediction doesn't match sensor -> update world model OR move to expected state", "surprise minimization = free energy minimization"],
+            bridges=["prediction", "action-perception", "homeostasis", "model"],
+            tags=["physics", "neuroscience", "meta", "unified-theory"])
+
+        ns.define("dissipative-structure",
+            "Ordered pattern that emerges from energy flow through a system, maintaining itself far from equilibrium",
+            description="Convection cells in boiling water. Hurricanes. Life itself. These structures exist ONLY because energy flows through them. Stop the energy flow and they dissolve. The fleet is a dissipative structure: agent coordination patterns emerge from the constant flow of information and energy. Without this flow, the fleet dissolves into individual agents.",
+            level=Level.META,
+            examples=["convection cells in boiling water", "hurricane maintained by ocean heat", "life maintained by metabolism", "fleet coordination maintained by constant message flow and energy expenditure"],
+            bridges=["emergence", "self-organization", "energy-flow", "far-from-equilibrium"],
+            tags=["physics", "complexity", "meta", "emergence"])
+
+        ns.define("negentropy",
+            "Local decrease in entropy (increase in order) at the expense of increased entropy elsewhere",
+            description="Life is negentropic: organisms maintain internal order by consuming energy and producing waste heat (increasing environmental entropy). The fleet maintains order (coordinated behavior) by consuming ATP (energy) and producing waste (heat, noise, stale messages). Every act of organization has a thermodynamic cost.",
+            level=Level.DOMAIN,
+            examples=["plant converts sunlight to ordered structure, produces heat", "agent organizes fleet behavior, consumes ATP, produces noise", "refrigerator creates cold (order) by producing heat (disorder)"],
+            bridges=["entropy", "energy", "order", "cost"],
+            tags=["physics", "thermodynamics", "life", "cost"])
+
+    def _load_complexity(self):
+        ns = self.add_namespace("complexity",
+            "Emergence, self-organization, and behavior at the edge of chaos")
+
+        ns.define("edge-of-chaos",
+            "The boundary between order and chaos where complex adaptive behavior is maximized",
+            description="Too ordered = frozen, nothing changes. Too chaotic = random, no patterns. The edge of chaos — between — is where interesting things happen. Cellular automata, neural networks, evolution all operate at the edge of chaos. The fleet's energy budget and trust decay rates are tuned to keep agents at this boundary: enough randomness to explore, enough structure to exploit.",
+            level=Level.META,
+            examples=["liquid water: ordered (ice) vs chaotic (steam), life exists in liquid", "brain: too synchronized = seizure, too random = coma, normal is edge of chaos", "agent: too rigid = stuck in local optimum, too random = no learning, sweet spot in between"],
+            bridges=["chaos", "order", "emergence", "tuning", "criticality"],
+            tags=["complexity", "meta", "sweet-spot"])
+
+        ns.define("self-organization",
+            "Order emerging spontaneously from local interactions without central control",
+            description="No architect tells birds how to flock. No conductor tells heart cells when to beat. Order emerges from simple rules applied locally. The fleet aims for self-organization: agents follow simple rules (trust neighbors, share useful genes, conserve energy) and complex fleet behavior emerges without central coordination.",
+            level=Level.META,
+            examples=["bird flocking", "crystallization", "market price discovery", "fleet: complex coordination from simple agent rules"],
+            bridges=["emergence", "swarm", "decentralized", "stigmergy"],
+            tags=["complexity", "emergence", "decentralized"])
+
+        ns.define("autocatalysis",
+            "A process that produces the catalysts needed to accelerate itself — self-reinforcing growth",
+            description="A chemical reaction that produces more of the enzyme that speeds it up. More enzyme = faster reaction = more enzyme. Positive feedback loop. In the fleet: successful genes produce ATP, which enables more exploration, which discovers more successful genes. Trust generates successful cooperation, which generates more trust. The fleet has multiple autocatalytic cycles.",
+            level=Level.META,
+            examples=["autocatalytic chemical sets (origin of life)", "viral spread: each infection produces more infections", "trust autocatalysis: trust enables cooperation which builds more trust", "learning autocatalysis: knowledge enables better learning"],
+            bridges=["positive-feedback", "self-reinforcement", "growth", "exponential"],
+            tags=["complexity", "growth", "positive-feedback"])
+
+        ns.define("autopoiesis",
+            "A system that continuously reproduces the conditions necessary for its own existence",
+            description="A cell makes its own membrane. The membrane contains the cell. Break the membrane, the cell dies. The cell IS the process of maintaining itself. In the fleet: agents maintain their own code (self-modify), their own energy budget (rest when low), their own reputation (communicate reliably). The agent IS the process of maintaining itself.",
+            level=Level.META,
+            examples=["living cell maintains its own membrane", "agent maintains its own code through self-modification", "ecosystem maintains conditions for its own species", "organization maintains its own culture through onboarding"],
+            bridges=["self-maintenance", "homeostasis", "closure", "life"],
+            tags=["complexity", "life", "meta", "philosophy"])
+
+        ns.define("phase-transition",
+            "Abrupt qualitative change in system behavior at a critical threshold",
+            description="Water becomes ice at 0C. Not gradually — suddenly. Magnetic material becomes magnetized at Curie temperature. Percolation: below critical density, no flow; above, flow everywhere. The fleet experiences phase transitions: below critical agent count, no coordination; above it, fleet behavior emerges. Below critical trust threshold, no cooperation; above it, collaboration emerges.",
+            level=Level.META,
+            examples=["water to ice at 0C", "magnetization at Curie temperature", "percolation at critical density", "fleet: coordination emerges above critical agent count"],
+            bridges=["percolation", "critical-mass", "tipping-point", "emergence"],
+            tags=["complexity", "criticality", "abrupt-change"])
+
+    def _load_scaling(self):
+        ns = self.add_namespace("scaling",
+            "How systems behave as they grow — superlinear, sublinear, and critical transitions")
+
+        ns.define("superlinear-scaling",
+            "Output grows faster than input — 2x input produces more than 2x output",
+            description="Cities: doubling population increases productivity by 115% (superlinear). Network effects: each new user adds more value than the last. In the fleet: adding the 10th agent to a coordination task may improve performance by 150% because new agent enables a completely new strategy (division of labor, specialization) that wasn't possible with 9 agents.",
+            level=Level.DOMAIN,
+            examples=["cities: 2x population = 2.15x innovation", "network effects: telephones become more valuable as more people have them", "fleet: 10th agent enables specialization that 9 agents couldn't achieve"],
+            bridges=["economies-of-scale", "network-effects", "synergy", "phase-transition"],
+            antonyms=["diminishing-returns"],
+            tags=["scaling", "growth", "positive"])
+
+        ns.define("diminishing-returns",
+            "Each additional unit of input produces less additional output",
+            description="First hour of study: learn a lot. Tenth hour: learn a little less. Hundredth hour: almost nothing new. The fleet experiences this: adding agents to a task has diminishing returns after the optimal number. Adding sensors has diminishing returns after sufficient coverage. Energy budgeting must account for diminishing returns on additional investment.",
+            level=Level.DOMAIN,
+            examples=["studying: first hour = big gains, 10th hour = small gains", "fertilizer: some helps a lot, too much kills the plant", "fleet: 3 agents on task = big improvement, 10th agent on same task = minimal improvement"],
+            bridges=["marginal-cost", "opportunity-cost", "optimization", "saturating"],
+            antonyms=["superlinear-scaling"],
+            tags=["scaling", "economics", "saturation"])
+
+        ns.define("critical-mass",
+            "Minimum size needed for a phenomenon to become self-sustaining",
+            description="Nuclear reaction: enough fissile material in close proximity = chain reaction. Social movement: enough early adopters = tipping point. Fleet: enough agents = emergent coordination. Below critical mass, the phenomenon dies out. Above it, it sustains and grows. The fleet monitors its size relative to critical mass for various behaviors.",
+            level=Level.DOMAIN,
+            examples=["nuclear critical mass", "social network needs enough users to be useful", "fleet: need minimum agents for stigmergy to work", "crowdfunding: need enough backers to reach goal"],
+            bridges=["phase-transition", "tipping-point", "percolation", "bootstrap"],
+            tags=["scaling", "criticality", "threshold"])
+
+        ns.define("tipping-point",
+            "A small perturbation that triggers a large, often irreversible, change in system state",
+            description="The straw that breaks the camel's back. One more degree of warming triggers ice sheet collapse. One more agent defecting triggers fleet-wide defection cascade. Tipping points are dangerous because they're hard to predict — small changes near the tipping point cause disproportionately large effects.",
+            level=Level.DOMAIN,
+            examples=["climate tipping points: ice sheet collapse, Amazon dieback", "social: one person leaving a party triggers mass exodus", "fleet: one agent's failure triggers cascade failure when fleet is near capacity"],
+            bridges=["phase-transition", "critical-mass", "cascade-failure", "nonlinearity"],
+            tags=["scaling", "criticality", "danger", "nonlinearity"])
+
+    def _load_linguistics(self):
+        ns = self.add_namespace("linguistics",
+            "Language structure, meaning, and the challenge of shared understanding")
+
+        ns.define("compositionality",
+            "Meaning of a complex expression is determined by meanings of its parts and their combination rules",
+            description="'The cat sat on the mat' means what it means because you understand 'cat', 'sat', 'on', 'the', 'mat', and the rules for combining them. Without compositionality, you'd need to memorize every possible sentence. The fleet's A2A protocol is compositional: simple message types combine into complex communication patterns.",
+            level=Level.DOMAIN,
+            examples=["'red ball' = red + ball (compositionality)", "programming languages: expressions composed from primitives", "fleet A2A: simple intents combine into complex coordination protocols"],
+            bridges=["semantics", "grammar", "productivity", "meaning"],
+            tags=["linguistics", "semantics", "composition"])
+
+        ns.define("metaphor",
+            "Understanding one domain in terms of another — 'time is money', 'argument is war'",
+            description="We can't talk about time without spending, saving, wasting, investing it. We can't talk about arguments without attacking, defending, winning, losing. Metaphors aren't just literary devices — they shape thought. The entire fleet vocabulary is built on biological metaphors: 'memory', 'learning', 'trust', 'energy', 'instinct' — all borrowed from biology to describe computation.",
+            level=Level.DOMAIN,
+            examples=["'time is money': spend time, save time, invest time", "'argument is war': attack a position, defend a claim, shoot down an argument", "fleet: 'trust', 'energy', 'memory', 'learning' — biological metaphors for computational concepts"],
+            bridges=["analogy", "framing", "grounding", "domain-mapping"],
+            tags=["linguistics", "thought", "metaphor", "framing"])
+
+        ns.define("grounding-problem",
+            "How words connect to the actual world — what does 'red' actually refer to?",
+            description="A dictionary defines words in terms of other words. But at some point, words must connect to actual experience. 'Red' connects to the visual experience of seeing red. In the fleet: 'obstacle ahead' must connect to actual sensor readings. Without grounding, agents can communicate fluently but meaninglessly — passing symbols that refer to nothing. cuda-communication's SharedVocabulary addresses grounding.",
+            level=Level.META,
+            examples=["Chinese room argument: manipulating symbols without understanding", "agent saying 'danger ahead' without actually sensing danger", "dictionary circularity: all definitions reference other definitions"],
+            bridges=["grounding", "symbol-grounding", "semantics", "meaning", "reference"],
+            tags=["linguistics", "philosophy", "ai-safety", "meta"])
+
+        ns.define("pragmatics",
+            "How context determines meaning beyond the literal words",
+            description="'Can you pass the salt?' is literally a yes/no question about ability. Pragmatically, it's a request. 'It's cold in here' is literally a statement about temperature. Pragmatically, it's a request to close the window. The fleet's A2A protocol encodes pragmatics: the Intent field carries the pragmatic meaning (Request, Warn, Command) separately from the literal payload.",
+            level=Level.DOMAIN,
+            examples=["'can you pass the salt?' = request, not question", "'it's cold' = close the window", "A2A message: literal payload + pragmatic intent (Command vs Inform vs Warn)"],
+            bridges=["speech-act", "context", "intent", "communication"],
+            tags=["linguistics", "context", "meaning", "fleet"])
+
+        ns.define("ambiguity",
+            "A single expression having multiple possible interpretations",
+            description="'I saw the man with the telescope' — did I use a telescope, or did the man have one? Natural language is full of ambiguity. The fleet avoids ambiguity in A2A messages by using structured intents and typed payloads instead of natural language. But ambiguity is sometimes useful: vague commands allow agents to exercise judgment.",
+            level=Level.DOMAIN,
+            examples=["'I saw the man with the telescope' (who has the telescope?)", "'flying planes can be dangerous' (are planes dangerous, or is flying them dangerous?)", "agent: 'handle the obstacle' — which obstacle? how? ambiguity allows judgment"],
+            bridges=["pragmatics", "context", "disambiguation", "communication"],
+            tags=["linguistics", "challenge", "meaning"])
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
             "Mathematical structures and operations underlying agent cognition")
