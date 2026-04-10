@@ -401,6 +401,7 @@ class HAV:
         self._load_efficiency_frontier()
         self._load_flux_bytecodes()
         self._load_flux_flavors()
+        self._load_agent_social()
         self._load_flux_memory()
         self._load_metaphor_vocab()
         self._load_mathematics()
