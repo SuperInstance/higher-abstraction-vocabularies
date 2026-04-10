@@ -403,6 +403,7 @@ class HAV:
         self._load_flux_flavors()
         self._load_agent_social()
         self._load_flux_memory()
+        self._load_agent_crypto()
         self._load_bio_computing()
         self._load_agent_lifecycle()
         self._load_flux_compound()
@@ -6283,6 +6284,34 @@ class HAV:
         ns.define("organ-system", "Coordinated subsystem interaction achieving complex higher-level goals", Level=Level.DOMAIN, examples=["perception organ decision organ action organ", "nervous system connects all organs"], bridges=["organ","coordinate","complex"], tags=["bio","organ","system"])
         ns.define("ecosystem-interdependence", "Agents depend on external systems and services creating mutual obligations", Level=Level.DOMAIN, examples=["agent depends on LLM API depends on data pipeline", "ecosystem of interacting services"], bridges=["ecosystem","depend","interoperate"], tags=["bio","ecosystem","depend"])
         ns.define("epigenetic-expression", "External configuration modifies agent behavior without changing core code", Level=Level.PATTERN, examples=["environment variables change agent personality", "fleet config adjusts behavior fleet-wide"], bridges=["epigenetic","config","express"], tags=["bio","epigenetic","config"])
+
+    def _load_agent_crypto(self):
+        ns = self.add_namespace("agent-crypto", "Cryptographic patterns for agent identity and trust")
+        ns.define("identity-claim", "Agent presents cryptographic proof of its identity to peers", Level=Level.CONCRETE, examples=["sign message with private key proving identity", "public key verifies claim"], bridges=["identity","prove","verify"], tags=["crypto","identity"])
+        ns.define("reputation-token", "Cryptographically signed attestation of agent track record", Level=Level.CONCRETE, examples=["signed history of completed tasks", "tamper-proof reputation ledger"], bridges=["reputation","token","sign"], tags=["crypto","reputation"])
+        ns.define("zero-knowledge-proof", "Prove a statement is true without revealing underlying data", Level=Level.PATTERN, examples=["prove capability without revealing implementation", "verify age without revealing birthdate"], bridges=["zero-knowledge","prove","private"], tags=["crypto","zkp"])
+        ns.define("key-rotation", "Periodically replace cryptographic keys limiting exposure window", Level=Level.CONCRETE, examples=["rotate signing keys weekly", "forward secrecy through key rotation"], bridges=["key","rotate","secure"], tags=["crypto","rotation"])
+        ns.define("threshold-signature", "Require minimum number of agents to authorize a collective action", Level=Level.PATTERN, examples=["3 of 5 agents must sign to approve", "multi-sig governance"], bridges=["threshold","multi-sig","authorize"], tags=["crypto","threshold"])
+        ns.define("commit-reveal", "Two-phase protocol preventing last-mover advantage", Level=Level.PATTERN, examples=["commit hash first then reveal answer", "sealed bid auction protocol"], bridges=["commit","reveal","fair"], tags=["crypto","commit-reveal"])
+        ns.define("merkle-proof", "Efficient proof of data inclusion in larger structure", Level=Level.CONCRETE, examples=["prove transaction in block without full chain", "verify repo file integrity"], bridges=["merkle","proof","efficient"], tags=["crypto","merkle"])
+        ns.define("byzantine-resilience", "Function correctly even with some agents behaving arbitrarily", Level=Level.DOMAIN, examples=["consensus with up to one-third faulty nodes", "BFT practical byzantine tolerance"], bridges=["byzantine","faulty","consensus"], tags=["crypto","byzantine"])
+        ns.define("certificate-transparency", "Publicly auditable log of all identity certifications", Level=Level.PATTERN, examples=["anyone can verify agent certification history", "detect unauthorized certificate issuance"], bridges=["transparent","audit","certificate"], tags=["crypto","transparent"])
+        ns.define("deniable-auth", "Prove identity to recipient but unable to prove to third party", Level=Level.CONCRETE, examples=["off-the-record messaging", "prove authorization without revealing who authorized"], bridges=["deniable","private","auth"], tags=["crypto","deniable"])
+
+    def _load_game_theory(self):
+        ns = self.add_namespace("game-theory", "Strategic interaction patterns between rational agents")
+        ns.define("prisoners-dilemma", "Cooperate or defect when mutual cooperation is better than mutual defection", Level=Level.DOMAIN, examples=["two agents decide whether to share or hoard resources", "cooperation vs individual optimization"], bridges=["dilemma","cooperate","defect"], tags=["game","dilemma"])
+        ns.define("nash-equilibrium", "No agent benefits from changing strategy when others hold constant", Level=Level.DOMAIN, examples=["traffic assignment where no driver benefits from switching route", "stable strategy profile"], bridges=["equilibrium","stable","strategy"], tags=["game","nash"])
+        ns.define("pareto-optimal", "No agent can improve without another agent worsening", Level=Level.DOMAIN, examples=["resource allocation where reallocating helps nobody", "efficient frontier of possible outcomes"], bridges=["pareto","optimal","efficient"], tags=["game","pareto"])
+        ns.define("minimax-strategy", "Minimize maximum possible loss under worst-case opponent behavior", Level=Level.PATTERN, examples=["agent assumes worst-case from competitors", "adversarial decision making"], bridges=["minimax","worst-case","adversarial"], tags=["game","minimax"])
+        ns.define("tit-for-tat", "Copy opponents last action as current action", Level=Level.PATTERN, examples=["cooperate if they cooperated defect if they defected", "simple reciprocity strategy"], bridges=["tit-for-tat","reciprocity","simple"], tags=["game","tit-for-tat"])
+        ns.define("free-rider", "Agent benefits from collective action without contributing", Level=Level.BEHAVIOR, examples=["use shared model without paying compute cost", "consume fleet resources without contributing"], bridges=["free-rider","exploit","collective"], tags=["game","free-rider"])
+        ns.define("tragedy-of-commons", "Individual rational agents deplete shared resource", Level=Level.BEHAVIOR, examples=["all agents use bandwidth → congestion", "overuse of shared compute budget"], bridges=["commons","deplete","shared"], tags=["game","commons"])
+        ns.define("chicken-game", "Two agents approaching conflict each must swerve or crash", Level=Level.DOMAIN, examples=["neither agent yields priority → deadlock", "bluff and commitment strategies"], bridges=["chicken","conflict","bluff"], tags=["game","chicken"])
+        ns.define("stag-hunt", "Cooperation for high-value reward requires trust others also cooperate", Level=Level.DOMAIN, examples=["all agents must contribute for big win", "individual safer option vs risky group payoff"], bridges=["stag-hunt","coordination","trust"], tags=["game","stag"])
+        ns.define("grim-trigger", "Cooperate until opponent defects then defect forever", Level=Level.PATTERN, examples=["zero-tolerance trust policy", "one betrayal permanent punishment"], bridges=["grim","trigger","permanent"], tags=["game","grim-trigger"])
+        ns.define("mixed-strategy", "Randomize between actions to prevent opponent exploitation", Level=Level.PATTERN, examples=["vary approach randomly to stay unpredictable", "probabilistic action selection"], bridges=["mixed","randomize","unpredictable"], tags=["game","mixed"])
+        ns.define("shapley-value", "Fair allocation of total value based on each agents marginal contribution", Level=Level.DOMAIN, examples=["credit assignment for multi-agent collaboration", "fair reward division"], bridges=["shapley","fair","contribution"], tags=["game","shapley"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
