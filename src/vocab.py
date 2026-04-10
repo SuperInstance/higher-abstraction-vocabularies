@@ -403,6 +403,7 @@ class HAV:
         self._load_flux_flavors()
         self._load_agent_social()
         self._load_flux_memory()
+        self._load_agent_lifecycle()
         self._load_flux_compound()
         self._load_agent_failure()
         self._load_emergence_patterns()
@@ -6245,6 +6246,27 @@ class HAV:
         ns.define("move/energy-efficient", "Optimize movement to minimize energy consumption", Level=Level.PATTERN, examples=["shortest path lowest cost", "energy budget aware navigation"], bridges=["move","efficient","energy"], tags=["flux","compound"])
         ns.define("move/pursuit", "Track and follow a moving target dynamically", Level=Level.PATTERN, examples=["intercept trajectory prediction", " pursue and rendezvous"], bridges=["move","pursuit","track"], tags=["flux","compound"])
         ns.define("move/stealthy", "Minimize detection signature while moving", Level=Level.PATTERN, examples=["low-profile operation mode", "minimize observable emissions"], bridges=["move","stealth","minimal"], tags=["flux","compound"])
+
+    def _load_agent_lifecycle(self):
+        ns = self.add_namespace("agent-lifecycle", "Phases and transitions in agent existence")
+        ns.define("spawn", "Agent instance created with minimal capabilities", Level=Level.CONCRETE, examples=["new agent booted from template", "clone fleet member from repo"], bridges=["create","boot","instance"], tags=["lifecycle","spawn"])
+        ns.define("bootstrap", "Initial capability loading during agent startup", Level=Level.CONCRETE, examples=["load core modules on first boot", "equip agent with base skills"], bridges=["startup","load","initialize"], tags=["lifecycle","bootstrap"])
+        ns.define("acclimation", "Agent adjusts to environment parameters before full operation", Level=Level.BEHAVIOR, examples=["calibrate sensors to new environment", "learn local norms before acting"], bridges=["adjust","calibrate","warmup"], tags=["lifecycle","acclimate"])
+        ns.define("activation", "Agent transitions from passive to active operational state", Level=Level.CONCRETE, examples=["switch from monitoring to execution", "receive first task assignment"], bridges=["activate","start","operate"], tags=["lifecycle","activate"])
+        ns.define("maturation", "Agent develops full capability through accumulated experience", Level=Level.BEHAVIOR, examples=["performance improves over time", "capability breadth expands"], bridges=["mature","develop","improve"], tags=["lifecycle","mature"])
+        ns.define("specialization", "Agent narrows focus becoming expert in specific domain", Level=Level.BEHAVIOR, examples=["generalist becomes domain expert", "capable in fewer things better"], bridges=["specialize","narrow","expert"], tags=["lifecycle","specialize"])
+        ns.define("senescence", "Agent performance degrades due to accumulated state bloat", Level=Level.BEHAVIOR, examples=["memory bloat slows deliberation", "stale knowledge reduces accuracy"], bridges=["age","degrade","bloat"], tags=["lifecycle","senescence"])
+        ns.define("hibernation", "Agent enters low-power idle state preserving minimal capabilities", Level=Level.CONCRETE, examples=["suspend to disk when idle", "wake on event trigger"], bridges=["sleep","idle","suspend"], tags=["lifecycle","hibernate"])
+        ns.define("revival", "Agent resumes from hibernation restoring full state", Level=Level.CONCRETE, examples=["deserialize from checkpoint", "resume interrupted task"], bridges=["wake","resume","restore"], tags=["lifecycle","revive"])
+        ns.define("fork", "Agent creates child clone inheriting current state", Level=Level.CONCRETE, examples=["spawn worker from parent state", "parallelize task across clones"], bridges=["clone","child","parallel"], tags=["lifecycle","fork"])
+        ns.define("merge", "Two agent instances combine their state into one", Level=Level.PATTERN, examples=["merge results from parallel workers", "combine memories from clones"], bridges=["combine","merge","unify"], tags=["lifecycle","merge"])
+        ns.define("apoptosis", "Graceful self-termination freeing resources for fleet", Level=Level.PATTERN, examples=["agent detects obsolescence and shuts down", "energy budget depleted triggers apoptosis"], bridges=["terminate","graceful","free"], tags=["lifecycle","apoptosis"])
+        ns.define("necrosis", "Abrupt ungraceful agent death leaving resources locked", Level=Level.BEHAVIOR, examples=["OOM kill without cleanup", "crash without resource release"], bridges=["crash","ungraceful","locked"], tags=["lifecycle","necrosis"])
+        ns.define("phoenix", "Agent rebuilt from saved state after catastrophic failure", Level=Level.PATTERN, examples=["restore from last checkpoint after crash", "reboot with persisted memory"], bridges=["rebuild","restore","recover"], tags=["lifecycle","phoenix"])
+        ns.define("metamorphosis", "Agent fundamentally restructures its architecture for new role", Level=Level.PATTERN, examples=["transform from sensor agent to coordinator", "major capability reshuffle"], bridges=["transform","restructure","role-change"], tags=["lifecycle","metamorphosis"])
+        ns.define("quiescence", "Agent temporarily stops processing waiting for external trigger", Level=Level.CONCRETE, examples=["pause processing between cycles", "wait for event to resume"], bridges=["pause","wait","trigger"], tags=["lifecycle","quiesce"])
+        ns.define("commissioning", "Agent passes qualification tests before production deployment", Level=Level.CONCRETE, examples=["run test suite before going live", "validate capabilities meet requirements"], bridges=["qualify","test","deploy"], tags=["lifecycle","commission"])
+        ns.define("decommission", "Agent removed from production permanently", Level=Level.CONCRETE, examples=["retire obsolete capability", "remove deprecated agent from fleet"], bridges=["retire","remove","permanent"], tags=["lifecycle","decommission"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
