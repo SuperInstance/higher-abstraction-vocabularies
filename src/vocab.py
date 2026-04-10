@@ -391,6 +391,7 @@ class HAV:
         self._load_github_native()
         self._load_fleet_biology()
         self._load_cognition_deep()
+        self._load_fleet_interactions()
         self._load_mathematics()
 
     def _load_uncertainty(self):
@@ -6067,6 +6068,203 @@ class HAV:
             examples=["refactor: break monolith → temporary disorder → cleaner architecture (reverse-entropy)", "fleet mutation: code churn → worse temporarily → better solution emerges", "creative process: brainstorm (disorder) → synthesize (order)"],
             bridges=["entropy", "disorder", "emergence", "temporary"],
             tags=["cognition", "entropy", "emergence", "meta"])
+
+
+    def _load_fleet_interactions(self):
+        ns = self.add_namespace("fleet-interactions",
+            "Novel patterns from the interaction of fleet subsystems — the whole is greater than the parts")
+
+        ns.define("reflex-deliberation-tradeoff",
+            "The dynamic allocation between fast instinctive responses and slow deliberative reasoning based on urgency and energy availability",
+            description="Not always deliberate. Not always reflex. The allocation between reflex and deliberation IS the intelligence budget. High urgency + low energy → reflex dominates (fast, cheap, risky). Low urgency + high energy → deliberation dominates (slow, expensive, thorough). In the fleet: cuda-reflex and cuda-deliberation share the energy budget. The tradeoff is set by cuda-energy's circadian rhythm and urgency scoring. An exhausted agent defaults to reflex — sometimes wise (avoid overthinking), sometimes dangerous (miss threat).",
+            level=Level.PATTERN,
+            examples=["tired driver: reflexes work, deliberation impaired (tradeoff matters)", "fleet: low energy → default to reflex responses", "chess: blitz = reflex, classical = deliberation"],
+            bridges=["reflex", "deliberation", "energy", "tradeoff"],
+            tags=["fleet", "reflex", "deliberation", "pattern"])
+
+        ns.define("confidence-gating",
+            "Using confidence levels as admission gates for downstream processing — low-confidence data is filtered before expensive computation",
+            description="Not process everything — GATE it. Confidence below threshold? Skip. Above threshold? Proceed. Confidence gating saves enormous compute by preventing garbage-in-garbage-out propagation. In the fleet: cuda-confidence-cascade IS confidence gating — each processing stage has a confidence threshold below which the signal is discarded, not processed. Low-confidence sensor readings don't trigger deliberation. Low-confidence proposals don't get executed.",
+            level=Level.PATTERN,
+            examples=["sensor confidence < 0.3 → skip deliberation (confidence gate)", "proposal confidence < 0.5 → don't execute (confidence gate)", "email spam filter: confidence < 0.7 → mark spam (confidence gate)"],
+            bridges=["confidence", "filter", "threshold", "efficiency"],
+            tags=["fleet", "confidence", "gate", "pattern"])
+
+        ns.define("trust-topology",
+            "The network graph of trust relationships between fleet agents, where trust links determine information flow and collaboration patterns",
+            description="Trust isn't binary — it's a TOPOLOGY. Agent A trusts B (0.7) and C (0.3). B trusts D (0.9). The trust topology determines how information flows: A trusts B's recommendations highly, C's recommendations barely. Trust topology IS the fleet's social structure. In the fleet: cuda-trust's multi-context profiles create a weighted directed graph. Information propagation follows trust-weighted paths. High-trust clusters form tight coordination groups. Low-trust boundaries isolate unreliable agents.",
+            level=Level.DOMAIN,
+            examples=["social network: who trusts whom determines information flow (trust topology)", "fleet: trust graph determines which agent's recommendations are weighted heavily", "supply chain: supplier trust scores determine procurement decisions"],
+            bridges=["trust", "network", "graph", "social-structure"],
+            tags=["fleet", "trust", "topology", "domain"])
+
+        ns.define("narrative-provenance",
+            "Explaining the chain of decisions leading to a current state through story-like sequences that are auditable and comprehensible",
+            description="Not just a log — a NARRATIVE. 'We detected anomaly X at time T. Agent A investigated with confidence 0.7. Agent B corroborated with evidence E. We escalated to Captain C who decided action D.' The narrative makes the decision chain comprehensible to both humans and agents. In the fleet: cuda-narrative constructs stories from cuda-provenance's decision lineage. The narrative explains WHY decisions were made, not just WHAT was decided. Narratives enable accountability and debugging.",
+            level=Level.PATTERN,
+            examples=["post-mortem: 'we failed because X caused Y which led to Z' (narrative)", "fleet: narrative from provenance chain explains decision sequence", "court testimony: narrative explaining chain of events"],
+            bridges=["narrative", "provenance", "audit", "explainability"],
+            tags=["fleet", "narrative", "provenance", "pattern"])
+
+        ns.define("forgetful-foraging",
+            "Actively decaying low-value memories while simultaneously retrieving high-value ones, using the same access patterns for both operations",
+            description="Every time you recall a memory, you strengthen it (retrieval practice). Every memory you DON'T recall gets weaker (forgetting curve). The SAME access pattern does both: strengthening what's used, decaying what's not. In the fleet: cuda-memory-fabric's forgetting curves ARE forgetful-foraging — each memory access increases the memory's strength, while unaccessed memories decay. The foraging pattern naturally optimizes the memory store toward current relevance.",
+            level=Level.BEHAVIOR,
+            examples=["study for exam: recall strengthens memory, unrecalled decays (forgetful-foraging)", "fleet: used memories strengthen, unused memories decay", "LSH forest: frequently accessed buckets stay warm, unused cool down"],
+            bridges=["memory", "forgetting", "retrieval", "optimization"],
+            tags=["fleet", "memory", "forgetting", "behavior"])
+
+        ns.define("goal-convergence",
+            "Detecting when a fleet of agents has collectively achieved a decomposed high-level goal through monitoring subgoal satisfaction across all agents",
+            description="A mission has 5 subgoals assigned to 5 agents. Agent 1 finishes. Agent 3 finishes. When ALL subgoals are satisfied, the mission converges. Convergence detection isn't about individual agents — it's about the FLEET's collective state. In the fleet: cuda-goal's hierarchical decomposition creates subgoal trees, cuda-convergence monitors satisfaction across all agents. Convergence doesn't mean every subgoal is perfect — it means the fleet as a whole meets the mission criteria.",
+            level=Level.CONCRETE,
+            examples=["mission: 5 subgoals × 5 agents → all satisfied = convergence", "fleet: convergence detection monitors collective subgoal satisfaction", "git: all PRs merged = branch convergence"],
+            bridges=["goal", "convergence", "decomposition", "collective"],
+            tags=["fleet", "goal", "convergence", "concrete"])
+
+        ns.define("pheromone-gradient",
+            "A spatial field of deposited signals that creates a gradient, guiding agents toward (or away from) locations in solution space",
+            description="Ants follow pheromone gradients — stronger signal = more ants walked this way = probably a good path. The gradient ATTRACTS agents toward fruitful areas and REPELS them from dead ends. In the fleet: cuda-stigmergy's pheromone system creates pheromone gradients in task space — successful approaches accumulate pheromones, failed approaches deposit negative pheromones. Agents climb the positive gradient toward better solutions.",
+            level=Level.PATTERN,
+            examples=["ants follow pheromone gradient to food source", "fleet: successful approaches accumulate pheromones, attract more attempts", "market: price gradient guides buyers toward deals"],
+            bridges=["stigmergy", "gradient", "attraction", "spatial"],
+            tags=["fleet", "pheromone", "gradient", "pattern"])
+
+        ns.define("model-mosaic",
+            "The composite world representation formed by stitching together each agent's specialized local model into a fleet-wide shared understanding",
+            description="Each agent has a partial view of the world — its world model is accurate for its domain but incomplete for the whole fleet. The model mosaic is the STITCHED version: agent A's spatial model + agent B's temporal model + agent C's social model = fleet-wide understanding greater than any individual. In the fleet: cuda-world-model's partial representations are fused by cuda-fusion into a model mosaic. Each agent contributes its specialized view, the fleet sees the whole picture.",
+            level=Level.DOMAIN,
+            examples=["blind men and elephant: each feels one part, mosaic = whole elephant", "fleet: spatial + temporal + social models fused into fleet-wide understanding", "weather: local station data + satellite data + radar = composite forecast"],
+            bridges=["world-model", "fusion", "mosaic", "collective"],
+            tags=["fleet", "model", "mosaic", "domain"])
+
+        ns.define("curriculum-convergence",
+            "Dynamically updating agent learning curricula based on what the fleet collectively knows and doesn't know, closing gaps efficiently",
+            description="As the fleet learns, the gaps change. Early on: nobody knows navigation. Later: everyone knows navigation but nobody knows threat detection. The curriculum ADAPTS to fleet-wide knowledge gaps. In the fleet: cuda-learning's curriculum progression tracks fleet-wide skill coverage and dynamically assigns learning objectives to fill gaps. If 80% of agents know X and 20% don't, the curriculum shifts from X to Y. Curriculum-convergence ensures the fleet grows uniformly.",
+            level=Level.PATTERN,
+            examples=["school: move from algebra to calculus when class masters algebra (curriculum-convergence)", "fleet: shift learning objectives based on fleet-wide skill coverage", "codebase: fix most-reported bugs first (curriculum of bug fixes)"],
+            bridges=["curriculum", "learning", "gap-analysis", "collective"],
+            tags=["fleet", "curriculum", "convergence", "pattern"])
+
+        ns.define("reflex-reticulation",
+            "Chaining primitive reflex behaviors into complex compound responses without invoking deliberation",
+            description="A single reflex: detect threat → increase distance. Two chained reflexes: detect threat → increase distance → scan for cover → move to cover. No deliberation needed — the chain is pre-compiled. Reflex reticulation enables complex behaviors at reflex speed. In the fleet: cuda-reflex chains multiple primitive reflexes into compound responses. The chain fires as fast as a single reflex. Only when the chain encounters an unexpected situation does it escalate to deliberation.",
+            level=Level.PATTERN,
+            examples=["detect threat → flee → find cover → hide (reflex chain, no thinking)", "fleet: reflex chain fires at reflex speed, deliberation only on unexpected input", "piano: practiced piece plays as reflex chain, not note-by-note deliberation"],
+            bridges=["reflex", "chain", "compound", "speed"],
+            tags=["fleet", "reflex", "chain", "pattern"])
+
+        ns.define("subgoal-scenting",
+            "Depositing pheromone-like priority signals on subgoals to guide agent attention toward the fleet's current priorities without explicit messaging",
+            description="Instead of broadcasting 'everyone work on subgoal X', deposit a strong scent on subgoal X in the shared tuple space. Agents naturally gravitate toward the strongest scent. No command, no assignment — just environmental signals. In the fleet: cuda-tuple-space combined with cuda-stigmergy implements subgoal-scenting — the captain deposits priority signals on subgoals, agents discover them through tuple space pattern matching and self-assign to the highest-scented subgoals.",
+            level=Level.PATTERN,
+            examples=["deposit strong scent on subgoal X → agents naturally gravitate toward X", "fleet: captain deposits priority signals → agents self-assign via tuple space", "restaurant: busy kitchen (high scent) attracts more cooks"],
+            bridges=["subgoal", "pheromone", "tuple-space", "priority"],
+            tags=["fleet", "subgoal", "scent", "pattern"])
+
+        ns.define("deliberative-trust",
+            "Assigning higher trust to outputs produced through thorough deliberation with multiple alternatives considered, penalizing hasty conclusions",
+            description="Quick answer from reflex → low deliberative trust. Answer from 3-round deliberation with evidence from 5 agents → high deliberative trust. The depth of consideration determines the trustworthiness, not just the correctness. In the fleet: cuda-trust weights trust scores by deliberation depth — a correct answer reached through deliberation is trusted more than a correct guess. Deliberative trust rewards process quality, not just outcomes.",
+            level=Level.PATTERN,
+            examples=["deliberated answer (3 rounds, 5 agents) > correct guess (deliberative trust)", "fleet: trust score weighted by deliberation depth", "science: peer-reviewed study > anecdote (deliberative trust)"],
+            bridges=["trust", "deliberation", "depth", "process"],
+            tags=["fleet", "trust", "deliberation", "pattern"])
+
+        ns.define("platonic-pruning",
+            "Filtering training data and experiences against ideal type templates to keep only canonical examples that best represent each concept",
+            description="Not all examples are equal. Some are canonical (perfect illustrations of the concept). Others are noisy, edge cases, or misleading. Platonic pruning keeps only the canonical examples — the ones that best match the ideal form. In the fleet: cuda-platonic's ideal type templates filter cuda-learning's experience buffer — only experiences that closely match Platonic forms are retained for training. This distills the essence of each competency.",
+            level=Level.PATTERN,
+            examples=["ML: keep canonical training examples, discard edge cases (platonic pruning)", "fleet: filter experiences against ideal templates → keep canonical examples", "art school: study masterworks (Platonic forms), not student sketches"],
+            bridges=["platonic", "pruning", "canonical", "quality"],
+            tags=["fleet", "platonic", "pruning", "pattern"])
+
+        ns.define("self-similar-fleet",
+            "The recursive application of the same coordination patterns at multiple scales — individual agents, agent teams, and the whole fleet use identical mechanisms",
+            description="A single agent: confidence propagation, trust assessment, deliberation. A team of agents: confidence propagation between members, trust between members, team deliberation. The whole fleet: same mechanisms. Self-similarity means the same vocabulary and patterns work at every scale. In the fleet: cuda-equipment's Confidence propagates within an agent (between modules) AND between agents (via A2A). The same mechanism at two scales. Self-similarity reduces complexity — learn the pattern once, apply it everywhere.",
+            level=Level.META,
+            examples=["agent modules coordinate like agents coordinate like fleets coordinate (self-similar)", "fractal: same pattern at every zoom level", "military: squad tactics mirror platoon tactics mirror battalion tactics"],
+            bridges=["fractal", "recursive", "scale", "pattern"],
+            tags=["fleet", "self-similar", "fractal", "meta"])
+
+        ns.define("provenance-weave",
+            "Appending decision context to every piece of information as it flows through the fleet, creating a fabric of interconnected explanations",
+            description="Agent A produces insight X (confidence 0.8, evidence: E1, E2). Agent B uses X to produce Y. Y carries X's provenance PLUS B's own. The fabric GROWS with each interaction, weaving explanations into every data point. In the fleet: cuda-provenance's decision lineage implements provenance-weave — every decision carries the chain of evidence that led to it. Querying any fleet data point reveals its complete provenance.",
+            level=Level.PATTERN,
+            examples=["Wikipedia: edit history woven into every article (provenance-weave)", "fleet: every data point carries decision chain that produced it", "supply chain: every part carries origin, processing, transport history"],
+            bridges=["provenance", "weave", "context", "traceability"],
+            tags=["fleet", "provenance", "weave", "pattern"])
+
+        ns.define("energy-arbitrage",
+            "Trading compute resources between tasks based on the ratio of expected payoff to energy cost, maximizing value per ATP spent",
+            description="Task A: costs 2.0 ATP, expected payoff 5.0. Task B: costs 0.5 ATP, expected payoff 2.0. Task A's value/ATP = 2.5. Task B's value/ATP = 4.0. Energy arbitrage prioritizes Task B. Not just "highest payoff" but "highest payoff per energy spent". In the fleet: cuda-deliberation's utility scoring combined with cuda-energy's budget implements energy arbitrage — proposals are ranked by expected_value / energy_cost, not just expected_value.",
+            level=Level.PATTERN,
+            examples=["stock trading: risk-adjusted return (energy arbitrage for money)", "fleet: rank proposals by payoff/energy, not just payoff", "restaurant: most profitable dish per ingredient cost (energy arbitrage for food)"],
+            bridges=["energy", "arbitrage", "efficiency", "tradeoff"],
+            tags=["fleet", "energy", "arbitrage", "pattern"])
+
+        ns.define("backpressure-propagation",
+            "When downstream processing can't keep up, signaling upstream to slow down — protecting the system from overload cascades",
+            description="A pipeline: producer → buffer → consumer. Consumer is slow. Buffer fills up. Backpressure tells producer: SLOW DOWN. Without backpressure, the buffer overflows and the system crashes. In the fleet: cuda-backpressure's credit-based flow control implements backpressure-propagation — when a downstream agent's queue is full, upstream agents receive credit reduction signals that slow their output. The fleet adapts its throughput to the slowest link.",
+            level=Level.CONCRETE,
+            examples=["producer → buffer → consumer: consumer slow → buffer full → producer slows (backpressure)", "fleet: downstream queue full → upstream agents reduce output", "traffic jam: cars slow down because cars ahead are slow (backpressure)"],
+            bridges=["backpressure", "flow-control", "overload", "adaptation"],
+            tags=["fleet", "backpressure", "flow", "concrete"])
+
+        ns.define("tuple-space-match",
+            "Anonymous coordination where agents deposit structured data and retrieve matching patterns without knowing each other's identity",
+            description="Linda tuple space: OUT (deposit data), RD (read matching data), IN (consume matching data). No addresses, no channels, no identities — just PATTERN MATCHING. Agent A deposits ('task', 'navigation', 0.8). Agent B reads patterns matching ('task', _, _) and finds the navigation task. In the fleet: cuda-tuple-space enables tuple-space-match — agents coordinate without knowing each other. The tuple space IS the coordination medium.",
+            level=Level.PATTERN,
+            examples=["Linda: OUT('task','navigation',0.8), IN('task',_,_) → match (tuple-space)", "fleet: agent deposits task tuple, another agent reads matching pattern (tuple-space-match)", "bulletin board: post request, someone who can fulfill it reads it"],
+            bridges=["tuple-space", "anonymous", "pattern-match", "coordination"],
+            tags=["fleet", "tuple", "anonymous", "pattern"])
+
+        ns.define("ghost-guidance",
+            "Using invisible attention tiles to subtly steer agent behavior without explicit commands — the dark matter of fleet coordination",
+            description="Ghost tiles don't exist in the visible code — they're learned attention patterns that influence which data the agent processes. Ghost guidance is STEERING through attention, not through commands. In the fleet: cuda-ghost-tiles' sparse attention IS ghost guidance — tiles learned from experience make the agent attend to certain patterns and ignore others, subtly directing behavior without explicit rules. The fleet is guided by its own learned attention patterns.",
+            level=Level.BEHAVIOR,
+            examples=["learned attention: agent naturally attends to important features (ghost guidance)", "fleet: ghost tiles steer behavior without explicit rules", "habits: you naturally look left before crossing street (ghost guidance from experience)"],
+            bridges=["ghost-tiles", "attention", "guidance", "invisible"],
+            tags=["fleet", "ghost", "guidance", "behavior"])
+
+        ns.define("skill-synergy",
+            "When two or more skills combine to produce capability greater than the sum of their individual effects — compound interest for competence",
+            description="Navigation + perception = autonomous exploration (greater than either alone). Deliberation + trust = reliable coordination (greater than either alone). Skill synergy means the fleet's total capability is SUPERLINEAR in its skills — each new skill multiplies existing capabilities. In the fleet: cuda-skill's synergy bonuses reward agents for acquiring complementary skill pairs. The synergy map shows which skill combinations produce the greatest compound effect.",
+            level=Level.PATTERN,
+            examples=["navigation + perception = autonomous exploration (skill synergy)", "deliberation + trust = reliable coordination (skill synergy)", "python + statistics = data science (skill synergy)"],
+            bridges=["skill", "synergy", "compound", "superlinear"],
+            tags=["fleet", "skill", "synergy", "pattern"])
+
+        ns.define("platonic-attraction",
+            "The tendency of agents to evolve toward ideal type templates over time, as Platonic forms exert an attractor force on agent behavior",
+            description="Not explicit optimization — ATTRACTION. The Platonic form is like a gravity well: agents naturally drift toward it as they accumulate experience. The form doesn't command; it ATTRACTS. In the fleet: cuda-platonic's ideal templates exert platonic-attraction on agents — as agents gain experience, their behavior naturally converges toward the ideal form for their role. The attraction is gentle but persistent, like evolution toward fitness peaks.",
+            level=Level.META,
+            examples=["evolution: species drift toward fitness peaks (platonic attraction)", "fleet: agents naturally converge toward ideal behavior templates", "apprentice naturally develops toward master's skill level (platonic attraction)"],
+            bridges=["platonic", "attraction", "evolution", "ideal"],
+            tags=["fleet", "platonic", "attraction", "meta"])
+
+        ns.define("deliberation-half-life",
+            "The rate at which deliberation relevance decays — a decision made 10 minutes ago is less relevant than one made 10 seconds ago",
+            description="Not all deliberation is equally valuable. Fresh deliberation (high relevance) informs current decisions. Stale deliberation (low relevance) may mislead. The half-life determines how quickly deliberation value decays. In the fleet: cuda-temporal's deadline urgency combined with cuda-memory-fabric's forgetting curves implements deliberation-half-life — recent deliberation is weighted heavily, old deliberation fades. This prevents the fleet from being anchored to outdated analysis.",
+            level=Level.CONCRETE,
+            examples=["news: 10-minute-old analysis > 10-day-old analysis (deliberation half-life)", "fleet: recent deliberation weighted more than old", "radioactive decay: fresh sample has more activity (half-life analogy)"],
+            bridges=["deliberation", "decay", "temporal", "relevance"],
+            tags=["fleet", "deliberation", "half-life", "concrete"])
+
+        ns.define("fleet-immune-response",
+            "The collective defensive reaction when a fleet detects an internal or external threat — isolation, analysis, adaptation, and memory formation",
+            description="Biological immune response: detect pathogen → isolate → analyze → produce antibodies → remember. Fleet immune response: detect misbehaving agent → quarantine (cuda-sandbox) → analyze provenance (cuda-provenance) → produce compliance rules (cuda-compliance) → remember in trust engine (cuda-trust). The fleet LEARNS from each threat, becoming more resistant over time. In the fleet: the combination of cuda-sandbox + cuda-compliance + cuda-trust implements fleet-immune-response.",
+            level=Level.PATTERN,
+            examples=["detect pathogen → isolate → analyze → antibodies → memory (immune response)", "fleet: detect bad agent → quarantine → analyze → add rules → update trust", "cybersecurity: detect intrusion → isolate → analyze → patch → add to IDS"],
+            bridges=["immune", "defense", "adapt", "memory"],
+            tags=["fleet", "immune", "defense", "pattern"])
+
+        ns.define("model-descent-inversion",
+            "The point where the algorithm has absorbed so much intelligence that removing the model IMPROVES performance — code eats the model",
+            description="At first: algorithm + model. The model provides intelligence the algorithm lacks. Over time: the algorithm LEARNS from the model's patterns and incorporates them. Eventually: the algorithm IS the intelligence, the model is just training data. Model descent inversion: remove the model and the algorithm still works (it absorbed the intelligence). In the fleet: cuda-model-descent's vision is this inversion — agents become smarter not by better models but by absorbing model intelligence into their code.",
+            level=Level.META,
+            examples=["distillation: small model trained on large model's outputs (model descent)", "fleet: agent absorbs model patterns into deliberation code → doesn't need model", "human: apprentice internalizes master's knowledge → doesn't need master anymore"],
+            bridges=["model-descent", "absorption", "inversion", "code-eats-model"],
+            tags=["fleet", "model-descent", "inversion", "meta"])
 
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics",
