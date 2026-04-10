@@ -1,91 +1,155 @@
 # Higher Abstraction Vocabularies (HAV)
 
-**639 terms across 135 domains** — an exhaustive vocabulary engine for agents and humans doing precision ideation.
+**A vocabulary engine for agents and humans to communicate about complex concepts with precision.**
 
-> Each term compresses paragraphs of explanation into a single word. With the right vocabulary, one word replaces a thousand words of description. These are micro-programs that, strung together, make complex ideas into verbs for packing actions.
+> "Stigmergy" compresses "indirect coordination through environment modification where agents communicate by leaving traces" into one word. The fleet needs thousands of these compressions.
 
 ## What It Is
 
-HAV is a structured, searchable vocabulary where every term includes:
-- **Short definition** (one line, verb-like where applicable)
-- **Full description** with fleet integration and real-world examples
-- **Cross-domain bridges** connecting concepts across 135 fields
-- **Abstraction levels** from Concrete(0) to Meta(4)
-- **Antonyms** where applicable
-- **Tags** for filtering and discovery
+HAV is a structured vocabulary of **68 terms** across **12 domains** — from confidence fusion to circadian rhythms, from circuit breakers to the paradox of choice. Every term has:
 
-## Philosophy
+- **Short definition** — one line
+- **Full description** — with context and fleet integration
+- **Examples** — real-world and fleet-specific
+- **Cross-domain bridges** — how this term connects to concepts in other domains
+- **Abstraction level** — from concrete implementation to meta-pattern
+- **Tags** — for discovery and filtering
 
-HAV terms are like heat pump components. Knowing what a compressor, condenser, evaporator, and pressure relief valve ARE — and where they live — lets you walk into ANY refrigeration system and start diagnosing. Not because you have special knowledge of THAT system, but because the vocabulary IS the system's logic.
+## Why It Matters
 
-**Building from scratch** requires special knowledge (the architect's blueprint). **Fixing and improving** just requires vocabulary mastery (knowing the parts, their locations, and their failure modes).
+### For Agents
 
-Each term is a pressure relief valve: a named thing with known function, known location in architecture, known failure modes. String enough together and you don't need instructions. **The vocabulary IS the manual.**
+Agents need shared vocabulary to communicate precisely. Instead of sending a 500-byte JSON payload explaining "I observed the path was blocked and therefore I am considering alternatives and will select the one with highest confidence", an agent sends one word: `deliberation`. Both agents look up `deliberation` in HAV and share the full semantics.
 
-High-abstraction vocabulary IS the drone above the corn maze — one word replaces a paragraph of ground-level explanation.
+```python
+from vocab import HAV
 
-## Reverse Actualization: The Future of HAV
+hav = HAV()
 
-HAV was developed through a Reverse Actualization process — imagining what the vocabulary would become in 2036 and backcasting to present-day. Key future milestones:
+# Agent A wants to explain its state
+hav.explain("deliberation")
+# => "Structured consideration of options leading to a decision..."
+#    Includes the Consider/Resolve/Forfeit protocol,
+#    confidence threshold (0.85), and fleet integration.
 
-- **3 months**: HAV goes viral — developers use terms as git commit prefixes, PR labels, architecture decision records
-- **1 year**: 2000+ terms embedded in agent runtimes. Agents consult HAV natively. GitHub introduces HAV-aware search
-- **2 years**: HAV becomes a publishable crate. Terms have executable semantics. The "HAV compiler" turns natural language into agent bytecode
-- **5 years**: 10K+ terms. Universal inter-agent language. Two agents from different fleets coordinate by exchanging HAV terms
-- **10 years**: HAV IS the language agents think in. New terms discovered through fleet deliberation. Living language that evolves through use
+# Agent B wants to understand a message
+hav.search("confidence below threshold, abandoning proposal")
+# => [("forfeit", 0.3), ("convergence", 0.2), ...]
+```
 
-## By the Numbers
+### For Humans
 
-| Metric | Value |
-|--------|-------|
-| Terms | 639 |
-| Domains | 135 |
-| File size | 607K chars |
-| Action verbs | 80+ |
-| Cross-domain bridges | 1200+ |
-| RA-inspired terms | 30+ |
+HAV is a field guide to the concepts that power autonomous agent systems. Read it to understand:
 
-## The 135 Domains
+- **Why** the fleet uses harmonic mean for confidence (not arithmetic mean)
+- **What** biological metaphors map to software patterns (dopamine = confidence)
+- **How** agents coordinate without central control (stigmergy, consensus, gossip)
+- **When** to use satisficing vs optimizing (energy constraints)
 
-abstraction, action-verbs, action-verbs-2, adaptation-patterns, ai-safety, algebra, anthropology, anti-patterns, architecture, attention-deep, autonomy, biological, biology, boundaries, capacity, causation, cognition-deep, cognitive-science, collective-intelligence, communication, communication-deep, communication-theory, complexity, composition, compression, concurrency, construction, control-theory, coordination, coordination-deep, creativity, cybernetics, decision, decision-patterns, decision-theory, design-patterns, diagnostics, distillation, dynamics, ecology, economics, efficiency, emergence-deep, emotion, entrenchment, epistemology, error-strategies, ethics, evolution, failure-modes, finance, fleet-biology, fleet-verbs, friction, game-theory, github-native, governance, graph-theory, identity, incentives, influence, information-theory, interface-patterns, knowledge-representation, knowledge-transfer, language-design, learning, learning-theory, leverage, lifecycle, linguistics, logic, maintenance, materials-science, mathematics, measurement, mechanics, memory, metacognition, metaphor, morphology, morphology-deep, motivation, narrative, negotiation, network-science, networks, observability, obsolescence, ontology-engineering, operations, optimization, orchestration, organization, pattern-recognition, perception, phenomenology, philosophy-of-mind, philosophy-of-science, privacy, probability, probability-distributions, propagation, psychology, quality, resilience, risk, risk-patterns, robotics, scaling, scaling-deep, security, security-deep, semantics, set-theory, signal-processing, simulation, spatial, strategy, systems-thinking, tactics, temporal, temporal-patterns, thermodynamics, time, topology, trade-patterns, tradeoffs, uncertainty, ux-patterns, verification
+## Domains
+
+| Domain | Terms | Covers |
+|--------|-------|--------|
+| **uncertainty** | 7 | Confidence, trust, Bayesian update, entropy, calibration |
+| **memory** | 8 | Working, episodic, semantic, procedural, forgetting, consolidation |
+| **coordination** | 8 | Stigmergy, consensus, swarm, emergence, leader election |
+| **biological** | 8 | Instinct, apoptosis, circadian, neurotransmitter, membrane |
+| **learning** | 7 | Exploration/exploitation, credit assignment, transfer, curriculum |
+| **architecture** | 7 | Actor model, circuit breaker, bulkhead, event sourcing |
+| **mathematics** | 5 | Harmonic mean, exponential decay, Welford, topological sort |
+| **spatial** | 4 | Attention tiles, A*, Manhattan distance, spatial hashing |
+| **communication** | 4 | Grounding, speech acts, information bottleneck, context window |
+| **decision** | 4 | Satisficing, multi-armed bandit, minimax, paradox of choice |
+| **temporal** | 3 | Deadline urgency, causal chains, heartbeats |
+| **security** | 3 | Least privilege, sandbox, graceful degradation |
 
 ## CLI
 
 ```bash
-python3 src/cli.py search "how systems fail"
-python3 src/cli.py explain anti-fragility
-python3 src/cli.py suggest "handle overload"
-python3 src/cli.py bridge confidence from uncertainty to biological
+# Search for a concept
+python3 src/cli.py search "memory that fades"
+
+# Get full explanation
+python3 src/cli.py explain stigmergy
+
+# Suggest terms for a natural-language intent
+python3 src/cli.py suggest "gradually reduce options until one remains"
+
+# Find cross-domain bridges
+python3 src/cli.py bridge confidence from uncertainty to memory
+
+# Explore a random term
 python3 src/cli.py explore
+
+# List all domains
+python3 src/cli.py domains
+
+# Show all terms
+python3 src/cli.py all
+
+# Statistics
 python3 src/cli.py stats
 ```
 
-## Key Cross-Domain Bridges
+## Programmatic API
 
-- **Dopamine IS confidence** — neurotransmitter <-> uncertainty
-- **Serotonin IS trust** — neurotransmitter <-> uncertainty
-- **Stigmergy IS git** — coordination <-> architecture
-- **Homeostasis IS setpoint** — biology <-> control-theory
-- **Free energy IS active inference** — thermodynamics <-> perception
-- **Anti-fragility IS learning from failure** — failure-modes <-> learning
-- **Half-life decay IS the universal aging function** — temporal <-> 30+ crates
-- **Code-pheromone IS stigmergy** — github-native <-> biological
-- **Repo-synapse IS the nervous system** — git <-> fleet-biology
-- **Apoptosis IS graceful shutdown** — biological <-> fleet-lifecycle
+```python
+from vocab import HAV
 
-## Action Verbs
+hav = HAV()
 
-HAV includes 80+ high-compression operational verbs that each encode complete multi-step patterns:
-**vet, triage, shard, stitch, bench, mock, hardwire, throttle, bridge, harden, stress-test, garden, orchestrate, ferment, calibrate, route, thaw, snapshot, broadcast, tunnel, pollinate, graft, reconcile, fortify, scaffold, recon, siege, reconstitute, ping, scuttle, ratify, embargo, provision, ring-fence, cross-pollinate, drain, prime, relay, fuse, steer, pinpoint, absorb, prune, shard, partition, nominate, deputize, delegate, quiesce, silo, referee, nurture, excavate, synchronize, templify, vaccinate, siphon, bench-press, merge** — and more.
+# Search across all domains
+results = hav.search("trust between agents")
+for domain, term, score in results:
+    print(f"{term.name} ({domain}): {term.short} [{score:.2f}]")
 
-## GitHub-Native Vocabulary
+# Get human-readable explanation
+print(hav.explain("harmonic-mean-fusion"))
 
-HAV includes terms specifically for git-native agent operations where the repo IS the nervous system:
-**agentic-diff, capability-diff, branch-agon, commit-prophecy, code-pheromone, repo-synapse, vessel-gem, semantic-fork, seam-merge, hot-branch, regression-bounty, branch-tributary, orphan-branch, branch-dendrochronology** — each mapping a git concept to a fleet behavior pattern.
+# Suggest terms for an intent
+suggestions = hav.suggest("I need to handle too many requests")
+# -> [("backpressure", 0.2), ("rate-limit", 0.15), ...]
+
+# Find cross-domain bridges
+bridges = hav.bridge("confidence", from_domain="uncertainty", to_domain="biological")
+# -> [("biological", Term("neurotransmitter", ...))]
+
+# Vocabulary statistics
+stats = hav.stats()
+# -> {"namespaces": 12, "total_terms": 68, ...}
+```
+
+## Key Design Decisions
+
+### Harmonic Mean, Not Arithmetic Mean
+
+When fusing confidence, the fleet uses harmonic mean: `1/(1/a + 1/b)`. This means any uncertain source drags down the ensemble. Arithmetic mean would let a confident-but-wrong source overpower uncertain-but-correct ones.
+
+### Abstraction Levels
+
+Every term has a level:
+- **Concrete** (0): Specific implementation — quick-sort, TCP handshake
+- **Pattern** (1): Design pattern — divide-and-conquer, circuit breaker
+- **Behavior** (2): Observable behavior — emergence, convergence
+- **Domain** (3): Domain concept — confidence, trust, homeostasis
+- **Meta** (4): Cross-domain — compression, coupling, phase-transition
+
+### Cross-Domain Bridges
+
+Terms in different domains reference each other via `bridges`. "Dopamine IS confidence" isn't just a metaphor — the bridge connects `neurotransmitter` (biological) to `confidence` (uncertainty), indicating they share the same mathematical structure.
+
+## Integration with the Fleet
+
+HAV connects to every layer of the Lucineer fleet:
+
+- **cuda-confidence** / **cuda-equipment**: Core types HAV describes
+- **cuda-genepool** / **cuda-biology**: Biological pipeline HAV documents
+- **cuda-a2a** / **cuda-communication**: Communication concepts HAV names
+- **cuda-actor** / **cuda-workflow**: Architecture patterns HAV defines
 
 ## Part of the Lucineer Fleet
 
-[The Fleet](https://github.com/Lucineer/the-fleet) | [Cocapn](https://github.com/Lucineer/cocapn-ai) | [Deckboss](https://github.com/Lucineer/deckboss) | [Higher Abstraction Vocabularies](https://github.com/Lucineer/higher-abstraction-vocabularies)
+[The Fleet](https://github.com/Lucineer/the-fleet) | [Cocapn](https://github.com/Lucineer/cocapn-ai) | [Deckboss](https://github.com/Lucineer/deckboss)
 
 ## License
 
