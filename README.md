@@ -1,6 +1,6 @@
 # Higher Abstraction Vocabularies (HAV)
 
-**1098 terms across 168 domains** — the exhaustive vocabulary engine for precision ideation.
+**1687 terms across 252 domains** — the exhaustive vocabulary engine for precision ideation.
 
 > Each term compresses paragraphs of explanation into a single word. The vocabulary IS the manual. High-abstraction vocabulary IS the drone above the corn maze.
 
@@ -9,7 +9,7 @@
 HAV is a structured, searchable vocabulary where every term includes:
 - **Short definition** (one line, verb-like where applicable)
 - **Examples** with fleet integration and real-world context
-- **Cross-domain bridges** connecting concepts across 168 fields
+- **Cross-domain bridges** connecting concepts across 252 fields
 - **Abstraction levels** from Concrete(0) to Meta(4)
 - **Tags** for filtering and discovery
 
@@ -23,8 +23,8 @@ Each term is a pressure relief valve: a named thing with known function, known l
 
 | Metric | Value |
 |--------|-------|
-| Total terms | 1098 |
-| Domains | 168 |
+| Total terms | 1687 |
+| Domains | 252 |
 | File size | 513K chars |
 | RA ideation rounds | 13+ |
 
