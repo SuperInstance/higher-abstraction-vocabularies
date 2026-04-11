@@ -7475,6 +7475,30 @@ class HAV:
         ns.define("tmsmotorthresholding","Determination of the minimum transcranial magnetic stimulation (TMS) intensity required to elicit a motor response, used to assess cortical excitability and guide TMS interventions.",Level=Level.CONCRETE,examples=["tmsmotorthresholding"],bridges=["flux:tmsmotorthresholding"])
         self.namespaces.append(ns)
 
+    def _load_wind_energy(self):
+        ns=Namespace("wind_energy")
+        ns.define("vortex_shedding_frequency","The frequency at which vortices are shed from the trailing edge of a wind turbine blade due to the interaction between the blade and the air flow.",Level=Level.CONCRETE,examples=["vortex_shedding_frequency"],bridges=["flux:vortex_shedding_frequency"])
+        ns.define("wind_shear_exponent","A measure of the vertical variation in wind speed, which affects the power output and loads on a wind turbine.",Level=Level.CONCRETE,examples=["wind_shear_exponent"],bridges=["flux:wind_shear_exponent"])
+        ns.define("turbulence_intensity","A statistical measure of the fluctuations in wind speed and direction, which can impact the performance and structural integrity of wind turbines.",Level=Level.CONCRETE,examples=["turbulence_intensity"],bridges=["flux:turbulence_intensity"])
+        ns.define("blade_tip_vorticity","The swirling motion of air near the tip of a wind turbine blade, which can influence the efficiency and noise generation of the turbine.",Level=Level.CONCRETE,examples=["blade_tip_vorticity"],bridges=["flux:blade_tip_vorticity"])
+        ns.define("wind_veer","The change in wind direction with height above the ground, which can affect the alignment and power output of wind turbines.",Level=Level.CONCRETE,examples=["wind_veer"],bridges=["flux:wind_veer"])
+        ns.define("inflow_angle","The angle between the wind direction and the rotational plane of a wind turbine, which determines the aerodynamic forces acting on the blades.",Level=Level.CONCRETE,examples=["inflow_angle"],bridges=["flux:inflow_angle"])
+        ns.define("dynamic_stall","A phenomenon where the flow separation point on a wind turbine blade rapidly changes due to variations in angle of attack, leading to unsteady loads and reduced efficiency.",Level=Level.CONCRETE,examples=["dynamic_stall"],bridges=["flux:dynamic_stall"])
+        ns.define("tower_shadow_effect","The reduction in wind speed and increase in turbulence experienced by a wind turbine blade as it passes through the region downstream of the turbine tower.",Level=Level.CONCRETE,examples=["tower_shadow_effect"],bridges=["flux:tower_shadow_effect"])
+        self.namespaces.append(ns)
+
+    def _load_sleep_science(self):
+        ns=Namespace("sleep_science")
+        ns.define("somnography","The scientific study and measurement of sleep patterns and cycles.",Level=Level.CONCRETE,examples=["somnography"],bridges=["flux:somnography"])
+        ns.define("hypnogenesis","The process of initiating and maintaining sleep, involving various physiological and neurological changes.",Level=Level.CONCRETE,examples=["hypnogenesis"],bridges=["flux:hypnogenesis"])
+        ns.define("nocturnalence","The state of being active, alert, or productive during the night, as opposed to daytime.",Level=Level.CONCRETE,examples=["nocturnalence"],bridges=["flux:nocturnalence"])
+        ns.define("sleepscape","The unique, individualized landscape of a persons sleep, including dreams, sleep stages, and physiological responses.",Level=Level.CONCRETE,examples=["sleepscape"],bridges=["flux:sleepscape"])
+        ns.define("circadiance","The degree to which an individuals circadian rhythm aligns with the natural 24-hour light-dark cycle.",Level=Level.CONCRETE,examples=["circadiance"],bridges=["flux:circadiance"])
+        ns.define("melatonergy","The energy or effectiveness of melatonin in promoting and regulating sleep in an individual.",Level=Level.CONCRETE,examples=["melatonergy"],bridges=["flux:melatonergy"])
+        ns.define("chronotype","The genetically determined preference for waking and sleeping at certain times, such as being a morning person or night owl.",Level=Level.CONCRETE,examples=["chronotype"],bridges=["flux:chronotype"])
+        ns.define("ultradian","Relating to biological rhythms or cycles that occur more frequently than once every 24 hours, such as the 90-minute sleep cycle.",Level=Level.CONCRETE,examples=["ultradian"],bridges=["flux:ultradian"])
+        self.namespaces.append(ns)
+
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics", "Deep-mined from fleet source code")
         ns.define("temperature-confidence-fusion", 'When multiple confidence values must be combined, harmonic mean prevents any single low confidence from being hidden — worst signal dominates', Level=Level.PATTERN, examples=["harmonic_mean of confidences: sensor(0.9) * model(0.3) / avg = low", "chain strength = weakest link", "security: system security = minimum of all component securities"], bridges=["harmonic", "mean", "fusion", "confidence"], tags=["mathematics", "harmonic", "mean"])
