@@ -7463,6 +7463,18 @@ class HAV:
         ns.define("quantum_dot_enhancement_film_qdef", "A thin film containing quantum dots that is placed over the backlight of a display, enabling more efficient and accurate color reproduction while reducing power consumption.", Level=Level.CONCRETE, examples=["quantum_dot_enhancement_film_qdef"], bridges=["flux:quantum_dot_enhancement_film_qdef"])
         self.namespaces.append(ns)
 
+    def _load_neuroimaging(self):
+        ns=Namespace("neuroimaging")
+        ns.define("boldtopography","Mapping the spatial distribution of blood oxygen level-dependent (BOLD) signal across the brain to identify regions of activation during specific tasks or at rest.",Level=Level.CONCRETE,examples=["boldtopography"],bridges=["flux:boldtopography"])
+        ns.define("voxelmorphonomics","Quantitative analysis of brain morphology using voxel-based morphometry to investigate structural differences between groups or changes over time.",Level=Level.CONCRETE,examples=["voxelmorphonomics"],bridges=["flux:voxelmorphonomics"])
+        ns.define("tractography","Visualization and analysis of white matter tracts using diffusion tensor tractography to study the structural connectivity of the brain.",Level=Level.CONCRETE,examples=["tractography"],bridges=["flux:tractography"])
+        ns.define("connectometrics","Quantitative measures derived from functional connectivity matrices to characterize the strength and patterns of functional interactions between brain regions.",Level=Level.CONCRETE,examples=["connectometrics"],bridges=["flux:connectometrics"])
+        ns.define("erpchronometrics","Measurement and analysis of event-related potential (ERP) latencies to study the timing of neural processes underlying cognitive functions.",Level=Level.CONCRETE,examples=["erpchronometrics"],bridges=["flux:erpchronometrics"])
+        ns.define("megsourcemapping","Localization of neural sources of magnetoencephalography (MEG) signals to identify the spatial origin of brain activity.",Level=Level.CONCRETE,examples=["megsourcemapping"],bridges=["flux:megsourcemapping"])
+        ns.define("pettracerdynamics","Analysis of the kinetics of positron emission tomography (PET) tracers to quantify the distribution and binding of neuroreceptors, transporters, or metabolites in the brain.",Level=Level.CONCRETE,examples=["pettracerdynamics"],bridges=["flux:pettracerdynamics"])
+        ns.define("tmsmotorthresholding","Determination of the minimum transcranial magnetic stimulation (TMS) intensity required to elicit a motor response, used to assess cortical excitability and guide TMS interventions.",Level=Level.CONCRETE,examples=["tmsmotorthresholding"],bridges=["flux:tmsmotorthresholding"])
+        self.namespaces.append(ns)
+
     def _load_mathematics(self):
         ns = self.add_namespace("mathematics", "Deep-mined from fleet source code")
         ns.define("temperature-confidence-fusion", 'When multiple confidence values must be combined, harmonic mean prevents any single low confidence from being hidden — worst signal dominates', Level=Level.PATTERN, examples=["harmonic_mean of confidences: sensor(0.9) * model(0.3) / avg = low", "chain strength = weakest link", "security: system security = minimum of all component securities"], bridges=["harmonic", "mean", "fusion", "confidence"], tags=["mathematics", "harmonic", "mean"])
