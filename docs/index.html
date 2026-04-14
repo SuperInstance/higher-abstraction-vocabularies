@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Higher Abstraction Vocabularies</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    :root{
+        --bg:#0a0a0a;
+        --panel:#151515;
+        --accent:#00ffcc;
+        --text:#e0e0e0;
+        --badge-0:#2ecc71;
+        --badge-1:#1abc9c;
+        --badge-2:#3498db;
+        --badge-3:#9b59b6;
+        --badge-4:#8e44ad;
+    }
+    body{
+        margin:0;
+        font-family:Arial,Helvetica,sans-serif;
+        background:radial-gradient(circle at 20% 20%,#001f3f, var(--bg) 70%);
+        color:var(--text);
+        line-height:1.5;
+    }
+    .container{
+        max-width:960px;
+        margin:2rem auto;
+        padding:1.5rem;
+        background:var(--panel);
+        border-radius:12px;
+        box-shadow:0 0 20px rgba(0,0,0,0.7);
+    }
+    h1{
+        text-align:center;
+        color:var(--accent);
+        margin-bottom:1rem;
+    }
+    .search-bar{
+        position:relative;
+        margin-bottom:1rem;
+    }
+    .search-input{
+        width:100%;
+        padding:0.75rem 1rem;
+        font-size:1rem;
+        border:none;
+        border-radius:8px;
+        background:#222;
+        color:var(--text);
+    }
+    .search-results{
+        position:absolute;
+        top:100%;
+        left:0;
+        right:0;
+        background:#222;
+        border-radius:0 0 8px 8px;
+        max-height:200px;
+        overflow-y:auto;
+        display:none;
+        z-index:10;
+    }
+    .search-results.show{display:block;}
+    .search-item{
+        padding:0.5rem 1rem;
+        cursor:pointer;
+    }
+    .search-item:hover{
+        background:#333;
+    }
+    .domain-browser ul,
+    .term-list{
+        list-style:none;
+        padding:0;
+        margin:0;
+    }
+    .domain-browser li,
+    .term-list li{
+        padding:0.5rem 0;
+        cursor:pointer;
+        color:var(--accent);
+    }
+    .domain-browser li:hover,
+    .term-list li:hover{
+        text-decoration:underline;
+    }
+    .term-detail{
+        margin-top:1rem;
+        border-top:1px solid #333;
+        padding-top:1rem;
+    }
+    .badge{
+        display:inline-block;
+        padding:0.2rem 0.6rem;
+        border-radius:4px;
+        margin-left:0.5rem;
+        font-weight:bold;
+        color:#fff;
+    }
+    .badge.L0{background:var(--badge-0);}
+    .badge.L1{background:var(--badge-1);}
+    .badge.L2{background:var(--badge-2);}
+    .badge.L3{background:var(--badge-3);}
+    .badge.L4{background:var(--badge-4);}
+    .bridge-graph{
+        margin-top:1rem;
+        padding:0.5rem;
+        background:#111;
+        border-radius:8px;
+        display:flex;
+        flex-wrap:wrap;
+        gap:0.5rem;
+    }
+    .bridge{
+        background:#222;
+        color:var(--accent);
+        padding:0.3rem 0.6rem;
+        border-radius:4px;
+        cursor:pointer;
+        font-size:0.9rem;
+    }
+    .bridge:hover{
+        background:#333;
+    }
+    .stats{
+        margin-top:1rem;
+        display:flex;
+        flex-wrap:wrap;
+        gap:1rem;
+    }
+    .stats div{
+        flex:1 1 200px;
+        background:#111;
+        padding:0.75rem;
+        border-radius:8px;
+    }
+    button{
+        background:var(--accent);
+        color:#000;
+        border:none;
+        padding:0.6rem 1rem;
+        border-radius:6px;
+        cursor:pointer;
+        font-weight:bold;
+        margin-top:0.5rem;
+    }
+    button:hover{
+        background:#00e6b8;
+    }
+    @media(max-width:600px){
+        .container{margin:1rem;padding:1rem;}
+        .stats{flex-direction:column;}
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Higher Abstraction Vocabularies</h1>
+
+    <div class="search-bar">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search terms… (press / to focus)">
+        <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <div class="domain-browser">
+        <h2>Domains</h2>
+        <ul id="domainList"></ul>
+    </div>
+
+    <div id="termSection" class="term-detail" style="display:none;">
+        <h2 id="termTitle"></h2>
+        <p id="termDef"></p>
+        <p id="termTags"></p>
+        <p id="termLevel"></p>
+        <div class="bridge-graph" id="bridgeGraph"></div>
+    </div>
+
+    <button id="randomBtn">Show me something interesting (R)</button>
+
+    <div class="stats">
+        <div id="termsPerDomain"></div>
+        <div id="levelDistribution"></div>
+    </div>
+
+    <button id="exportBtn">Export vocabulary as JSON</button>
+</div>
+
+<script>
+/* Embedded vocabulary data */
+const vocab = {
+  "domains": {
+    "maritime": {
+      "terms": {
+        "pilotage": {
+          "short": "Navigate using local references",
+          "level": 2,
+          "bridges": ["wayfinding","dead-reckoning"],
+          "tags": ["navigation","local"]
+        },
+        "pilig-fish": {
+          "short": "Underwater ridge that concentrates marine life",
+          "level": 1,
+          "bridges": ["hotspot","aggregation"],
+          "tags": ["fishing","geology"]
+        }
+      }
+    }
+  }
+};
+
+/* DOM references */
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+const domainList = document.getElementById('domainList');
+const termSection = document.getElementById('termSection');
+const termTitle = document.getElementById('termTitle');
+const termDef = document.getElementById('termDef');
+const termTags = document.getElementById('termTags');
+const termLevel = document.getElementById('termLevel');
+const bridgeGraph = document.getElementById('bridgeGraph');
+const randomBtn = document.getElementById('randomBtn');
+const exportBtn = document.getElementById('exportBtn');
+const termsPerDomainDiv = document.getElementById('termsPerDomain');
+const levelDistributionDiv = document.getElementById('levelDistribution');
+
+/* Helper: render domains */
+function renderDomains(){
+    for(const domain in vocab.domains){
+        const li = document.createElement('li');
+        li.textContent = domain;
+        li.addEventListener('click',()=>showTerms(domain));
+        domainList.appendChild(li);
+    }
+}
+
+/* Show list of terms for a domain */
+function showTerms(domain){
+    termSection.style.display='none';
+    const termList = document.createElement('ul');
+    termList.className='term-list';
+    for(const term in vocab.domains[domain].terms){
+        const li=document.createElement('li');
+        li.textContent=term;
+        li.addEventListener('click',()=>showTermDetail(term,domain));
+        termList.appendChild(li);
+    }
+    // replace domain list temporarily with term list
+    domainList.innerHTML='';
+    const back = document.createElement('li');
+    back.textContent='← Back to domains';
+    back.style.color='var(--accent)';
+    back.addEventListener('click',()=>{domainList.innerHTML='';renderDomains();});
+    domainList.appendChild(back);
+    domainList.appendChild(termList);
+}
+
+/* Show term detail */
+function showTermDetail(term,domain){
+    const data=vocab.domains[domain].terms[term];
+    termTitle.textContent=term;
+    termDef.textContent=data.short;
+    termTags.textContent='Tags: '+data.tags.join(', ');
+    termLevel.innerHTML='Level: <span class="badge L'+data.level+'">L'+data.level+'</span>';
+    // bridges
+    bridgeGraph.innerHTML='';
+    data.bridges.forEach(b=> {
+        const span=document.createElement('span');
+        span.className='bridge';
+        span.textContent=b;
+        span.addEventListener('click',()=>navigateBridge(b));
+        bridgeGraph.appendChild(span);
+    });
+    termSection.style.display='block';
+}
+
+/* Navigate to a bridge term if it exists */
+function navigateBridge(termName){
+    // search across all domains
+    for(const domain in vocab.domains){
+        if(vocab.domains[domain].terms[termName]){
+            showTermDetail(termName,domain);
+            return;
+        }
+    }
+    alert('Bridge term "'+termName+'" not found in vocabulary.');
+}
+
+/* Search handling */
+searchInput.addEventListener('input',()=>{
+    const query=searchInput.value.trim().toLowerCase();
+    searchResults.innerHTML='';
+    if(!query){searchResults.classList.remove('show');return;}
+    const matches=[];
+    for(const domain in vocab.domains){
+        for(const term in vocab.domains[domain].terms){
+            if(term.toLowerCase().includes(query)){
+                matches.push({term,domain});
+            }
+        }
+    }
+    matches.forEach(m=>{
+        const div=document.createElement('div');
+        div.className='search-item';
+        div.textContent=`${m.term} (${m.domain})`;
+        div.addEventListener('click',()=>{showTermDetail(m.term,m.domain);searchResults.classList.remove('show');});
+        searchResults.appendChild(div);
+    });
+    if(matches.length) searchResults.classList.add('show');
+    else searchResults.classList.remove('show');
+});
+
+/* Random explore */
+randomBtn.addEventListener('click',()=>{
+    const domains=Object.keys(vocab.domains);
+    const randDomain=domains[Math.floor(Math.random()*domains.length)];
+    const terms=Object.keys(vocab.domains[randDomain].terms);
+    const randTerm=terms[Math.floor(Math.random()*terms.length)];
+    showTermDetail(randTerm,randDomain);
+});
+
+/* Export JSON */
+exportBtn.addEventListener('click',()=>{
+    const blob=new Blob([JSON.stringify(vocab,null,2)],{type:'application/json'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='vocabulary.json';
+    a.click();
+});
+
+/* Statistics */
+function renderStats(){
+    const domainStats=Object.entries(vocab.domains).map(([d,obj])=>{
+        return `${d}: ${Object.keys(obj.terms).length}`;
+    }).join(' | ');
+    termsPerDomainDiv.textContent='Terms per domain: '+domainStats;
+
+    const levelCounts={0:0,1:0,2:0,3:0,4:0};
+    for(const domain in vocab.domains){
+        for(const term in vocab.domains[domain].terms){
+            const lvl=vocab.domains[domain].terms[term].level;
+            levelCounts[lvl]=(levelCounts[lvl]||0)+1;
+        }
+    }
+    const levelStats=Object.entries(levelCounts).map(([lvl,cnt])=>`L${lvl}: ${cnt}`).join(' | ');
+    levelDistributionDiv.textContent='Level distribution: '+levelStats;
+}
+
+/* Keyboard shortcuts */
+document.addEventListener('keydown',e=>{
+    if(e.key==='/'){
+        e.preventDefault();
+        searchInput.focus();
+    }else if(e.key==='r' || e.key==='R'){
+        randomBtn.click();
+    }else if(e.key==='Escape'){
+        searchInput.value='';
+        searchResults.classList.remove('show');
+    }
+});
+
+/* Init */
+renderDomains();
+renderStats();
+</script>
+</body>
+</html>
