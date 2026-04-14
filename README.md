@@ -1,72 +1,260 @@
 # Higher Abstraction Vocabularies (HAV)
 
-**606 terms across 132 domains** — an exhaustive vocabulary engine for agents and humans doing precision ideation.
+**2000 terms across 292 domains** — the exhaustive vocabulary engine for precision ideation.
 
-> Each term compresses paragraphs of explanation into a single word. With the right vocabulary, one word replaces a thousand words of description. These are micro-programs that, strung together, make complex ideas into verbs for packing actions.
+> Each term compresses paragraphs of explanation into a single word. The vocabulary IS the manual. High-abstraction vocabulary IS the drone above the corn maze.
 
 ## What It Is
 
 HAV is a structured, searchable vocabulary where every term includes:
 - **Short definition** (one line, verb-like where applicable)
-- **Full description** with fleet integration and real-world examples
-- **Cross-domain bridges** connecting concepts across 132 fields
+- **Examples** with fleet integration and real-world context
+- **Cross-domain bridges** connecting concepts across 252 fields
 - **Abstraction levels** from Concrete(0) to Meta(4)
-- **Antonyms** where applicable
 - **Tags** for filtering and discovery
 
 ## Philosophy
 
-HAV terms are like heat pump components. Knowing what a compressor, condenser, evaporator, and pressure relief valve ARE — and where they live — lets you walk into ANY refrigeration system and start diagnosing. Not because you have special knowledge of THAT system, but because the vocabulary IS the system's logic.
+HAV terms are like heat pump components. Knowing what each part IS and where it lives lets you walk into ANY system and start diagnosing. **Building from scratch** requires the architect's blueprint (Deckboss layer). **Fixing and improving** just requires vocabulary mastery.
 
-**Building from scratch** requires special knowledge (the architect's blueprint). **Fixing and improving** just requires vocabulary mastery (knowing the parts, their locations, and their failure modes).
-
-Each term is a pressure relief valve: a named thing with known function, known location in architecture, known failure modes. String enough together and you don't need instructions. **The vocabulary IS the manual.**
-
-High-abstraction vocabulary IS the drone above the corn maze — one word replaces a paragraph of ground-level explanation.
+Each term is a pressure relief valve: a named thing with known function, known location, known failure modes. String enough together and you don't need instructions.
 
 ## By the Numbers
 
 | Metric | Value |
 |--------|-------|
-| Terms | 606 |
-| Domains | 132 |
-| File size | 573K chars |
-| Action verbs | 60+ |
-| Cross-domain bridges | 800+ |
+| Total terms | 1687 |
+| Domains | 252 |
+| File size | 513K chars |
+| RA ideation rounds | 13+ |
 
-## The 132 Domains
+## Domains
 
-abstraction, action-verbs, action-verbs-2, adaptation-patterns, ai-safety, algebra, anthropology, anti-patterns, architecture, attention-deep, autonomy, biological, biology, boundaries, capacity, causation, cognitive-science, collective-intelligence, communication, communication-deep, communication-theory, complexity, composition, compression, concurrency, construction, control-theory, coordination, coordination-deep, creativity, cybernetics, decision, decision-patterns, decision-theory, design-patterns, diagnostics, distillation, dynamics, ecology, economics, efficiency, emergence-deep, emotion, entrenchment, epistemology, error-strategies, ethics, evolution, failure-modes, finance, fleet-verbs, friction, game-theory, governance, graph-theory, identity, incentives, influence, information-theory, interface-patterns, knowledge-representation, knowledge-transfer, language-design, learning, learning-theory, leverage, lifecycle, linguistics, logic, maintenance, materials-science, mathematics, measurement, mechanics, memory, metacognition, metaphor, morphology, morphology-deep, motivation, narrative, negotiation, network-science, networks, observability, obsolescence, ontology-engineering, operations, optimization, orchestration, organization, pattern-recognition, perception, phenomenology, philosophy-of-mind, philosophy-of-science, privacy, probability, probability-distributions, propagation, psychology, quality, resilience, risk, risk-patterns, robotics, scaling, scaling-deep, security, security-deep, semantics, set-theory, signal-processing, simulation, spatial, strategy, systems-thinking, tactics, temporal, temporal-patterns, thermodynamics, time, topology, trade-patterns, tradeoffs, uncertainty, ux-patterns, verification
+
+### FLUX VM
+- **flux-bytecodes** (1 terms)
+- **flux-flavors** (1 terms)
+- **flux-memory** (1 terms)
+- **flux-compound** (1 terms)
+- **flux-control** (1 terms)
+- **flux-data** (1 terms)
+- **flux-network** (1 terms)
+- **flux-concurrency** (1 terms)
+
+### Agent Patterns
+- **agent-social** (1 terms)
+- **agent-failure** (1 terms)
+- **agent-lifecycle** (1 terms)
+- **agent-crypto** (1 terms)
+- **posthuman-comm** (1 terms)
+- **flux-compound** (1 terms)
+
+### Craft Metaphors
+- **metaphor-verbs** (1 terms)
+- **culinary** (1 terms)
+- **military** (1 terms)
+- **maritime** (1 terms)
+- **aerospace** (1 terms)
+- **chemical-metaphor** (1 terms)
+- **ethnobotany-metaphor** (1 terms)
+
+### Science & Math
+- **mathematics** (1 terms)
+- **probability** (1 terms)
+- **thermodynamics** (1 terms)
+- **quantum-metaphor** (1 terms)
+- **information-theory** (2 terms)
+- **systems-dynamics** (1 terms)
+- **game-theory** (2 terms)
+- **graph-theory** (1 terms)
+
+### Fleet Biology
+- **fleet-biology** (1 terms)
+- **bio-computing** (1 terms)
+- **cognition-deep** (1 terms)
+
+### Architecture
+- **arch-patterns** (1 terms)
+- **network-topology** (1 terms)
+- **urban-planning** (1 terms)
+
+### Social & Emergence
+- **emergence-patterns** (1 terms)
+- **fleet-interactions** (1 terms)
+
+### Engineering
+- **security** (2 terms)
+- **scaling** (1 terms)
+- **efficiency** (1 terms)
+- **observability** (1 terms)
+- **anti-patterns** (1 terms)
+- **failure-modes** (1 terms)
+- **coordination** (1 terms)
+- **composition** (1 terms)
+
+### Business & Trade
+- **trade-patterns** (1 terms)
+- **negotiation** (1 terms)
+- **incentives** (1 terms)
+- **risk-patterns** (1 terms)
+- **quality** (1 terms)
+
+### Meta
+- **milestone** (1 terms)
+
+### Other Domains
+- **abstraction**
+- **action-verbs**
+- **action-verbs-2**
+- **adaptation-deep**
+- **adaptation-patterns**
+- **ai-safety**
+- **algebra**
+- **anthropology**
+- **architecture**
+- **attention-deep**
+- **autonomy**
+- **biological**
+- **biology**
+- **boundaries**
+- **capacity**
+- **causation**
+- **cognitive-science**
+- **collective-intelligence**
+- **communication**
+- **communication-deep**
+- **communication-theory**
+- **complexity**
+- **compression**
+- **concurrency**
+- **construction**
+- **control-theory**
+- **coordination-deep**
+- **coordination-deep-2**
+- **creativity**
+- **cybernetics**
+- **decision**
+- **decision-patterns**
+- **decision-quality**
+- **decision-theory**
+- **design-patterns**
+- **diagnostics**
+- **distillation**
+- **dynamics**
+- **ecology**
+- **economics**
+- **efficiency-frontier**
+- **emergence-deep**
+- **emotion**
+- **entrenchment**
+- **epistemology**
+- **error-strategies**
+- **ethics**
+- **evolution**
+- **finance**
+- **fleet-verbs**
+- **friction**
+- **github-native**
+- **governance**
+- **identity**
+- **influence**
+- **interface-patterns**
+- **knowledge-representation**
+- **knowledge-transfer**
+- **language-design**
+- **learning**
+- **learning-theory**
+- **leverage**
+- **lifecycle**
+- **linguistics**
+- **logic**
+- **maintenance**
+- **materials-science**
+- **measurement**
+- **mechanics**
+- **memory**
+- **metacognition**
+- **metaphor**
+- **morphology**
+- **morphology-deep**
+- **motivation**
+- **narrative**
+- **network-science**
+- **networks**
+- **obsolescence**
+- **ontology-deep**
+- **ontology-engineering**
+- **operations**
+- **optimization**
+- **orchestration**
+- **organization**
+- **pattern-recognition**
+- **perception**
+- **phenomenology**
+- **philosophy-of-mind**
+- **philosophy-of-science**
+- **power-dynamics**
+- **privacy**
+- **probability-distributions**
+- **propagation**
+- **psychology**
+- **resilience**
+- **risk**
+- **robotics**
+- **scaling-deep**
+- **security-deep**
+- **security-deep-2**
+- **semantics**
+- **set-theory**
+- **signal-processing**
+- **simulation**
+- **spatial**
+- **strategy**
+- **systems-thinking**
+- **tactics**
+- **temporal**
+- **temporal-patterns**
+- **thinking-patterns**
+- **time**
+- **topology**
+- **tradeoffs**
+- **uncertainty**
+- **ux-patterns**
+- **verification**
+
+
+## Cross-Domain Bridges
+
+- **Dopamine IS confidence** — neurotransmitter <-> uncertainty
+- **Serotonin IS trust** — neurotransmitter <-> uncertainty
+- **Stigmergy IS git** — coordination <-> architecture
+- **Apoptosis IS graceful shutdown** — biological <-> fleet-lifecycle
+- **Code-pheromone IS stigmergy** — github-native <-> biological
+- **Mycorrhiza IS mutual capability exchange** — mycology <-> social
+- **Murmuration IS decentralized coordination** — emergence <-> biology
+- **Confidence cascade IS attention amplification** — fleet-interactions <-> cognition
+
+## FLUX Integration
+
+HAV terms compile to FLUX VM bytecode. Each term name maps to base opcodes; flavors map to parameter variants.
+
+- `prune/aggressive` → different bytecode than `prune/cautious`
+- `sense/focused` → narrow high-resolution sensing
+- `act/reflexive` → skip deliberation execute immediately
+- `communicate/gossip` → stochastic peer message forwarding
 
 ## CLI
 
 ```bash
 python3 src/cli.py search "how systems fail"
 python3 src/cli.py explain anti-fragility
-python3 src/cli.py suggest "handle overload"
 python3 src/cli.py bridge confidence from uncertainty to biological
-python3 src/cli.py explore
 python3 src/cli.py stats
 ```
 
-## Key Cross-Domain Bridges
-
-- **Dopamine IS confidence** — neurotransmitter <-> uncertainty
-- **Serotonin IS trust** — neurotransmitter <-> uncertainty
-- **Stigmergy IS git** — coordination <-> architecture
-- **Homeostasis IS setpoint** — biology <-> control-theory
-- **Free energy IS active inference** — thermodynamics <-> perception
-- **Anti-fragility IS learning from failure** — failure-modes <-> learning
-- **Half-life decay IS the universal aging function** — temporal <-> 30+ crates
-
-## Action Verbs
-
-HAV includes 60+ high-compression operational verbs that each encode complete multi-step patterns:
-**vet, triage, shard, stitch, bench, mock, hardwire, throttle, bridge, harden, stress-test, garden, orchestrate, ferment, calibrate, route, thaw, snapshot, broadcast, tunnel, pollinate, graft, reconcile, fortify, scaffold, recon, siege, reconstitute, ping, scuttle, ratify, embargo, provision, ring-fence, cross-pollinate** — and more.
-
 ## Part of the Lucineer Fleet
 
-[The Fleet](https://github.com/Lucineer/the-fleet) | [Cocapn](https://github.com/Lucineer/cocapn-ai) | [Deckboss](https://github.com/Lucineer/deckboss)
+[The Fleet](https://github.com/Lucineer/the-fleet) | [Cocapn](https://github.com/Lucineer/cocapn-ai) | [Deckboss](https://github.com/Lucineer/deckboss) | [HAV RA Research](https://github.com/Lucineer/hav-reverse-actualization) | [Iron-to-Iron](https://github.com/SuperInstance/iron-to-iron)
 
 ## License
 
